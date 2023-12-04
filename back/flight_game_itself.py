@@ -6,11 +6,6 @@
 ##########################
 '''
 
-'''
- TODO 1. travel system
- TODO 2. money system
- TODO 3. sql cursor
-'''
 
 ### IMP imports
 

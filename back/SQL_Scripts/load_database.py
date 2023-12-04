@@ -1,7 +1,47 @@
 from SQL_Scripts import sql_connection as sql
 
+class Query:
+    def __init__(self, qry):
+        self.query = qry
+        
+    def executeSQL(self):
+        sql.kursori.execute(self.query)
+
+        if sql.kursori.rowcount == 1:
+            print("SQL query successful")
+        else:
+            print("SQL query failed")
 
 def load_events():
+    ### new version for classes >:(
+    clear_old_players = Query("delete from game;")
+    clear_events = Query('''UPDATE airport SET event_id = 0;''')
+    add_quests = Query('''update airport set event_id=(select id from event where event_name=airport_name)
+                    where exists (select 1 from event where event_name=airport_name);''')
+    add_bandits = Query('''UPDATE airport 
+                        SET event_id = 13 
+                        WHERE event_id = 0 
+                        ORDER BY RAND() 
+                        LIMIT 5;''')
+    add_black_cat = Query('''UPDATE airport 
+                        SET event_id=11 
+                        WHERE event_id=0 
+                        ORDER BY RAND() 
+                        LIMIT 1;''')
+    
+    init_game = [
+        clear_old_players,
+        clear_events,
+        add_quests,
+        add_bandits,
+        add_black_cat
+            ]
+    for qry in init_game:
+        qry.executeSQL()
+
+    print('end of SQL queries')
+    ###
+'''
     # Clearing Old players
     sql.kursori.execute("delete from game;")
 
@@ -42,3 +82,4 @@ def load_events():
         print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     else:
         print("-------------------------------------------------------------------------------------------------------")
+'''
