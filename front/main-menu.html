@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maksa Velat!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Optional: Add additional styles for content on top of the video */
+        #content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            padding: 20px;
+            color: #fff;
+            text-align: center; /* Optional: Center text content */
+        }
+        h1 {
+            color: #8b0000;
+            background-color: rgba(250, 235, 215, 0.5);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Video element -->
+    <video id="video-background" autoplay muted loop>
+        <source src="main-menu.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Content on top of the video -->
+    <div id="content">
+        <h1>MAKSA VELAT!</h1>
+        <p>This is an example HTML page with a video background.</p>
+        <button id="start">Start</button>
+        <button id="load_game">Load Game</button>
+        <button id="tutorial">Tutorial</button>
+    </div>
+
+</body>
+</html>
