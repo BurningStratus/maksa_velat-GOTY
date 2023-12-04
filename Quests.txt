@@ -1,0 +1,120 @@
+
+1. ### ( STARTER QUEST )
+$ 1. part
+'Rich' people problems.
+Monaco, 16:56
+Since you will be away for a while after receiving the message from the debt collectors, it might be a bright idea to
+tell everything to your love interest.
+
+
+Would you like to make a call? Y/N
+$
+IF NO
+$ 2. part1.
+You decide that the trip won't be long enough to bother them and depart for good.
+$ 2. part2.
+IF YES
+$
+After a long talk they are quite 'unpleased' with the situation. They write you a check for 50$ though.
+You go to the nearest bank and receive 50$ with a note: "I hope ... debt will teach you. Still love you, ...".
+Some parts of the note are uncomprehendable because of the water stains on the paper. It's time to hit the sky. 
+$
+###
+
+2. ### ( STATIC GERMANY )
+Checkers maybe?
+Germany, 15:20
+$ 1. part
+While walking through the park in Germany, you see an old man sitting on a bench with a smoking pipe and a chess board, 
+with all pieces being set up for a new game. The old man asks you to play a single game with him. 
+At school you loved to play chess. Do you want to challenge him?
+$ 2. part1
+if no: 
+You choose to ignore the old man, because you don't have time for stupid games. 
+$ 2. part2
+if yes:
+After a long and exhausting game you take a victory from the old man. He is very pleased with a game
+and after you tell them about your problem, he tells you about Lepricons in Ireland, that give out gold for some reason.
+"What a weirdo" - Was your first thought.
+$ 
+###
+
+
+3. ## ( STATIC POLAND )
+Live and let live
+Poland 02:31
+$ 1. part
+When landing on the airport, one of your tyres pops. Too bad that the spare one's been in the trunk for long enough for it rot through. 
+You spend the entire day trying to navigate the city and to find the tyre with the right size. You spend 100$ on it. 
+Returning to the airport, where you plane is parked, you feel exhausted. 
+
+
+Do you want to pay airport mechanic 200$ for him to change your tyre? 
+$ 1. part // quest denied
+YES - you spend 200$ and fly away.
+$ 2. part
+NO - You sit through the whole evening trying to change a tyre. When you are finally done with the tyre, you bring the borrowed tools back to
+the repair hangar. There you spot an airport mechanic filling gas cans with kerosene. This certainly wasn't an authorized activity.
+
+
+He didn't notice you. Do you want to confront him?
+$ 2. part1
+NO - You put the tools back in their place and peacefully leave the hangar. Then you go back to the motel and depart the next day. 
+$ 2. part2
+YES - When you come closer to the mechanic, he finally sees you and looks pissed. Since you see him performing not-so-legal things, 
+he tells you that he will give 100$ and 300 L of kerosene(1x FREE TRAVEL). 
+
+
+Contact the mechanic's superiors?
+$
+Y - You decide that the world will be better if you tell the airport security that the mechanic is stealing the kerosene.
+When you tell the patrolling guard about it, he tells that they will deal with the mechanic. Being pleased with doing the right thing,
+you go back to the motel. In the morning you notice that your another tyre is punctured. You spend another 100$ to change it,
+and depart peacefully. 
+$
+You decide to not to interrupt the direction of the universe and take the {
+FREE TRAVEL and 100$} and leave with peace. 
+$
+##
+
+
+4. ### ( RANDOM, happens only once )
+???
+During preparation for departure, a black cat jumps in your machine, takes your keychain and runs away. You swiftly jump out and chase the cat.
+You have the important keys from a plane and your home in Monaco in your pocket. 
+
+
+Will you still chase the cat?
+IF NO - You let the cat get away with the bunch of your keys. Not that there was anything important, but you are not happy either. // quest denied
+IF YES:
+You continue to chase the cat with your keys. It runs in way that you wouldn't lose it.
+Will you still chase the cat?
+
+
+IF NO - You let the cat get away with the bunch of your keys. Not that there was anything important, but you are not happy either. // quest denied
+IF YES - You are still chasing a cat. When you get close enough to try to catch it, it dodges your hand and you trip on a street.
+"Stupid cat" - You think.
+Do you really need these keys?
+
+
+IF NO - You let the cat get away with the bunch of your keys. Not that there was anything important, but you are not happy either. // quest denied
+IF YES - Your back hurts, and your left hand is scratched. Come on, this keychain isn't worth it to chase it.
+But still, will you chase the damn black cat?
+
+
+IF NO - You let the cat get away with the bunch of your keys. Not that there was anything important, but you are not happy either.
+Something tells you that you should have retrieved the keychain. The cat is never to be seen again.
+
+IF YES - After another couple of minutes of exhausting chase, cat finally lets your keys go. You retrieve your keys. But after a long chase,
+you are deep inside a foreign city on an unknown street. While walking on the street and cursing the cat, you find 200$.
+Maybe that black cat didn't bring bad luck after all. 
+Asking people for directions and trying to understand them in a mix of local language and english 
+wasn't particularly easy, but in the end you find your way back to the airport.
+???
+###
+
+###
+
+
+###
+

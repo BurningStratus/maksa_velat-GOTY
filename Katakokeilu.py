@@ -1,0 +1,37 @@
+'''“Amsterdam, Holland”, [AM] + koordinaatit, lootbox(tapahtuma)numero
+“Athens, Greece”, [AT]
+“Barcelona, Spain”, [BA]
+“Bern, Switzerland”, [BE]
+“Berlin, Germany”, [BR]
+“Belgrad, Serbia”, [BG]
+“Bratislava, Slovakia”, [BT]
+“Bucharest, Romania”, [BC]
+“Budapest, Hungary”, [BD]
+“ Brussels, Belgium”, [BU]
+“Copenhagen, Denmark”, [CO]
+“Dublin, Ireland”, [DU]
+“Helsinki, Finland”, [HE]
+“Istanbul, Turkey”, [IS]
+“Kiev, Ukraine”, [KI]
+“Lisbon, Portugal”, [LI]
+“Ljubljana, Slovenia”, [LJ]
+“London, UK”, [LO]
+“Madrid, Spain”, [MD]
+“Marseilles, France”, [MR]
+“Monaco, Monaco”, [MO]
+“Oslo, Norway”, [OS]
+“Paris, France”, [PA]
+“Prague, Czech Republic”, [PR]
+“Riga, Latvia”, [RI]
+“Rome, Italy”, [RO]
+“Sarajevo, Bosnia and Herzegovina”, [SA]
+“Stockholm, Sweden”, [ST]
+“Tallinn, Estonia”, [TA]
+"Vatican city, Vatican”, [VA]
+“Vienna, Austria”, [VI]
+“Warsaw, Poland”, [WA]
+
+Rahan ja velan määrä pitää infota pelaajalle tarpeeksi usein!
+'''
+
+# romania()
