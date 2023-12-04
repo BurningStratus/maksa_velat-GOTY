@@ -4,7 +4,7 @@ import time
 from colorama import Fore
 from geopy import distance
 
-from SQL_Scripts import sql_connection as sql
+from back.SQL_Scripts import sql_connection as sql
 
 
 def print_game_name():

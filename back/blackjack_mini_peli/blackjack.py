@@ -1,5 +1,5 @@
 import random
-from functions import general_functions as g_func
+from back.functions import general_functions as g_func
 # The first version of the black jack game. Now it is not used anymore
 # korttipakka
 deck_of_cards = [

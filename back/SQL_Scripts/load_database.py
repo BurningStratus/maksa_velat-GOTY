@@ -1,4 +1,4 @@
-from SQL_Scripts import sql_connection as sql
+from back.SQL_Scripts import sql_connection as sql
 
 class Query:
     def __init__(self, qry):

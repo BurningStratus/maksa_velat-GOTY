@@ -1,7 +1,7 @@
-import quests.list_of_quests as p_quests
-from SQL_Scripts import sql_connection as sql
-from functions import general_functions as g_func
-from quests import maksa_velat_projektia as v_quests
+import back.quests.list_of_quests as p_quests
+from back.SQL_Scripts import sql_connection as sql
+from back.functions import general_functions as g_func
+from back.quests import maksa_velat_projektia as v_quests
 
 
 # Function updates quest/event_id in asked city
