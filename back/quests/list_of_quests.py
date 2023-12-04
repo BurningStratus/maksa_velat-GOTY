@@ -1,4 +1,4 @@
-from functions import general_functions as g_func
+from back.functions import general_functions as g_func
 
 ###  yleinen quest file
 ###  sitä voi suoraan integroida koodiiin.
