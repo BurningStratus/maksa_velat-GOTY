@@ -12,10 +12,15 @@
 from functions import general_functions as g_func
 from functions import quest_functions as q_func
 from functions import casino_flags
+
+import server
+
 import prehistory
 from blackjack_mini_peli import blackjack_iteration as black_jack
 from colorama import Back, Fore
 from SQL_Scripts import load_database
+
+
 ###
 
 
@@ -31,14 +36,17 @@ if choice.upper() == "Y":
 print(Fore.LIGHTBLUE_EX, "press Enter to continue...", Fore.RESET)
 input()
 # Asking from player its nickname
+
 screen_name = input("From all due to stress I forgot my own name...\n"
                     "*Starts to check his identity card*\n"
                     "OH I FOUND IT, and my name is ...\nWrite here > ")
+
 print(f"My name is {screen_name}...")
 # Difficulty level
 debt = int(input("Lets see how much debt I need to pay...\nWrite here > "))
 
 print(f"{debt} DOLLARS!? That's really big debt I own...\nOkay let's get started...")
+
 g_func.add_player(screen_name, debt)
 
 game_over = False
