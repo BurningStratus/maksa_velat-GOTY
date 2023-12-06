@@ -33,7 +33,8 @@ prehistory.get_prehistory()  # Printing Pre-History
 
 # choice = input("Do you want a tutorial? Y/N ")
 # if choice.upper() == "Y":
-##    prehistory.get_instructions()
+##
+#     prehistory.get_instructions()
 
 print(Fore.LIGHTBLUE_EX, "press Enter to continue...", Fore.RESET)
 input()
@@ -57,9 +58,12 @@ lose = False
 win = False
 
 while not game_over:
+
     player_money = g_func.get_player_money(screen_name)
+    
     print(Fore.LIGHTCYAN_EX, f"Your money amount: {player_money} $", Fore.RESET)
     print(Fore.RED, f"Your Debt: {debt} $", Fore.RESET)
+
     q_func.do_quest(screen_name)
     player_location = g_func.get_player_location(screen_name)
 

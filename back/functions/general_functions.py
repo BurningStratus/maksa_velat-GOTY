@@ -140,11 +140,18 @@ def print_9_nearest_airports(icao):
 
         for i in range(1, 10):
             nearest_9_airports.append(airports[i][0])  # adds already sorted icao codes to new list
+        
+        airport_list = []
         for icao in nearest_9_airports:
             name_and_country = get_airport_name_and_country_by_icao(icao)
-            print(f"({icao}) {name_and_country[0]}, {name_and_country[1]}")
+            # YE' OLDE print(f"({icao}) {name_and_country[0]}, {name_and_country[1]}")
+            
+            # instead of printing, makes a list and writes there 9 airports:
+            airport_list.append(icao + "/" + name_and_country[0] + "/" + name_and_country[1])
+             
+        return airport_list
     else:
-        print("NONE")
+        return 'NONE'
 
 
 def get_epilogue():
@@ -196,8 +203,16 @@ def get_player_money(screen_name):
     if tulos:
         return tulos[0][0]
     else:
-        print("PLAYER_NOT_FOUND_EXCEPTION")
-        return None
+        return "PLAYER_NOT_FOUND_EXCEPTION"
+        
+
+def get_player_debt(screen_name):
+    sql.kursori.execute(f"SELECT debt FROM game WHERE screen_name='{screen_name}';")
+    tulos = sql.kursori.fetchall()
+    if tulos:
+        return tulos[0][0]
+    else:
+        return "SQL_QUERY_FAIL"
 
 
 def can_play_blackjack(screen_name):
