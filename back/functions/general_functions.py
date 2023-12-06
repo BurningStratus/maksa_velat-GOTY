@@ -4,7 +4,7 @@ import time
 from colorama import Fore
 from geopy import distance
 
-from back.SQL_Scripts import sql_connection as sql
+from SQL_Scripts import sql_connection as sql
 
 
 def print_game_name():
@@ -174,9 +174,10 @@ def add_player(screen_name, debt):
     sql.kursori.execute(f"insert into game(screen_name,location,money,debt) "
                         f"values('{screen_name}','MO',500,{debt});")
     if sql.kursori.rowcount == 1:
-        print("Journey begins!")
+        
+        return 'name/debt updated'
     else:
-        print("NONE")
+        return 'error updating name/debt'
 
 
 def get_player_location(screen_name):
