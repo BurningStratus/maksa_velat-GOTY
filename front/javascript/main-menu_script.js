@@ -5,6 +5,7 @@ const loadButton = document.querySelector('#load_game');
 const tutorialButton = document.querySelector('#tutorial');
 const dialogExitButton = document.querySelector('.exit-button');
 const dialogWindow = document.querySelector('dialog');
+const audioButton = document.querySelector('.audio');
 
 async function newGame(name, debt) {
     let response;
@@ -49,4 +50,15 @@ tutorialButton.addEventListener('click', async function () {
 
 dialogExitButton.addEventListener('click', function(){
     dialogWindow.close();
+});
+
+audioButton.addEventListener('click', function (){
+    const audio = document.querySelector('audio');
+    if (audioButton.id === 'mute'){
+        audio.muted = true;
+        audioButton.id = 'unmute';
+    } else {
+       audio.muted = false;
+       audioButton.id = 'mute';
+    }
 });
