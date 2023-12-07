@@ -41,7 +41,17 @@ dialog[closed] {
 }
 
 dialog[open] {
-  opacity: 1;
+    opacity: 1;
+    width: 50%;
+    align-self: center;
+    box-sizing: border-box;
+    border-color: yellowgreen;
+    border-width: thick;
+    background-color: antiquewhite;
+}
+dialog p {
+    text-align: left;
+    font-size: 20px !important;
 }
 
 dialog::backdrop {
