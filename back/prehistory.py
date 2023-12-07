@@ -10,90 +10,40 @@ from functions import general_functions as g_func
 #Yleisiä ohjeita alkuun
 def get_instructions():
     print('''
-    
-########## Maksa-Velat projekt ############
+You have 2 primary parameters to follow: Your money and Your Debt. 
+The goal of the game is to earn enough money to pay off your debt. You take off on your tiny airplane and travel 
+around Europe to play Blackjack at illegal casinos. That's what got you into debt in the first place, 
+but that's also the only way you can make money at the moment. 
 
-This game is made by using Python 3 programming language
-and SQL databases. 
 
-Commands are used for the game's controls. 
-Typically, it is recommended to wait for terminal to 
-print all needed data before pressing any buttons.
+TRAVEL: 
+At every airport, you will have 9 different cities to travel to. 
+Each flight costs you 50$. 
+You can choose your destination on the list next to the map. Click the buttons next to the cities to travel there. 
 
-Text prompt examples are shown in boxes below
-representing how commands look like in an
-actual game.
+BLACKJACK: 
+At some cities, you will have the opportunity to play Blackjack
+at illegal casinos. The game prompts: 
 
-When the game show the prompt:
-+============================+
-|[game prompt] Y/N:          |
-+============================+
+" Do you want to play blackjack? YES / NO "
+To play Blackjack, click 'YES'. 
 
-Y(y) will mean "Yes" and N(n) Will mean "No".
+You are allowed to play 3 hands of Blackjack at the same casino at a time. But you can always com back later... 
 
-When the game prompts [ENTER], it means that you should press Enter.
-(contextually)
-+-----------------------+
-|Wanna gamble? [ENTER]/N|
-+-----------------------+
-
-In the example above, press enter to play Black Jack.
-If N is entered, you won't play Black Jack.
-
-You have 2 primary parameters to follow:
-Your money, and Your Debt.
-
-// TRAVEL:
-At every airport, you will have 9 different cities to travel to.
-Each flight costs you 50$
-(except for situations when you have free 300 L of aviation fuel).
-
-To win the game, you will have to earn enough money
-to pay off the debt.
-
-To travel to another city, type the code of the city.
-+============================+
-|Your money amount: 1000 $   |
-|Your Debt: 5000 $           |
-|Where you would like to fly?|
-|                            |
-|(BE) Bern, Switzerland      |
-|(RO) Rome, Italy            |
-|(BA) Barcelona, Spain       |
-|(WA) Warsawa, Poland        |
-|(PA) Paris, France          |
-|(VI) Vienna, Austria        |
-|                            |
-|> BE                        |
-+============================+
-If you type BE, just like in the example above,
-you will travel to Bern, Switzerland. 
-
-// Blackjack:
-At some cities, you will have the opportunity to play Black Jack
-at illegal casinos. That's the only way you know how to make money. 
-+===================================+
-|Do you want to play blackjack? Y/N |
-+===================================+
-To play Black jack, type Y(y).
-
-You are only allowed to play 3 hands of Black Jack at the same casino at a time.
-
-Blackjack features "previous bet memory".
+Blackjack features "previous bet memory". 
  
-When you have played at least one hand, press ENTER when the game prompts for a bet
-to use the previous one. If you press ENTER on your first hand
-however, the bet will be set default, or 20% of your current money capped at 200$.
-So, if you have 123$, the bet will be: 123$ * 0.2 == 25$(always rounded) and if you have 3000 it will be 200$, not 600$.
+When you have played at least one hand, click 'BET' when the game prompts for a bet 
+to use the previous one. If you click 'BET' on your first hand 
+however, the bet will be set default, or 20% of your current money capped at 200$. 
+So, if you have 123$, the bet will be: 123$ * 0.2 == 25$(always rounded) and if you have 3000 it will be 200$, not 600$. 
 
-At the start of each game in casinos, you will be prompted to view rules:
-+----------------------------------+
-| View rules of Black Jack? Y/N:   |
-+----------------------------------+
-Type Y(y) to view complete rules of black jack.
+At the start of each game in casinos, you will be prompted to view rules: 
 
+ " View rules of Blackjack? YES / NO " 
 
-// Random encounters
+Click 'YES' to view complete rules of blackjack. 
+
+RANDOM ENCOUNTERS: 
 
 During Your journey around the Europe, you might encounter
 "interesting" people and situations. Some of them might be sketchy, so

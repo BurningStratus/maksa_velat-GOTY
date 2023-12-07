@@ -3,6 +3,9 @@
 const startButton = document.getElementById('start');
 const loadButton = document.querySelector('#load_game');
 const tutorialButton = document.querySelector('#tutorial');
+const dialogExitButton = document.querySelector('.exit-button');
+const dialogWindow = document.querySelector('dialog');
+
 async function newGame(name, debt) {
     let response;
     try {
@@ -26,4 +29,24 @@ startButton.addEventListener('click', (event) => {
 loadButton.addEventListener('click', function () {
     username = prompt("What's your name?");
     location.replace('gamePage.html');
+});
+
+tutorialButton.addEventListener('click', async function () {
+
+    try {
+        const response = await fetch('../back/Game_instructions_README');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch data: ${response.statusText}`);
+        }
+
+        document.querySelector('#tutorialP').innerHTML = await response.text();
+        dialogWindow.showModal();
+    }
+    catch (error){
+        console.log('Error: ', error);
+    }
+});
+
+dialogExitButton.addEventListener('click', function(){
+    dialogWindow.close();
 });
