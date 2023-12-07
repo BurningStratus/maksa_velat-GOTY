@@ -239,7 +239,8 @@ def bandits(screen_name):
     print()
 
 
-'''Plant the trees
+'''
+Plant the trees
 In the city you meet a group of young energetic people. 
 They are on their way to plant some trees with a local organisation. 
 Would you like to join them?
