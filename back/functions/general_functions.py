@@ -6,8 +6,7 @@ from geopy import distance
 
 from SQL_Scripts import sql_connection as sql
 
-
-def update_calendar(curr_date: str) -> str: # curr_date has to look like "dd/mm/yyyy", for example "10/04/1997"
+def update_calendar(curr_date: list) -> str: # curr_date has to look like "dd/mm/yyyy", "10/04/1997"
     date = curr_date.split("/")
     day = int(date[0])
     month = int(date[1])
@@ -69,41 +68,50 @@ def gameover():
             """, Fore.RESET)
 
 
-# This function updates money in game database, which means it adds or takes money from database
-# If in argument in money variable will be given "-200" it will minus that amount of money from database
-# and update it, or if in money variable will be given "200" then it will add that amount of money to
-# the money in database
-def update_money(money, screen_name):
+def update_money(money: str, screen_name: str) -> str:
+    """
+    This function updates money in game database, which means it adds or takes money from database
+    If in argument in money variable will be given "-200" it will minus that amount of money from database
+    and update it, or if in money variable will be given "200" then it will add that amount of money to
+    the money in database.
+    """
     symbol = money[0]  # checks if string have minus sign at the beginning or not
+    
     if symbol == "-":  # if yes then money will be minused
         money = int(money[1:])
         sql.kursori.execute(f"update game "
                             f"set money=((select money from game where screen_name='{screen_name}') - {money})"
                             f"where screen_name='{screen_name}';")
+        return "UPDATED_MONEY_ADD"
+    
     else:  # if not money will be added
         money = int(money)
         sql.kursori.execute(f"update game "
                             f"set money=((select money from game where screen_name='{screen_name}') + {money})"
                             f"where screen_name='{screen_name}';")
+        
     if sql.kursori.rowcount == 1:
-        return "UPDATED"
+        return "UPDATED_MONEY_REMOVED"
+    
     return "NOTHING_UPDATED"
 
 
-def get_airport_name_and_country_by_icao(icao):
+def get_airport_name_and_country_by_icao(icao: str) -> str:
+    "Returns airport's name using ICAO"
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
     tulos = sql.kursori.fetchall()
     if tulos:
         return tulos[0]
     else:
-        print("Nothing found")
-        return None
+        return 'NOTHING_FOUND'
 
 
-# Function changes Player's location and charges money if needed
-# no_fare=False means that by default there always will be flight charge, but if in argument will be given True
-# it only happens in one quest then the flight will be out of charge for that time:)
 def fly_to(icao, screen_name, no_fare=False):
+    """
+    Function changes Player's location and charges money if needed
+    no_fare=False means that by default there always will be flight charge, but if in argument will be given True
+    it only happens in one quest then the flight will be out of charge for that time :)
+    """
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
     tulos = sql.kursori.fetchall()
     if tulos:
@@ -152,6 +160,7 @@ def fly_to(icao, screen_name, no_fare=False):
 
 
 def get_latitude_and_longtitude_by_icao(icao):
+    """Fetch location(LAT, LONG) of airport thru SQL using ICAO."""
     # Tietokannan ja pycharm valillä yhdeyksen asentaminen ja kyselyn tehtäminen ja tuloksen saaminen
     sql.kursori.execute(f"select latitude_deg, longitude_deg from airport where icao ='{icao}';")
     tulos = sql.kursori.fetchall()
@@ -164,8 +173,7 @@ def get_latitude_and_longtitude_by_icao(icao):
 
     # Jos tulos on tyhjä tulostetaan virhe viesti ja palautetaan tyhjän listaan
     print("LENTOKONEASEMA_NOT_FOUND_404")
-    print("RETURN_EMPTY_LIST")
-    return list()
+    return []
 
 
 # Funktio
@@ -197,7 +205,7 @@ def print_9_nearest_airports(icao):
             # YE' OLDE print(f"({icao}) {name_and_country[0]}, {name_and_country[1]}")
             
             # instead of printing, makes a list and writes there 9 airports:
-            airport_list.append(icao + "/" + name_and_country[0] + "/" + name_and_country[1])
+            airport_list.append(icao + " " + name_and_country[0] + " " + name_and_country[1])
              
         return airport_list
     else:
@@ -232,22 +240,21 @@ def add_player(screen_name, debt):
                         f"values('{screen_name}','MO',500,{debt}, '10/04/1997');")
     if sql.kursori.rowcount == 1:
         
-        return 'name/debt updated'
+        return 'NAME/DEBT UPDATED'
     else:
-        return 'error updating name/debt'
+        return 'ERROR UPDATING NAME/DEBT'
 
 
-def get_player_location(screen_name):
+def get_player_location(screen_name: str) -> str:
     sql.kursori.execute(f"select location from game where screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
         return tulos[0][0]
     else:
-        print("UNKNOWN_ERROR")
-        return None
+        return "UNKNOWN_ERROR"
 
 
-def get_player_money(screen_name):
+def get_player_money(screen_name:str) -> str:
     sql.kursori.execute(f"select money from game where screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
@@ -256,7 +263,7 @@ def get_player_money(screen_name):
         return "PLAYER_NOT_FOUND_EXCEPTION"
         
 
-def get_player_debt(screen_name):
+def get_player_debt(screen_name:str) -> str:
     sql.kursori.execute(f"SELECT debt FROM game WHERE screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
