@@ -1,6 +1,8 @@
+'use strict';
 
-const startGame = document.getElementById('start');
-
+const startButton = document.getElementById('start');
+const loadButton = document.querySelector('#load_game');
+const tutorialButton = document.querySelector('#tutorial');
 async function newGame(name, debt) {
     let response;
     try {
@@ -12,9 +14,16 @@ async function newGame(name, debt) {
     return response;
 }
 
-startGame.addEventListener('click', (event) => {
+startButton.addEventListener('click', (event) => {
     console.log('event started');
     const name = prompt('Name');
     const debt = parseInt(prompt('Debt'));
     console.log(newGame(name, debt));
+    location.replace('gamePage.html');
 })
+
+
+loadButton.addEventListener('click', function () {
+    username = prompt("What's your name?");
+    location.replace('gamePage.html');
+});

@@ -1,5 +1,5 @@
 
-const usrname = prompt('What was your name?');
+const username = prompt('What was your name?');
 
 
 
@@ -41,13 +41,13 @@ async function updateTerminal(name) {
 }
 
 async function printAirports() {
-    const airports = await updateTerminal(usrname);
+    const airports = await updateTerminal(username);
     const dest = document.querySelectorAll('.dest');
     for (let i = 0; i < dest.length; i++) {
         dest[i].innerText = airports[i];
-    };
+    }
 
-};
+}
 printAirports()
-updateTerminal(usrname);
+updateTerminal(username);
 
