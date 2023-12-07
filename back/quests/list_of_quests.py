@@ -239,3 +239,51 @@ def bandits(screen_name):
     print()
 
 
+'''Plant the trees
+In the city you meet a group of young energetic people. 
+They are on their way to plant some trees with a local organisation. 
+Would you like to join them?
+
+if yes:
+You had a nice time with the youngsters and together you planted over a thousand trees. 
+That’s some good karma! And the afterparty was amazing.
+
+seuraus: ei vaikutusta rahaan, mutta +1 päivä
+----------------------------------
+
+Fundraiser 
+On the street you notice a group of people dressed up all fancy. 
+They tell you that there is a big fundraiser event  for girls’ education about to begin and 
+the method of raising the funds is blackjack. After hearing that you are basically a blackjack pro, 
+they ask you to join them. You are definitely not dressed appropriately. 
+But on the other hand you have always been passionate about women’s rights. Will you join them?
+
+if yes:
+In the beginning you placed a bet of 100$ and played better than ever, but of course all the money 
+went to charity. It was all worth it because you had a blast and made some new friends.
+
+raha -100$ ja +1 päivä
+------------------------------------
+
+Problems with the engine
+You have been having some troubles with your airplane's engine. You find a friendly mechanic. 
+Luckily they tell you the repairs will cost you only 100$. There is also a chance to convert the engine 
+so that it would run on ethanol instead of kerosene. The conversion would cost you only 50$ on top of 
+the 100$ for the needed repairs and the ethanol would cost you the same as kerosene(50$ per flight). 
+Are you an environmental hero or will you continue to fly with kerosene?
+
+if yes:
+The repairs and the conversion cost you 150$. Now your dear plane is running smoothly and 
+environmentally friendly :)
+
+raha -150 tai -100
+
+--------------------------------
+
+All quests done:
+Congratulations! You have completed three quests to make the world a better place: you planted trees, 
+gave money to girls’ education and converted your airplane’s engine to run on ethanol. 
+Your good deeds have been noticed by a big environmental organization and they gave you a stipend of 1500$! 
+
+raha +1500$
+'''
