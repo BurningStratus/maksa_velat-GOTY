@@ -38,7 +38,7 @@ def data_retriever(username):
     money = g_func.get_player_money(username)
     debt = g_func.get_player_debt(username)
     date = g_func.get_player_calendar(username)
-    
+
     response = {
         'date': date,
         "money": money,
@@ -55,7 +55,8 @@ def data_retriever(username):
 def flyto(destination, username):
     response = g_func.fly_to(destination, username)
     response = json.dumps({
-        'nofare': response
+        'STATS': response
+
     })
     return Response(response=response, status=200, mimetype="application/json")
 
