@@ -37,8 +37,10 @@ def data_retriever(username):
     airports = g_func.print_9_nearest_airports(location)
     money = g_func.get_player_money(username)
     debt = g_func.get_player_debt(username)
-
+    date = g_func.get_player_calendar(username)
+    
     response = {
+        'date': date,
         "money": money,
         "debt": debt,
         "location": location,

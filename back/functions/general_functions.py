@@ -7,6 +7,37 @@ from geopy import distance
 from SQL_Scripts import sql_connection as sql
 
 
+def update_calendar(curr_date: str) -> str: # curr_date has to look like "dd/mm/yyyy", for example "10/04/1997"
+    date = curr_date.split("/")
+    day = int(date[0])
+    month = int(date[1])
+    year = int(date[2])
+
+    if day < 30 and month < 12:
+        # any month except DEC. Day will swap to +1( 1 4 1997 >> 2 4 1997 )
+        day += 1
+        
+    elif day == 30 and month < 12:
+        # month changes. Any, except DEC. ( 30 4 1997 >> 1 5 1997 )
+        month += 1
+        day = 1
+
+    elif day == 30 and month == 12:
+        # year swap. If 30 DEC, year + 1 ( 30 12 1997 >> 1 1 1998 ) 
+        day = 1
+        month = 1
+        year += 1
+    
+    if len(str(day)) < 2:
+        day = "0" + str(day)
+    
+    if len(str(month)) < 2:
+        month = "0" + str(month)
+    
+    upd_date = str(day) + "/" + str(month) + "/" + str(year)
+    return upd_date
+
+
 def print_game_name():
     print(Fore.RED + """
 $$\      $$\  $$$$$$\  $$\   $$\  $$$$$$\   $$$$$$\        $$\    $$\ $$$$$$$$\ $$\        $$$$$$\  $$$$$$$$\ 
@@ -78,8 +109,11 @@ def fly_to(icao, screen_name, no_fare=False):
     if tulos:
         city = tulos[0][0]  # tulos = ((Barcelona),(Monaco),(Madrid),)
         country = tulos[0][1]
+        cost = None         # price of flight
+        calendar = None
+
         if no_fare:
-            print(f"Flight to {city} cost you 0$")
+            cost = f"FREE FLIGHT TO {city}"
             ###
         else:
             # Player's money minus 50$
@@ -87,18 +121,34 @@ def fly_to(icao, screen_name, no_fare=False):
                                 f"set money=((select money from game where screen_name='{screen_name}') - 50) "  # money = money - 50
                                 f"where screen_name='{screen_name}';")
             if sql.kursori.rowcount == 1:
-                print(f"Flight to {city} cost you 50$")
+                cost = f"{city} 50$"
             else:
-                print("SCREEN_NAME_DOES_NOT_EXIST")
+                return ["SCREEN_NAME_DOES_NOT_EXIST", "null", "null"]
+        
+        # Player calendar change
+        cur_date = get_player_calendar(screen_name)
+        cur_date = update_calendar(cur_date)
+
+        sql.kursori.execute(f'''UPDATE game 
+                            SET calendar="{cur_date}" 
+                            WHERE screen_name="{screen_name}";''')
+        if sql.kursori.rowcount == 1:
+            calendar = "CALENDAR UPDATED"
+        else:
+            calendar = "ERROR_CALENDAR"
+            return ['null', calendar, cost]
+
         # Player location change
         sql.kursori.execute(f"update game "
                             f"set location=(select icao from airport where airport_name='{city}')"
                             f"where screen_name='{screen_name}';")
+        
         if sql.kursori.rowcount == 1:
-            print(f"You are now at {city}, {country}")
+            return ["SUCCESSFUL FLIGHT", calendar, cost]
+        else:
+            return ["FLIGHT FAILED AT LOCATION CHANGE"]
     else:
-        print("ERROR NO SUCH CITY EXISTS")
-        return None
+        return ["ERROR NO SUCH CITY EXISTS", "null", 'null']
 
 
 def get_latitude_and_longtitude_by_icao(icao):
@@ -178,8 +228,8 @@ To be continued?
 
 
 def add_player(screen_name, debt):
-    sql.kursori.execute(f"insert into game(screen_name,location,money,debt) "
-                        f"values('{screen_name}','MO',500,{debt});")
+    sql.kursori.execute(f"insert into game(screen_name,location,money,debt, calendar) "
+                        f"values('{screen_name}','MO',500,{debt}, '10/04/1997');")
     if sql.kursori.rowcount == 1:
         
         return 'name/debt updated'
@@ -213,6 +263,15 @@ def get_player_debt(screen_name):
         return tulos[0][0]
     else:
         return "SQL_QUERY_FAIL"
+
+
+def get_player_calendar(screen_name: str) -> str:
+    sql.kursori.execute(f'SELECT calendar FROM game WHERE screen_name="{screen_name}";')
+    tulos = sql.kursori.fetchone()
+    if tulos:
+        return tulos[0]
+    else:
+        return 'brokendate'
 
 
 def can_play_blackjack(screen_name):
