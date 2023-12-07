@@ -1,0 +1,12 @@
+-RULES of BLACKJACK- Winner is the one with the sum of the cards closer to 21.
+ In the beginning both the Player and the
+Dealer are dealt two cards. One of the Dealer's cards is disclosed until the Player chooses to "Stay". When
+the game prompts: " Stay? YES / NO " click 'YES' to stay or 'NO' to take a new card. Player can take as many cards as
+they want. Dealer takes new cards until their sum is at least 16. Number cards have their own values. J, Q, K have the
+value of 10. Ace has the value of 1 or 11, whichever suits the player best. When player is satisfied with their cards or
+"hand", the Dealer opens their second card. If sum of cards is over 21, the player(or Dealer) is "busted" and loses their bet.
+If both the Dealer's and the Player's sums are under 21, the one whose sum is closer to 21, wins.
+
+
+
+
