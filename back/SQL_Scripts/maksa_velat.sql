@@ -29,6 +29,7 @@ CREATE TABLE game
   location VARCHAR(255) NOT NULL,
   money INT NOT NULL,
   debt INT NOT NULL,
+  calendar VARCHAR(10),
   PRIMARY KEY (id),
   FOREIGN KEY (location) REFERENCES airport(icao)
 );
