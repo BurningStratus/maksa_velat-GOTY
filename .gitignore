@@ -7,3 +7,4 @@ back/functions/__pycache__/general_functions.cpython-37.pyc
 back/functions/__pycache__/quest_functions.cpython-37.pyc
 back/quests/__pycache__/list_of_quests.cpython-37.pyc
 back/quests/__pycache__/maksa_velat_projektia.cpython-37.pyc
+back/SQL_Scripts/sql_connection.py

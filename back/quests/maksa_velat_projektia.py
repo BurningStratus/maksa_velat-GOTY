@@ -2,7 +2,7 @@
 
 # Vatikaani quest
 # Saavut Vatikaaniin ensin
-from back.functions import general_functions as g_func
+from functions import general_functions as g_func
 
 
 def vatican_escape_caller(screen_name):

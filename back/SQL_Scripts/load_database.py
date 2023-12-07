@@ -1,4 +1,4 @@
-from back.SQL_Scripts import sql_connection as sql
+from SQL_Scripts import sql_connection as sql
 
 class Query:
     def __init__(self, qry):
@@ -39,7 +39,7 @@ def load_events():
     for qry in init_game:
         qry.executeSQL()
 
-    print('end of SQL queries')
+    return 'SQL executed'
     ###
 '''
     # Clearing Old players

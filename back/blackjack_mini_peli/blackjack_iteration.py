@@ -1,6 +1,6 @@
 import random
 import time
-from back.functions import general_functions as g_func
+from functions import general_functions as g_func
 
 '''
 Read comments in order to get a picture of program's command order.
