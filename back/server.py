@@ -3,7 +3,10 @@ from flask_cors import CORS
 import json
 
 from functions import general_functions as g_func
-from SQL_Scripts import load_database, sql_connection
+from SQL_Scripts import load_database, sql_connection as sql
+
+#### TODO check SQL pass
+####
 
 server = Flask(__name__)
 cors = CORS(server)
@@ -54,9 +57,9 @@ def data_retriever(username):
 @server.route('/navigation.<destination>.<username>')
 def flyto(destination, username):
     response = g_func.fly_to(destination, username)
+    
     response = json.dumps({
         'STATS': response
-
     })
     return Response(response=response, status=200, mimetype="application/json")
 

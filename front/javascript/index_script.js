@@ -1,14 +1,14 @@
+const username = 'booba';
 
-const username = prompt('What was your name?');
-
-
+const listAirports = document.getElementById('dests');
 
 let date = document.getElementById('date');
 let currLocation = document.getElementById('location');
 let money = document.getElementById('money');
 let debt = document.getElementById('debt');
-// let airports = document.querySelectorAll('.destination');
 
+// let airports = document.querySelectorAll('.destination');
+////////////////////////////////////////////////////////////
 async function infoDex(name) {
     let response;
     try {
@@ -21,7 +21,6 @@ async function infoDex(name) {
     }
     return response;
 }
-
 async function updateTerminal(name) {
     // to update during the game
     let date = document.getElementById('date');
@@ -39,15 +38,42 @@ async function updateTerminal(name) {
     console.log(await data.airports);
     return data.airports;
 }
+async function printAirports(name) {
+    const airports = await updateTerminal(name);
+    const listOfDestinations = document.getElementById('dests');
 
-async function printAirports() {
-    const airports = await updateTerminal(username);
-    const dest = document.querySelectorAll('.dest');
-    for (let i = 0; i < dest.length; i++) {
-        dest[i].innerText = airports[i];
+    // creating articles with text, button and event listener.
+    for (let i = 0; i < 9; i++) {
+        const airport = await airports[i];
+        const travelButton = document.createElement('button');
+        const dest = document.createElement('li');
+        const ICAOcode = document.createElement('span');
+
+        // "PA Paris France"
+        ICAOcode.innerText = airport;
+
+        dest.append(ICAOcode, travelButton);
+        dest.classList.add('travelButton');
+        
+        ICAO = await airport.split(' ')[0];
+        travelButton.innerHTML = ICAO;
+        travelButton.value = ICAO;
+        
+        await travelButton.addEventListener('click', (object) => {
+            listAirports.innerHTML = '';
+            console.log(object.target.value);
+            flyto(username, object.target.value);
+        });
+
+        listOfDestinations.append(dest);
     }
-
 }
-printAirports()
-updateTerminal(username);
 
+async function flyto(name, airport) {
+    const flight = await fetch(`http://127.0.0.1:5000/navigation.${airport}.${name}`);
+    console.log(await flight.json());
+    await printAirports(username);
+}
+/////////////////////////////////////////////////////////////
+
+printAirports(username)
