@@ -5,33 +5,49 @@
     <title>Maksa Velat!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main-menu_style.css">
+    <script>
+        function getLocalStream() {
+            navigator.mediaDevices
+                .getUserMedia({video: false, audio: true})
+                .then((stream) => {
+                    window.localStream = stream;
+                    document.querySelector('audio').srcObject = stream;
+                    document.querySelector('audio').autoplay = true;
+                })
+                .catch((err) => {
+                    console.error(`you got an error: ${err}`);
+                });
+        }
+
+        getLocalStream();
+    </script>
     <script src="javascript/mainMenuScript.js" defer></script>
 </head>
 <body>
 
 <!-- Video element -->
-    <video id="video-background" autoplay muted loop>
-        <source src="videos/main-menu-background-video222.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <dialog>
-        <span class="exit-button">&#x2715;</span>
-        <p id="tutorialP">This is your dialog box text.</p>
-    </dialog>
-    <!-- Content on top of the video -->
-    <div id="content">
-        <h1>MAKSA VELAT!</h1>
-        <p>This is an example HTML page with a video background.</p>
-        <button id="start">Start</button>
-        <button id="load_game">Load Game</button>
-        <button id="tutorial">Tutorial</button>
-    </div>
-     <audio id="backgroundAudio" autoplay loop>
-        <source src="music/in-the-hall-of-the-mountain-king.mp3" type="audio/mp3">
-        <source src="music/in-the-hall-of-the-mountain-king.wav" type="audio/wav">
-        <source src="music/in-the-hall-of-the-mountain-king.ogg" type="audio/ogg">
-        Your browser does not support the audio tag.
-    </audio>
-    <button id="mute" class="audio"></button>
+<video id="video-background" autoplay muted loop>
+    <source src="videos/main-menu-background-video222.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+<dialog>
+    <span class="exit-button">&#x2715;</span>
+    <p id="tutorialP">This is your dialog box text.</p>
+</dialog>
+<!-- Content on top of the video -->
+<div id="content">
+    <h1>MAKSA VELAT!</h1>
+    <p>This is an example HTML page with a video background.</p>
+    <button id="start">Start</button>
+    <button id="load_game">Load Game</button>
+    <button id="tutorial">Tutorial</button>
+</div>
+<audio id="backgroundAudio" autoplay loop>
+    <source src="music/in-the-hall-of-the-mountain-king.mp3" type="audio/mp3">
+    <source src="music/in-the-hall-of-the-mountain-king.wav" type="audio/wav">
+    <source src="music/in-the-hall-of-the-mountain-king.ogg" type="audio/ogg">
+    Your browser does not support the audio tag.
+</audio>
+<button id="mute" class="audio"></button>
 </body>
 </html>
