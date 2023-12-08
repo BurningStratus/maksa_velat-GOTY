@@ -1,4 +1,6 @@
-const username = 'booba';
+import {name} from "./mainMenuScript";
+
+const username = name;
 
 const listAirports = document.getElementById('dests');
 
@@ -27,7 +29,7 @@ async function updateTerminal(name) {
     let currLocation = document.getElementById('location');
     let money = document.getElementById('money');
     let debt = document.getElementById('debt');
-    
+
     const data = await infoDex(name);
     // debug
     console.log(data);
@@ -54,11 +56,11 @@ async function printAirports(name) {
 
         dest.append(ICAOcode, travelButton);
         dest.classList.add('travelButton');
-        
-        ICAO = await airport.split(' ')[0];
+
+        const ICAO = await airport.split(' ')[0];
         travelButton.innerHTML = ICAO;
         travelButton.value = ICAO;
-        
+
         await travelButton.addEventListener('click', (object) => {
             listAirports.innerHTML = '';
             console.log(object.target.value);
