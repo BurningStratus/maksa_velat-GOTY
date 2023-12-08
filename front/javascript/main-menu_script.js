@@ -18,11 +18,11 @@ async function newGame(name, debt) {
     return response;
 }
 
-startButton.addEventListener('click', (event) => {
+startButton.addEventListener('click', async (event) => {
     console.log('event started');
     const name = prompt('Name');
     const debt = parseInt(prompt('Debt'));
-    console.log(newGame(name, debt));
+    console.log(await newGame(name, debt));
     location.replace('gamePage.html');
 })
 

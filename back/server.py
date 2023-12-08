@@ -24,7 +24,7 @@ def main_menu():
 def start(username, debt):
     sql_game_init = load_database.load_events()
     sql_player = g_func.add_player(username, debt)
-
+    
     response = {
         'user': sql_player,
         'game': sql_game_init
@@ -57,7 +57,7 @@ def data_retriever(username):
 @server.route('/navigation.<destination>.<username>')
 def flyto(destination, username):
     response = g_func.fly_to(destination, username)
-    
+
     response = json.dumps({
         'STATS': response
     })
