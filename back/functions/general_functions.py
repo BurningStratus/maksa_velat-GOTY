@@ -6,6 +6,23 @@ from geopy import distance
 
 from SQL_Scripts import sql_connection as sql
 
+''' courier's stash
+print(Fore.RED, 
+              ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  
+             ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
+            ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
+            ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄  
+            ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒
+             ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░
+              ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░
+            ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░ 
+                  ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░     
+                                                                 ░                   
+            , Fore.RESET)
+
+'''
+
+
 def update_calendar(curr_date: list) -> str: # curr_date has to look like "dd/mm/yyyy", "10/04/1997"
     date = curr_date.split("/")
     day = int(date[0])
@@ -53,20 +70,16 @@ $$ | \_/ $$ |$$ |  $$ |$$ | \$$\ \$$$$$$  |$$ |  $$ |         \$  /   $$$$$$$$\ 
 """, Fore.RESET)
 
 
-def gameover():
-    print(Fore.RED, """
-              ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  
-             ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
-            ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
-            ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄  
-            ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒
-             ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░
-              ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░
-            ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░ 
-                  ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░     
-                                                                 ░                   
-            """, Fore.RESET)
+def gameover(screen_name: str) -> bool:
+    sql.kursori.execute(f'SELECT money FROM game WHERE screen_name="{screen_name}";')
+    result = sql.kursori.fetchone()
+    cur_money = result[0]
 
+    if cur_money >= 0:
+        return False
+    else:
+        return True
+    
 
 def update_money(money: str, screen_name: str) -> str:
     """
@@ -96,6 +109,13 @@ def update_money(money: str, screen_name: str) -> str:
     return "NOTHING_UPDATED"
 
 
+def get_coordinatesSQL():
+    sql_query = """SELECT latitude_deg, longitude_deg, country, airport_name FROM airport;"""
+    sql.kursori.execute(sql_query)
+    
+    result = sql.kursori.fetchall()
+    return result
+
 def get_airport_name_and_country_by_icao(icao: str) -> str:
     "Returns airport's name using ICAO"
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
@@ -106,11 +126,16 @@ def get_airport_name_and_country_by_icao(icao: str) -> str:
         return 'NOTHING_FOUND'
 
 
-def fly_to(icao, screen_name, no_fare=False):
+def fly_to(icao, screen_name, fare_price:str = "KE" , no_fare:bool = False) -> list:
     """
     Function changes Player's location and charges money if needed
     no_fare=False means that by default there always will be flight charge, but if in argument will be given True
     it only happens in one quest then the flight will be out of charge for that time :)
+
+    icao: ICAO of airport, i.e MO(Monaco)
+    screen_name: Name of the player
+    fare_price: Either "KE" as Kerosene or "ET" as Ethanol
+    nofare: Boolean. Used in quests. If True, the flight is free.
     """
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
     tulos = sql.kursori.fetchall()
@@ -124,12 +149,25 @@ def fly_to(icao, screen_name, no_fare=False):
             cost = f"FREE FLIGHT TO {city}"
             ###
         else:
-            # Player's money minus 50$
-            sql.kursori.execute(f"update game "
-                                f"set money=((select money from game where screen_name='{screen_name}') - 50) "  # money = money - 50
-                                f"where screen_name='{screen_name}';")
+            # addtl check if ET85 is used.
+            if fare_price == "ET":
+                # Player's money minus 65$
+                sql.kursori.execute(f"update game "
+                                f"set money=((select money from game where screen_name='{screen_name}') - 65) "
+                                f"where screen_name='{screen_name}';") # money = money - 65
+                
+                cost = "65$"
+
+            else:
+                # Player's money minus 50$
+                sql.kursori.execute(f"update game "
+                                f"set money=((select money from game where screen_name='{screen_name}') - 50) "  
+                                f"where screen_name='{screen_name}';") # money = money - 50
+                
+                cost = "50$"
+            
             if sql.kursori.rowcount == 1:
-                cost = f"{city} 50$"
+                cost = f"{city} {fare_price} {cost}"
             else:
                 return ["SCREEN_NAME_DOES_NOT_EXIST", "null", "null"]
         

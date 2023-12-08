@@ -20,14 +20,25 @@ def get_quest_id_by_icao(icao):
         return tulos[0][0]
     return 0
 
+def quest_decryptor(quest_data: str) -> list:
+    # RAND{CH}[0] or {PL}[]
+    if quest_data[:3] == "RAND":
+        pass
+
+
+    
+    head = quest_data[:1]
+
+
 
 # Function for doing quests corresponding locations event_id's
 def do_quest(screen_name):
     icao = g_func.get_player_location(screen_name)
     quest_id = get_quest_id_by_icao(icao)
     if quest_id == 1:
-        p_quests.starter_quest_caller(screen_name)  # Calls Monaco Quest
-        update_quest(0, "Monaco")  # This marks quest as done in database
+        # p_quests.starter_quest_caller(screen_name)  # Calls Monaco Quest
+        pass
+        # update_quest(0, "Monaco")  # This marks quest as done in database
     elif quest_id == 2:
         p_quests.chess_in_germany_caller()  # Calls German Quest
         update_quest(0, "Berlin")  # This marks quest as done in database

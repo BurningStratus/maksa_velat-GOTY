@@ -3,6 +3,7 @@ from flask_cors import CORS
 import json
 
 from functions import general_functions as g_func
+from functions import quest_functions as q_func
 from SQL_Scripts import load_database, sql_connection as sql
 
 #### TODO check SQL pass
@@ -24,13 +25,18 @@ def main_menu():
 def start(username, debt):
     sql_game_init = load_database.load_events()
     sql_player = g_func.add_player(username, debt)
-    
+
     response = {
         'user': sql_player,
         'game': sql_game_init
     }
     response = json.dumps(response)
     return Response(response=response, status=200, mimetype="application/json")
+
+@server.route('/init_cities')
+def init_cities():
+    
+    return Response()
 
 
 @server.route('/infoDex_navigation/<username>')
@@ -43,7 +49,7 @@ def data_retriever(username):
     date = g_func.get_player_calendar(username)
 
     response = {
-        'date': date,
+        "date": date,
         "money": money,
         "debt": debt,
         "location": location,
@@ -57,10 +63,16 @@ def data_retriever(username):
 @server.route('/navigation.<destination>.<username>')
 def flyto(destination, username):
     response = g_func.fly_to(destination, username)
+    game_state = g_func.gameover(username)
+    quest = q_func.do_quest(username)
 
+    # game 
     response = json.dumps({
-        'STATS': response
+    'STATS': response,
+    "quest": quest,
+    "gameover" : game_state
     })
+    
     return Response(response=response, status=200, mimetype="application/json")
 
 
