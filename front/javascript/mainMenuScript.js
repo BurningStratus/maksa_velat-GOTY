@@ -1,11 +1,12 @@
 'use strict';
-
 const startButton = document.getElementById('start');
 const loadButton = document.querySelector('#load_game');
 const tutorialButton = document.querySelector('#tutorial');
 const dialogExitButton = document.querySelector('.exit-button');
 const dialogWindow = document.querySelector('dialog');
 const audioButton = document.querySelector('.audio');
+
+
 async function newGame(name, debt) {
     let response;
     try {
@@ -16,10 +17,10 @@ async function newGame(name, debt) {
     }
     return response;
 }
-
+// Todo: CONNECT USERNAME AND BACKEND
 startButton.addEventListener('click', async (event) => {
     console.log('event started');
-    const name = prompt('Name');
+    const name = prompt('Name')
     const debt = parseInt(prompt('Debt'));
     console.log(await newGame(name, debt));
     location.replace('gamePage.html');

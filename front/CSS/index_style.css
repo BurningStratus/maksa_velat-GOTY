@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+}
+
+#map {
+    object-fit: cover;
+    height: 1000px;
+    width: 60%;
+    border: solid 0.5rem;
+    border-color: #2e3f31;
+}
+
+.fixed-element {
+    object-fit: cover;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    width: 39%;
+}
+
+img {
+    width: 20%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: antiquewhite;
+}
+
+#nameOfThePanel {
+    width: 100%;
+    height: 2rem;
+    background-color: black;
+}
+
+#nameOfThePanel h1 {
+    color: antiquewhite;
+    background-image: url("../img/turquoise-2083986_640.jpg");
+}
+
+#panel {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    box-sizing: border-box;
+    justify-content: space-between;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+
+}
+
+footer {
+    width: 100%;
+    height: 2rem;
+    background-color: #c45b00;
+}

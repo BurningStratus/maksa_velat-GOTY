@@ -5,22 +5,6 @@
     <title>Maksa Velat!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main-menu_style.css">
-    <script>
-        function getLocalStream() {
-            navigator.mediaDevices
-                .getUserMedia({video: false, audio: true})
-                .then((stream) => {
-                    window.localStream = stream;
-                    document.querySelector('audio').srcObject = stream;
-                    document.querySelector('audio').autoplay = true;
-                })
-                .catch((err) => {
-                    console.error(`you got an error: ${err}`);
-                });
-        }
-
-        getLocalStream();
-    </script>
     <script src="javascript/mainMenuScript.js" defer></script>
 </head>
 <body>
@@ -42,7 +26,7 @@
     <button id="load_game">Load Game</button>
     <button id="tutorial">Tutorial</button>
 </div>
-<audio id="backgroundAudio" autoplay loop>
+<audio id="backgroundAudio">
     <source src="music/in-the-hall-of-the-mountain-king.mp3" type="audio/mp3">
     <source src="music/in-the-hall-of-the-mountain-king.wav" type="audio/wav">
     <source src="music/in-the-hall-of-the-mountain-king.ogg" type="audio/ogg">

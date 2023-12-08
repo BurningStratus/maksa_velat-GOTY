@@ -1,5 +1,3 @@
-const username = name;
-
 const listAirports = document.getElementById('dests');
 
 let date = document.getElementById('date');
