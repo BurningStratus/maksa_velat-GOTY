@@ -1,5 +1,3 @@
-import {name} from "./mainMenuScript";
-
 const username = name;
 
 const listAirports = document.getElementById('dests');

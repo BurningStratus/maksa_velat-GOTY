@@ -6,7 +6,6 @@ const tutorialButton = document.querySelector('#tutorial');
 const dialogExitButton = document.querySelector('.exit-button');
 const dialogWindow = document.querySelector('dialog');
 const audioButton = document.querySelector('.audio');
-export let name, debt;
 async function newGame(name, debt) {
     let response;
     try {
