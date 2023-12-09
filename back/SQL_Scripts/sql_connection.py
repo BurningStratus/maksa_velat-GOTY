@@ -12,7 +12,7 @@ yhteys = mysql.connector.connect(
     port=3306,
     database='maksa_velat',
     user='root',
-    password='red_banana',
+    password='',
     autocommit=True
 )
 kursori = yhteys.cursor()
