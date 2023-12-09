@@ -21,9 +21,24 @@ print(Fore.RED,
             , Fore.RESET)
 
 '''
+def update_day_counter(screen_name: str) -> str:
+    """Updates day counter in DataBase."""
+    sql.kursori.execute(f'''UPDATE game 
+                            SET day_counter=((SELECT day_counter FROM game WHERE screen_name='{screen_name}') + 1)
+                            WHERE screen_name="{screen_name}";''')
+    sql.kursori.fetchone()
+    if sql.kursori.rowcount == 1:
+        return "UPDATED_DAY_COUNTER"
+    return "NOTHING_UPDATED"
 
 
-def update_calendar(curr_date: list) -> str: # curr_date has to look like "dd/mm/yyyy", "10/04/1997"
+def update_calendar(curr_date: list, screen_name: str) -> str: # curr_date has to look like "dd/mm/yyyy", "10/04/1997"
+    """Takes care of calendar. Each month has 30 days. Returns updated date as a string. Example of input and output:  
+    ["30/07/1997"] >> 01/08/1997. AUG irl has 31 days, but it's not a big deal if it will have 30."""
+
+    # updates days in database
+    update_day_counter(screen_name)
+
     date = curr_date.split("/")
     day = int(date[0])
     month = int(date[1])
@@ -51,6 +66,7 @@ def update_calendar(curr_date: list) -> str: # curr_date has to look like "dd/mm
         month = "0" + str(month)
     
     upd_date = str(day) + "/" + str(month) + "/" + str(year)
+
     return upd_date
 
 
@@ -109,12 +125,27 @@ def update_money(money: str, screen_name: str) -> str:
     return "NOTHING_UPDATED"
 
 
-def get_coordinatesSQL():
+def get_coordinatesSQL() -> list:
+    """Used for fetching and unpacking SQL-queries for fetching the coordinates of cities. 
+    Returns list of lists: [ [ latitude_deg, longitude_deg, country, airport_name ], ...].     
+    BTW, sql_unpacker()-method should live inside the get_coordsSQL(). """
+
     sql_query = """SELECT latitude_deg, longitude_deg, country, airport_name FROM airport;"""
     sql.kursori.execute(sql_query)
+    list_of_cities = []
     
-    result = sql.kursori.fetchall()
-    return result
+    # unpacks the tuples into lists
+    def sql_unpacker(listof_tuples: list) -> list:
+        return [*listof_tuples[0]]
+
+    # since we have exactly 32 cities, we can use range().
+    for itr in range(31):
+        sql_row = sql.kursori.fetchmany()
+        row = sql_unpacker(sql_row)
+        list_of_cities.append(row)
+    
+    return list_of_cities
+
 
 def get_airport_name_and_country_by_icao(icao: str) -> str:
     "Returns airport's name using ICAO"
@@ -176,7 +207,8 @@ def fly_to(icao, screen_name, fare_price:str = "KE" , no_fare:bool = False) -> l
         cur_date = update_calendar(cur_date)
 
         sql.kursori.execute(f'''UPDATE game 
-                            SET calendar="{cur_date}" 
+                            SET calendar="{cur_date},
+                            SET day_counter=((SELECT day_counter FROM game WHERE screen_name='{screen_name}') + 1)
                             WHERE screen_name="{screen_name}";''')
         if sql.kursori.rowcount == 1:
             calendar = "CALENDAR UPDATED"
@@ -273,14 +305,31 @@ To be continued?
 ''')
 
 
+def get_players_list() -> list:
+    sql_query = 'SELECT location, screen_name, money, debt, calendar FROM game WHERE score <= 0;'
+    sql.kursori.execute(sql_query)
+    
+    players_list = sql.kursori.fetchall()
+    if players_list:
+        return players_list
+    else:
+        return ['Empty player list.']
+
+
 def add_player(screen_name, debt):
-    sql.kursori.execute(f"insert into game(screen_name,location,money,debt, calendar) "
-                        f"values('{screen_name}','MO',500,{debt}, '10/04/1997');")
+
+    sql.kursori.execute(f"select screen_name from game where screen_name ='{screen_name}';")
+    result = sql.kursori.fetchone()
+    if result:
+        return 'PLAYER EXISTS'
+
+    sql.kursori.execute(f"insert into game(screen_name, location, money, debt, calendar, day_count, score) "
+                        f"values('{screen_name}','MO',500,{debt}, '10/04/1997', 0, 0);")
     if sql.kursori.rowcount == 1:
         
-        return 'NAME/DEBT UPDATED'
+        return 'NAME/DEBT/CALENDAR/SCORE UPDATED'
     else:
-        return 'ERROR UPDATING NAME/DEBT'
+        return 'ERROR UPDATING NAME/DEBT/CALENDAR/SCORE'
 
 
 def get_player_location(screen_name: str) -> str:
@@ -330,3 +379,23 @@ def can_play_blackjack(screen_name):
             return True
     else:
         return False
+
+
+def get_score(screen_name: str):
+    
+    sql_query = f"SELECT day_count, debt, money FROM game WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+    result = sql.kursori.fetchone()
+    days, debt, money  = result[0], result[1], result[2]
+    
+    if days == 0:
+        days = 1
+
+    score = round(500 / (days / (debt * 0.1)) + money ** (1.1))
+    print(screen_name + f"'s score is : {score}")
+
+    sql_query = f"UPDATE game SET score = '{score}' WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+    result = sql.kursori.fetchone()
+
+    return

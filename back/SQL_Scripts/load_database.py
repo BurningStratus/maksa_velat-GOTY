@@ -14,7 +14,8 @@ class Query:
 
 def load_events():
     ### new version for classes >:(
-    clear_old_players = Query("delete from game;")
+    # clear_old_players = Query("delete from game;")
+
     clear_events = Query('''UPDATE airport SET event_id = 0;''')
     add_quests = Query('''update airport set event_id=(select id from event where event_name=airport_name)
                     where exists (select 1 from event where event_name=airport_name);''')
@@ -28,13 +29,30 @@ def load_events():
                         WHERE event_id=0 
                         ORDER BY RAND() 
                         LIMIT 1;''')
-    
+    add_blown_engine = Query('''UPDATE airport 
+                        SET event_id=12 
+                        WHERE event_id=0 
+                        ORDER BY RAND() 
+                        LIMIT 1;''')
+    add_fundraiser = Query('''UPDATE airport 
+                        SET event_id=14 
+                        WHERE event_id=0 
+                        ORDER BY RAND() 
+                        LIMIT 1;''')
+    add_plant_trees = Query('''UPDATE airport 
+                        SET event_id=15 
+                        WHERE event_id=0 
+                        ORDER BY RAND() 
+                        LIMIT 1;''')
+
     init_game = [
-        clear_old_players,
         clear_events,
         add_quests,
         add_bandits,
-        add_black_cat
+        add_black_cat,
+        add_blown_engine,
+        add_fundraiser,
+        add_plant_trees
             ]
     for qry in init_game:
         qry.executeSQL()

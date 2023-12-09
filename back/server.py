@@ -31,12 +31,21 @@ def start(username, debt):
         'game': sql_game_init
     }
     response = json.dumps(response)
-    return Response(response=response, status=200, mimetype="application/json")
+    return Response(response = response, status = 200, mimetype = "application/json")
+
+@server.route('/retrieve_players')
+def retrieve_players():
+    player_list = g_func.get_players_list()
+    response = json.dumps({
+        "PLAYERS": player_list
+    })
+    return Response(response = response, status = 200, mimetype = "application/json")
+
 
 @server.route('/init_cities')
 def init_cities():
-    
-    return Response()
+    cities = json.dumps(g_func.get_coordinatesSQL())
+    return Response(response= cities, status = 200, mimetype = "application/json")
 
 
 @server.route('/infoDex_navigation/<username>')
@@ -47,32 +56,36 @@ def data_retriever(username):
     money = g_func.get_player_money(username)
     debt = g_func.get_player_debt(username)
     date = g_func.get_player_calendar(username)
+    
+    quest = q_func.do_quest(username)
 
     response = {
         "date": date,
         "money": money,
         "debt": debt,
         "location": location,
+        "quest": quest,
         "airports": airports
     }
     response = json.dumps(response)
-
     return Response(response=response, status=200, mimetype="application/json")
+
+@server.route("/quest/<username>.<quest_data>")
+def quest_completion(usename: str, quest_data: str):
+    
+    return Response(response= None, status = 200, mimetype = "application/json")
 
 
 @server.route('/navigation.<destination>.<username>')
 def flyto(destination, username):
     response = g_func.fly_to(destination, username)
     game_state = g_func.gameover(username)
-    quest = q_func.do_quest(username)
 
     # game 
     response = json.dumps({
     'STATS': response,
-    "quest": quest,
     "gameover" : game_state
     })
-    
     return Response(response=response, status=200, mimetype="application/json")
 
 

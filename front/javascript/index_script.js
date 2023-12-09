@@ -33,6 +33,7 @@ async function updateTerminal(name) {
     currLocation.innerText = data.location;
     money.innerText = data.money;
     debt.innerText = data.debt;
+    date.innerText = data.date;
     console.log(await data.airports);
     return data.airports;
 }

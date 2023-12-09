@@ -7,6 +7,14 @@ const dialogWindow = document.querySelector('dialog');
 const audioButton = document.querySelector('.audio');
 
 
+async function loadPlayer() {
+    const playerList = await (await fetch('http://127.0.0.1:5000/retrieve_players')).json();
+    console.log(await playerList);
+}
+
+loadPlayer()
+
+
 async function newGame(name, debt) {
     let response;
     try {

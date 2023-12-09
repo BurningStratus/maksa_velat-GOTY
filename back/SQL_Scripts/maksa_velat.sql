@@ -29,13 +29,16 @@ CREATE TABLE game
   location VARCHAR(255) NOT NULL,
   money INT NOT NULL,
   debt INT NOT NULL,
-  calendar VARCHAR(10),
+  calendar VARCHAR(10) NOT NULL,
+  day_count INT(4) NOT NULL,
+  score INT(6) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (location) REFERENCES airport(icao)
 );
 
 INSERT INTO event VALUES(0,"Nothing"),(1,"Monaco"),(2,"Berlin"),(3,"Warsaw"),(4,"Vatican City"),(5,"Dublin"),
-                        (6,"Madrid"),(7,"Oslo"),(8,"Bucharest"),(11,"Black Cat"),(13,"Bandits");
+                        (6,"Madrid"),(7,"Oslo"),(8,"Bucharest"),(11,"Black Cat"), (12, "Blown Engine"),
+                        (13,"Bandits"), (14, "Fundraiser"), (15, "Plant Trees"), (16, "Eco Activist");
 
 INSERT INTO airport (airport_name, country, icao, latitude_deg, longitude_deg, blackjack, event_id) VALUES
   ("Amsterdam", "Holland", "AM", 52.3676, 4.9041, 1, 0),

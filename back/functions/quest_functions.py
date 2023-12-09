@@ -20,13 +20,12 @@ def get_quest_id_by_icao(icao):
         return tulos[0][0]
     return 0
 
+
 def quest_decryptor(quest_data: str) -> list:
     # RAND{CH}[0] or {PL}[]
     if quest_data[:3] == "RAND":
         pass
 
-
-    
     head = quest_data[:1]
 
 
@@ -36,35 +35,66 @@ def do_quest(screen_name):
     icao = g_func.get_player_location(screen_name)
     quest_id = get_quest_id_by_icao(icao)
     if quest_id == 1:
+        return "MONA_quest"
+        
         # p_quests.starter_quest_caller(screen_name)  # Calls Monaco Quest
-        pass
         # update_quest(0, "Monaco")  # This marks quest as done in database
     elif quest_id == 2:
-        p_quests.chess_in_germany_caller()  # Calls German Quest
-        update_quest(0, "Berlin")  # This marks quest as done in database
+        return "CHES_randm"
+        
+        # p_quests.chess_in_germany_caller()  # Calls German Quest
+        # update_quest(0, "Berlin")  # This marks quest as done in database
     elif quest_id == 3:
-        p_quests.polish_incident_caller(screen_name)  # Calls Polish Quest
-        update_quest(0, "Warsaw")  # This marks quest as done in database
+        return "POLN_quest"
+        
+        # p_quests.polish_incident_caller(screen_name)  # Calls Polish Quest
+        # update_quest(0, "Warsaw")  # This marks quest as done in database
     elif quest_id == 4:
-        v_quests.vatican_escape_caller(screen_name)  # Calls Vatican Quest
-        update_quest(0, "Vatican City")  # This marks quest as done in database
+        return "VATC_quest"
+        
+        # v_quests.vatican_escape_caller(screen_name)  # Calls Vatican Quest
+        # update_quest(0, "Vatican City")  # This marks quest as done in database
     elif quest_id == 5:
-        v_quests.dublin_adventure_caller(screen_name)  # Calls Lepricon Quest
-        update_quest(0, "Dublin")  # This marks quest as done in database
+        return "DUBL_quest"
+       
+        # v_quests.dublin_adventure_caller(screen_name)  # Calls Lepricon Quest
+        # update_quest(0, "Dublin")  # This marks quest as done in database
     elif quest_id == 6:
-        v_quests.madrid_wine_smuggler_caller(screen_name)  # Calls Madrid Quest
-        update_quest(0, "Madrid")  # This marks quest as done in database
+        return "MADR_quest"
+        
+        # v_quests.madrid_wine_smuggler_caller(screen_name)  # Calls Madrid Quest
+        # update_quest(0, "Madrid")  # This marks quest as done in database
     elif quest_id == 7:
-        v_quests.oslo_quest(screen_name)  # Calls Oslo Quest
-        update_quest(0, "Oslo")  # This marks quest as done in database
+        return "OSLO_quest"
+        
+        # v_quests.oslo_quest(screen_name)  # Calls Oslo Quest
+        # update_quest(0, "Oslo")  # This marks quest as done in database
     elif quest_id == 8:
-        p_quests.romania(screen_name)  # Calls Romania Quest
-        update_quest(0, "Bucharest")  # This marks quest as done in database
+        return "ROMN_quest"
+        
+        # p_quests.romania(screen_name)  # Calls Romania Quest
+        # update_quest(0, "Bucharest")  # This marks quest as done in database
     elif quest_id == 11:
-        p_quests.black_cat_caller(screen_name)  # Calls Black Cat Random Event
-        update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
+        return "BLCT_randm"
+        
+        # p_quests.black_cat_caller(screen_name)  # Calls Black Cat Random Event
+        # update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
+    elif quest_id == 12:
+        return "BLEN_randm"
+    
     elif quest_id == 13:
-        p_quests.bandits(screen_name)  # Calls Bandit event Random Event
-        update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
+        return "BAND_randm"
+       
+        # p_quests.bandits(screen_name)  # Calls Bandit event Random Event
+        # update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
+    
+    elif quest_id == 14:
+        return "FUND_randm"
+    
+
+    elif quest_id == 15:
+        return "WEED_randm"
+
     else:
-        print("Nothing seems out of the ordinary")
+        return "NONE_quest"
+        # print("Nothing seems out of the ordinary")
