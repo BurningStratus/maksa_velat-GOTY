@@ -33,6 +33,7 @@ def start(username, debt):
     response = json.dumps(response)
     return Response(response = response, status = 200, mimetype = "application/json")
 
+
 @server.route('/retrieve_players')
 def retrieve_players():
     player_list = g_func.get_players_list()
@@ -70,14 +71,16 @@ def data_retriever(username):
     response = json.dumps(response)
     return Response(response=response, status=200, mimetype="application/json")
 
+
 @server.route("/quest/<username>.<quest_data>")
-def quest_completion(usename: str, quest_data: str):
-    
-    return Response(response= None, status = 200, mimetype = "application/json")
+def quest_completion(username: str, quest_data: str):
+    response = json.dumps(q_func.quest_decryptor(quest_data, username))
+    return Response(response= response, status = 200, mimetype = "application/json")
 
 
 @server.route('/navigation.<destination>.<username>')
 def flyto(destination, username):
+    print(username)
     response = g_func.fly_to(destination, username)
     game_state = g_func.gameover(username)
 
@@ -90,4 +93,4 @@ def flyto(destination, username):
 
 
 if __name__ == "__main__":
-    server.run(use_reloader=True)
+    server.run(use_reloader=True, debug=True)

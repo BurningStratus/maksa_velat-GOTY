@@ -60,6 +60,7 @@ marker.on('click', function() {
 // navigation panel ahead >>
 //////////////////////////////////////////////////////////////
 const listAirports = document.getElementById('dests');
+const infoDex_log = document.getElementById('infoDEX_log');
 
 let date = document.getElementById('date');
 let currLocation = document.getElementById('location');
@@ -76,7 +77,7 @@ async function infoDex(name) {
     try {
         response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
         response = await response.json();
-        console.log('data retrieved. infoDex')
+        infoDex_log.innerHTML += 'Data retrieved.<br>';
     } catch(error) {
         response = error.message;
         console.error('error. infoDex', response)
@@ -98,7 +99,8 @@ async function updateTerminal(name) {
     money.innerText = data.money;
     debt.innerText = data.debt;
     date.innerText = data.date;
-    console.log(await data.airports);
+
+    infoDex_log.innerHTML += `Your position: ${await data.location}<br>`;
     return data.airports;
 }
 async function printAirports(name) {
@@ -137,6 +139,31 @@ async function flyto(name, airport) {
     console.log(await flight.json());
     await printAirports(username);
 }
+
 /////////////////////////////////////////////////////////////
 
-printAirports(username)
+
+
+/// only for development: should be removed after >> 
+
+const username = "booba";
+printAirports(username);
+
+async function questCaller(screen_name) {
+    const quest = prompt("Quest tag and data: [MONA0 or MONA1]");
+    const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.${quest}`);
+    const resp = await complete.json();
+    return resp;
+}
+
+const quest = document.getElementById('quest');
+quest.addEventListener('click', async (click) => {
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+
+    console.log('quest started', click)
+    const info = await questCaller(username);
+    await updateTerminal(username);
+
+    infoDex_log.innerHTML += `${await info[1]}<br>`;
+})

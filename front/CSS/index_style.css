@@ -2,6 +2,16 @@
     box-sizing: border-box;
 }
 
+
+/* definitely needs a terminal font */
+#infoDEX_log {
+    height: 400px;
+    overflow: auto;
+    color: darkgreen;
+    background-color: rgb(36, 34, 34);
+    
+}
+
 #map {
     object-fit: cover;
     height: 1000px;

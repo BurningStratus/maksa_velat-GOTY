@@ -36,16 +36,17 @@ CREATE TABLE game
   FOREIGN KEY (location) REFERENCES airport(icao)
 );
 
-INSERT INTO event VALUES(0,"Nothing"),(1,"Monaco"),(2,"Berlin"),(3,"Warsaw"),(4,"Vatican City"),(5,"Dublin"),
+INSERT INTO event VALUES(0,"Nothing"),(1,"Monaco"), (3,"Warsaw"),(4,"Vatican City"),(5,"Dublin"),
                         (6,"Madrid"),(7,"Oslo"),(8,"Bucharest"),(11,"Black Cat"), (12, "Blown Engine"),
-                        (13,"Bandits"), (14, "Fundraiser"), (15, "Plant Trees"), (16, "Eco Activist");
+                        (13,"Bandits"), (14, "Fundraiser"), (15, "Plant Trees"), (16, "Eco Activist"),
+                        (17,"Chess");
 
 INSERT INTO airport (airport_name, country, icao, latitude_deg, longitude_deg, blackjack, event_id) VALUES
   ("Amsterdam", "Holland", "AM", 52.3676, 4.9041, 1, 0),
   ("Athens", "Greece", "AT", 37.9838, 23.7275, 1, 0),
   ("Barcelona", "Spain", "BA", 41.3851, 2.1734, 1, 0),
   ("Bern", "Switzerland", "BE", 46.9480, 7.4474, 1, 0),
-  ("Berlin", "Germany", "BR", 52.5200, 13.4050, 1, 2),
+  ("Berlin", "Germany", "BR", 52.5200, 13.4050, 1, 0),
   ("Belgrad", "Serbia", "BG", 44.7866, 20.4489, 1, 0),
   ("Bratislava", "Slovakia", "BT", 48.1486, 17.1077, 1, 0),
   ("Bucharest", "Romania", "BC", 44.4268, 26.1025, 1, 0),

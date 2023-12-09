@@ -44,6 +44,11 @@ def load_events():
                         WHERE event_id=0 
                         ORDER BY RAND() 
                         LIMIT 1;''')
+    add_chess = Query('''UPDATE airport
+                        SET event_id = 17
+                        WHERE event_id = 0
+                        ORDER BY RAND()
+                        LIMIT 1;''')
 
     init_game = [
         clear_events,
@@ -52,7 +57,8 @@ def load_events():
         add_black_cat,
         add_blown_engine,
         add_fundraiser,
-        add_plant_trees
+        add_plant_trees,
+        add_chess
             ]
     for qry in init_game:
         qry.executeSQL()
