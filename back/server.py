@@ -37,9 +37,7 @@ def start(username, debt):
 @server.route('/retrieve_players')
 def retrieve_players():
     player_list = g_func.get_players_list()
-    response = json.dumps({
-        "PLAYERS": player_list
-    })
+    response = json.dumps(player_list)
     return Response(response = response, status = 200, mimetype = "application/json")
 
 

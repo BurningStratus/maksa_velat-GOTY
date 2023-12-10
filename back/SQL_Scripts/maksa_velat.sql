@@ -31,6 +31,8 @@ CREATE TABLE game
   debt INT NOT NULL,
   calendar VARCHAR(10) NOT NULL,
   day_count INT(4) NOT NULL,
+  fuel VARCHAR(2),
+  eco_score INT(1),
   score INT(6) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (location) REFERENCES airport(icao)
