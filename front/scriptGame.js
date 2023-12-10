@@ -1,6 +1,28 @@
 'use strict';
 
-// @Jafestro 
+let username;
+
+
+async function initPlayer(player) {
+
+    const response = await fetch('http://127.0.0.1:5000/infoDex_userinit/caller/');
+    const responseJS = await response.json();
+
+    switch (player) {
+        case undefined:
+            console.log("Pulled name: " + await responseJS.player, "Current: ", player, "Using pulled one.");
+            player = await responseJS.player;
+            console.log(await player);
+            console.log('player initialised.')
+            return player
+        }
+}
+// username.then(response => (console.log(response)))
+const namepromise = initPlayer(username)
+namepromise.then(response => (username = response))
+
+
+
 // cities' and countries' fetch function initMap() for creating a playing zone.
 // with initMap(), you NEED and you WANT Decimal() function. Otherwise, you will get a mess.
 /*
@@ -20,7 +42,6 @@ async function initMap() {
     // write your code here
     return markersJSON;
 }
-
 
 var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -69,24 +90,18 @@ let currLocation = document.getElementById('location');
 let money = document.getElementById('money');
 let debt = document.getElementById('debt');
 
-
 async function infoDex(name) {
     let response;
     try {
-        if (name == null) {
-            response = await fetch('http://127.0.0.1:5000/infoDex_navigation/');
-            response = await response.json();
-        } else {
-            response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
-            response = await response.json();
-        }
-        
+        response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
+        response = await response.json();
+
         infoDex_log.innerHTML += 'Data retrieved.<br>';
     } catch(error) {
         response = error.message;
         console.error('error. infoDex', response)
     }
-    return response;
+    return await response;
 }
 async function updateTerminal(name) {
     // to update during the game
@@ -97,7 +112,7 @@ async function updateTerminal(name) {
 
     const data = await infoDex(name);
     // debug
-    console.log(data);
+    console.log("Updatetermianl info", data);
 
     currLocation.innerText = data.location;
     money.innerText = data.money;
@@ -140,7 +155,6 @@ async function printAirports(name) {
         listOfDestinations.append(dest);
     }
 }
-
 async function flyto(name, airport) {
     const flight = await fetch(`http://127.0.0.1:5000/navigation.${airport}.${name}`);
     console.log(await flight.json());
@@ -153,8 +167,11 @@ async function flyto(name, airport) {
 
 /// only for development: should be removed after >> 
 
-const username = "booba";
+
+console.log("Username in the bottom:> " + username)
+
 printAirports(username);
+
 
 async function questCaller(screen_name) {
     const quest = prompt("Quest tag and data: [MONA0 or MONA1]");

@@ -5,7 +5,7 @@ from quests import maksa_velat_projektia as v_quests
 
 
 # Function updates quest/event_id in asked city
-def update_quest(quest_id: int, city: str, env=False, *name) -> str:
+def update_quest(quest_id: int, city: str, env=False, name=None) -> str:
     """Updates both usual quests and ecoquests. If quest is not eco, it just updates ID on location.
     But if the quest is eco, method takes env = True, and then it needs a screen_name.\n
     :arg: quest_id(int): ID of quest.  
@@ -20,8 +20,8 @@ def update_quest(quest_id: int, city: str, env=False, *name) -> str:
             return "UPDATED_NOT_ECO"
     else:
         sql.kursori.execute(f"""UPDATE game 
-                            SET eco_score=((SELECT eco_score FROM game where screen_name='{name[0]}') + 1)
-                            WHERE screen_name='{name[0]}'
+                            SET eco_score=((SELECT eco_score FROM game where screen_name='{name}') + 1)
+                            WHERE screen_name='{name}'
                             """)
         
         if sql.kursori.rowcount == 1:
@@ -282,7 +282,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         loc = g_func.get_player_location(screen_name)
 
         if quest_data[4] == "1":
-            update_quest(0, loc, env = True, name = screen_name)
+            upd_quest = update_quest(0, loc, env = True, name = screen_name)
             sql.kursori.execute(f"""UPDATE game
                                 SET fuel ='ET'
                                 WHERE screen_name = '{screen_name}'
