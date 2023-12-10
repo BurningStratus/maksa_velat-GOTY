@@ -11,6 +11,7 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: -1;
+    radial-gradient(transparent 50%, black);
 }
 
 /* Optional: Add additional styles for content on top of the video */

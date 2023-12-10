@@ -16,6 +16,7 @@ function Decimal(float) {
 async function initMap() {
     const cities = await fetch('http://127.0.0.1:5000/init_cities');
     const markersJSON = await cities.json();
+    // write your code here
     return markersJSON;
 }
 
@@ -117,16 +118,19 @@ async function printAirports(name) {
         // "PA Paris France"
         ICAOcode.innerText = airport;
 
+
+        travelButton.classList.add('buttons');
         dest.append(ICAOcode, travelButton);
         dest.classList.add('travelButton');
 
         const ICAO = await airport.split(' ')[0];
-        travelButton.innerHTML = ICAO;
         travelButton.value = ICAO;
 
         await travelButton.addEventListener('click', (object) => {
             listAirports.innerHTML = '';
             console.log(object.target.value);
+            travelButton.style.backgroundImage = "url('img/travel_button_pressed.png')";
+            travelButton.style.backgroundSize = "cover";
             flyto(username, object.target.value);
         });
 

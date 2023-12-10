@@ -5,24 +5,69 @@
 
 /* definitely needs a terminal font */
 #infoDEX_log {
-    height: 400px;
+    height: 200px;
     overflow: auto;
     color: darkgreen;
     background-color: rgb(36, 34, 34);
-    
+    font-size: 18px;
 }
+
+#infodex {
+    color: #ddfadd;
+    background-color: rgb(36, 34, 34);
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+.buttons {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    border: none;
+    border-radius: 3rem;
+    cursor: pointer;
+    background-image: url('../img/travel_button_unpressed.png');
+    background-size: cover;
+}
+.buttons:hover {
+    background-image: url('../img/travel_button_pressed.png');
+}
+
+@media screen and (min-width: 720px) {
+            #infodex {
+                font-size: 20px; /* Adjust font size for screens wider than 600px */
+            }
+            #infoDEX_log {
+                font-size: 20px; /* Adjust font size for screens wider than 600px */
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+             #infodex {
+                font-size: 24px; /* Adjust font size for screens wider than 600px */
+            }
+            #infoDEX_log {
+                font-size: 24px; /* Adjust font size for screens wider than 600px */
+            }
+        }
 
 #map {
     object-fit: cover;
-    height: 1000px;
+    height: 800px;
     width: 60%;
     border: solid 0.5rem;
     border-color: #2e3f31;
 }
 
 .fixed-element {
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: column;
+    box-sizing: border-box;
     object-fit: cover;
-    background-color: #f0f0f0;
+    height: 800px;
+    background-color: #5e5454;
     border: 1px solid #ccc;
     width: 39%;
 }
@@ -32,15 +77,16 @@ img {
 }
 
 body {
-    margin: 0;
+    margin: 2rem;
     padding: 0;
-    background-color: antiquewhite;
+    background-image: url("../img/background.png");
 }
 
 #nameOfThePanel {
     width: 100%;
     height: 2rem;
     background-color: black;
+    text-align: center;
 }
 
 #nameOfThePanel h1 {
@@ -57,11 +103,33 @@ body {
     margin-top: 1rem;
     margin-bottom: 1rem;
     width: 100%;
-
 }
 
 footer {
     width: 100%;
     height: 2rem;
-    background-color: #c45b00;
+    border-radius: 2rem;
+    background-color: #1b5223;
+    text-align: center;
+}
+
+footer p {
+    font-family: "Bookman Old Style";
+    text-justify: auto;
+    color: #a6d7aa;
+}
+ul {
+        overflow: auto;
+}
+
+ul li {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    margin: 0.5rem;
+    font-size: 30px;
+    background-color: #1b5223;
+    text-justify: distribute;
+    padding-right: 0;
+    margin-right: 3rem;
 }
