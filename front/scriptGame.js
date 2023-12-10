@@ -9,6 +9,7 @@ Example response:
 [[Decimal('52.367600'), Decimal('4.904100'), 'Holland', 'Amsterdam'], ...]
 */
 
+
 function Decimal(float) {
     return parseFloat(float);
 }
@@ -68,16 +69,18 @@ let currLocation = document.getElementById('location');
 let money = document.getElementById('money');
 let debt = document.getElementById('debt');
 
-async function loadPlayer() {
-    const playerList = await (await fetch('http://127.0.0.1:5000/retrieve_players')).json();
-    console.log(playerList);
-}
 
 async function infoDex(name) {
     let response;
     try {
-        response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
-        response = await response.json();
+        if (name == null) {
+            response = await fetch('http://127.0.0.1:5000/infoDex_navigation/');
+            response = await response.json();
+        } else {
+            response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
+            response = await response.json();
+        }
+        
         infoDex_log.innerHTML += 'Data retrieved.<br>';
     } catch(error) {
         response = error.message;

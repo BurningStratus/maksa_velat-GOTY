@@ -13,6 +13,11 @@ server = Flask(__name__)
 cors = CORS(server)
 server.config['CORS_HEADERS'] = 'Content-Type'
 
+####################################
+# Short Access Memory Box
+curr_player_name = None
+
+###################################
 
 @server.route('/')
 def main_menu():
@@ -25,6 +30,11 @@ def main_menu():
 def start(username, debt):
     sql_game_init = load_database.load_events()
     sql_player = g_func.add_player(username, debt)
+
+    # on game initialisation, cur_player_name receives the username's value.
+    # booba(username) => booba(curr_player_name)
+    curr_player_name = username
+    print('Name received: ' + curr_player_name)
 
     response = {
         'user': sql_player,
@@ -50,6 +60,12 @@ def init_cities():
 @server.route('/infoDex_navigation/<username>')
 def data_retriever(username):
     ### fetch all data about playa'
+
+    # if first request, username will be None.
+    if username == None:
+        username = curr_player_name
+        print("screen_name retrieved: " + username)
+
     location = g_func.get_player_location(username)
     airports = g_func.print_9_nearest_airports(location)
     money = g_func.get_player_money(username)
@@ -78,7 +94,7 @@ def quest_completion(username: str, quest_data: str):
 
 @server.route('/navigation.<destination>.<username>')
 def flyto(destination, username):
-    print(username)
+
     response = g_func.fly_to(destination, username)
     game_state = g_func.gameover(username)
 

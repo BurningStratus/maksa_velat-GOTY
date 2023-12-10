@@ -138,9 +138,10 @@ def do_quest(screen_name: str) -> str:
 def quest_decryptor(quest_data: str, screen_name: str) -> list:
     # CHES0, BLCT5
     head = quest_data[:4]
+    
     if head == "MONA":
-        # upd_quest = update_quest(0, 'Monaco')
-        upd_quest = "YES"
+        upd_quest = update_quest(0, 'Monaco')
+        
         if quest_data[4] == "1":
             g_func.update_money("50", screen_name)
             info_log = "Wanderer"
@@ -275,6 +276,8 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
                         by a big environmental organization 
                         and they gave you a stipend of 1500$"""
 
+        return [upd_quest, info_log]
+    
     elif head == "BLEN":
         loc = g_func.get_player_location(screen_name)
 
@@ -285,13 +288,14 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
                                 WHERE screen_name = '{screen_name}'
                                 """)
             if sql.kursori.fetchone():
-                info_log = "Now you are Eco-logical"
+                info_log = "Now you are Eco-Logical!"
             else:
                 return [upd_quest, "ERROR CONVERTING FUEL TYPE"]
         else:
             upd_quest = update_quest(0, loc)
+            info_log = "Good old fossil fuels, they never disappoint."
 
-        return 
+        return [upd_quest, info_log]
 
     elif head == "MADR":
         upd_quest = update_quest(0, 'Madrid')
@@ -326,4 +330,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
 
         return [upd_quest, info_log]
     
+    else:
+        info_log = 'Nothing seems to be out of the ordinary.'
+        return ["None", info_log]
     
