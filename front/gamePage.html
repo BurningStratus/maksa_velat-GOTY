@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>map</title>
+    <link rel="stylesheet" href="CSS/index_style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
@@ -10,30 +11,43 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     <script src="scriptGame.js" defer></script>
-    <style>
-        #map {
-            height: 1500px;
-            width: 60%;
-        }
-        .fixed-element {
-            position: fixed;
-            right: 0;
-            top: 50%; /* You can adjust the top position as per your requirement */
-            transform: translateY(-50%);
-            background-color: #f0f0f0;
-            padding: 15px;
-            border: 1px solid #ccc;
-            width: 50%;
-        }
-        img {
-            width: 100%;
-        }    
-    </style>
 </head>
 <body>
-    <div id="map"></div>
-    <div class="fixed-element">
-        <img src="https://via.placeholder.com/210x295?text=The%20Menu" alt="img">
+    <div id="nameOfThePanel">
+        <h1>infoDEX</h1>
     </div>
+    <div id="panel">
+        <div id="map"></div>
+
+        <div class="fixed-element">
+            
+            
+            <div id="infodex">
+                <span id="date"></span> <!-- date-->
+                <span id="location"></span> <!-- location -->
+                <span id="money"></span> <!-- money -->
+                <span id="debt"></span> <!-- debt -->
+            </div>
+            <ul id="dests">
+                <!-- all 9 destinations will be added here thru iteration -->
+            </ul>
+            
+            <!-- logscreen -->
+            <div id="infoDEX_log">
+
+            </div>
+            <button id="quest">QUEST</button>
+            
+            <article>
+                <img src="img/cards/diamond1.png">
+                <p>dfadsfadsfkajdshflkajsdhfaksjdhfaksjdhfakdsjfh</p>
+                <p>dfadsfadsfkajdshflkajsdhfaksjdhfaksjdhfakdsjfh</p>
+                <p>dfadsfadsfkajdshflkajsdhfaksjdhfaksjdhfakdsjfh</p>
+            </article>
+        </div>
+    </div>
+    <footer>
+        <p>METROPOLIA RYHMÄ D&D  @all rights reserved 2023-infinity</p>
+    </footer>
 </body>
 </html>

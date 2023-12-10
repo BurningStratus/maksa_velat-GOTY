@@ -57,6 +57,7 @@ game_over = False
 lose = False
 win = False
 
+
 while not game_over:
 
     player_money = g_func.get_player_money(screen_name)
