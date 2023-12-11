@@ -2,7 +2,6 @@
 
 let username;
 
-
 async function initPlayer(player) {
 
     const response = await fetch('http://127.0.0.1:5000/infoDex_userinit/caller/');
@@ -24,7 +23,6 @@ namepromise.then(response => (username = response))
 
 
 // cities' and countries' fetch function initMap() for creating a playing zone.
-// with initMap(), you NEED and you WANT Decimal() function. Otherwise, you will get a mess.
 /*
 Example response:
 [[lat, long, country, city]]
@@ -104,6 +102,7 @@ async function infoDex(name) {
     return await response;
 }
 async function updateTerminal(name) {
+    
     // to update during the game
     let date = document.getElementById('date');
     let currLocation = document.getElementById('location');
@@ -113,6 +112,13 @@ async function updateTerminal(name) {
     const data = await infoDex(name);
     // debug
     console.log("Updatetermianl info", data);
+
+    // quest checker
+    const dataHolder = document.getElementById('quest');
+    dataHolder.innerHTML = '';
+    dataHolder.innerText = await data.quest;
+    dataHolder.value = await data.quest;
+
 
     currLocation.innerText = data.location;
     money.innerText = data.money;
@@ -156,8 +162,16 @@ async function printAirports(name) {
     }
 }
 async function flyto(name, airport) {
+    const dataHolder = document.getElementById('quest');
+    dataHolder.innerHTML = '';
+
     const flight = await fetch(`http://127.0.0.1:5000/navigation.${airport}.${name}`);
     console.log(await flight.json());
+    const flight_quest = await flight.json();
+    
+    dataHolder.innerText = await flight_quest.quest;
+    dataHolder.value = await flight_quest.quest;
+
     await printAirports(username);
 }
 
@@ -167,27 +181,7 @@ async function flyto(name, airport) {
 
 /// only for development: should be removed after >> 
 
-
 console.log("Username in the bottom:> " + username)
 
 printAirports(username);
 
-
-async function questCaller(screen_name) {
-    const quest = prompt("Quest tag and data: [MONA0 or MONA1]");
-    const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.${quest}`);
-    const resp = await complete.json();
-    return resp;
-}
-
-const quest = document.getElementById('quest');
-quest.addEventListener('click', async (click) => {
-    // logger
-    const infoDex_log = document.getElementById('infoDEX_log');
-
-    console.log('quest started', click)
-    const info = await questCaller(username);
-    await updateTerminal(username);
-
-    infoDex_log.innerHTML += `${await info[1]}<br>`;
-})
