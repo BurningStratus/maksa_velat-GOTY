@@ -6,6 +6,9 @@ from geopy import distance
 
 from SQL_Scripts import sql_connection as sql
 
+# store players only during the game.
+local_players_list = []
+
 ''' courier's stash
 print(Fore.RED, 
               ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  
@@ -32,14 +35,6 @@ def update_day_counter(screen_name: str) -> str:
         return "UPDATED_DAY_COUNTER"
     return "NOTHING_UPDATED"
 """
-def get_player_calendar(player_name):
-    sql_query = f'SELECT calendar FROM game WHERE screen_name="{player_name}";'
-    sql.kursori.execute(sql_query)
-    tulos = sql.kursori.fetchone()
-    if tulos:
-        return tulos[0]
-    else:
-        return f"BROKEN_CALENDAR", player_name
 
 
 def update_calendar(screen_name: str) -> str:
@@ -181,7 +176,7 @@ def get_airport_name_and_country_by_icao(icao: str) -> str:
         return 'NOTHING_FOUND'
 
 
-def fly_to(icao, screen_name, fare_price:str = "KE" , no_fare:bool = False) -> list:
+def fly_to(icao, screen_name, no_fare:bool = False) -> list:
     """
     Function changes Player's location and charges money if needed
     no_fare=False means that by default there always will be flight charge, but if in argument will be given True
@@ -196,7 +191,7 @@ def fly_to(icao, screen_name, fare_price:str = "KE" , no_fare:bool = False) -> l
     tulos = sql.kursori.fetchall()
     if tulos:
         city = tulos[0][0]  # tulos = ((Barcelona),(Monaco),(Madrid),)
-        country = tulos[0][1]
+                            # country = tulos[0][1]
         cost = None         # price of flight
 
         if no_fare:
@@ -204,7 +199,12 @@ def fly_to(icao, screen_name, fare_price:str = "KE" , no_fare:bool = False) -> l
             ###
         else:
             # addtl check if ET85 is used.
-            if fare_price == "ET":
+            sql.kursori.execute(f"SELECT fuel FROM game WHERE screen_name='{screen_name}';")
+            fuel = sql.kursori.fetchone()[0]
+            if not fuel:
+                return ["ERROR FETCHING FUEL TYPE"]
+
+            if fuel == "ET":
                 # Player's money minus 65$
                 sql.kursori.execute(f"update game "
                                 f"set money=((select money from game where screen_name='{screen_name}') - 65) "
@@ -221,12 +221,11 @@ def fly_to(icao, screen_name, fare_price:str = "KE" , no_fare:bool = False) -> l
                 cost = "50$"
             
             if sql.kursori.rowcount == 1:
-                cost = f"{city} {fare_price} {cost}"
+                cost = f"{city} {fuel} {cost}"
             else:
                 return ["SCREEN_NAME_DOES_NOT_EXIST", "null", "null"]
         
         # Player calendar change
-        # cur_date = get_player_calendar(screen_name)
 
         cur_date = update_calendar(screen_name)
         print(cur_date, "inside flyto")
@@ -324,31 +323,82 @@ To be continued?
 ''')
 
 
-def get_players_list() -> list:
-    sql_query = 'SELECT location, screen_name, money, debt, calendar FROM game WHERE score <= 0;'
-    sql.kursori.execute(sql_query)
+def get_players_list(serverside=False, load_serverside=False, sql_names_only = False) -> list:
+    """Used for retrieving the list of players.
+    :arg: serverside: False by default. Used for returning a list of players. If false, the list will be pulled from the Database. If set to True, will return the local list.
+    :arg: load_serverside: Defaults to false. If set to true, will fill up the local list of players by calling the database.
+    :arg: sql_names_only. Used for retrieving only names from DB.
+    :return: list of players. Only exception is when DB is empty, but there is an attempt to fill the local list."""
     
-    players_list = sql.kursori.fetchall()
-    if players_list:
-        return players_list
-    else:
-        return ['Empty player list.']
+    if load_serverside:
+        sql_query = 'SELECT screen_name FROM game WHERE score <= 0;'
+        sql.kursori.execute(sql_query)
+        players_list_tuple = sql.kursori.fetchall()
+        players_list = []
 
+        for player in players_list_tuple:
+            players_list.append(player[0])
+        
+        if players_list:
+            local_players_list.extend(players_list)
+
+            return players_list
+        else:
+            return ['NO_PLAYERS_LIST_AVAILABLE']
+    if sql_names_only:
+        sql_query = 'SELECT screen_name FROM game WHERE score <= 0;'
+        sql.kursori.execute(sql_query)
+        players_list_tuple = sql.kursori.fetchall()
+        players_list = []
+
+        for player in players_list_tuple:
+            players_list.append(player[0])
+
+        return players_list
+        
+    if not serverside:
+        sql_query = 'SELECT location, screen_name, money, debt, calendar FROM game WHERE score <= 0;'
+        sql.kursori.execute(sql_query)
+        
+        players_list = sql.kursori.fetchall()
+        if players_list:
+            return players_list
+        else:
+            return ['Empty player list.']
+    else:
+        return local_players_list
+    
 
 def add_player(screen_name, debt):
-
+    """Adds player to the database and to the local list."""
     sql.kursori.execute(f"select screen_name from game where screen_name ='{screen_name}';")
     result = sql.kursori.fetchone()
     if result:
         return 'PLAYER EXISTS'
 
-    sql.kursori.execute(f"insert into game(screen_name, location, money, debt, calendar, day_count, score) "
-                        f"values('{screen_name}','MO',500,{debt}, '10/04/1997', 0, 0);")
+    sql.kursori.execute(f"""INSERT INTO 
+                        game(screen_name, location, money, debt, calendar, day_count, score, fuel, eco_score)
+                        VALUES ('{screen_name}','MO',500,{debt},'10/04/1997',0,0,'KE',0);""")
     if sql.kursori.rowcount == 1:
+
+        local_players_list.append(screen_name)
         
-        return 'NAME/DEBT/CALENDAR/SCORE UPDATED'
+        if len(local_players_list) >= 10:
+            del local_players_list[0]
+
+        return 'NAME/DEBT/CALENDAR/FUEL/SCORE UPDATED'
     else:
-        return 'ERROR UPDATING NAME/DEBT/CALENDAR/SCORE'
+        return 'ERROR UPDATING NAME/DEBT/FUEL/CALENDAR/SCORE'
+
+
+def get_player_calendar(player_name: str) -> str or tuple:
+    sql_query = f'SELECT calendar FROM game WHERE screen_name="{player_name}";'
+    sql.kursori.execute(sql_query)
+    tulos = sql.kursori.fetchone()
+    if tulos:
+        return tulos[0]
+    else:
+        return f"BROKEN_CALENDAR", player_name
 
 
 def get_player_location(screen_name: str) -> str:

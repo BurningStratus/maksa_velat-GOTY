@@ -5,11 +5,51 @@ from quests import maksa_velat_projektia as v_quests
 
 
 # Function updates quest/event_id in asked city
-def update_quest(quest_id: int, city: str) -> str:
-    sql.kursori.execute(f"update airport set event_id = {quest_id} where airport_name = '{city}';")
-    if sql.kursori.rowcount == 1:
-        return "UPDATED"
-    return "NOTHING_UPDATED"
+def update_quest(quest_id: int, city: str, env=False, name=None) -> str:
+    """Updates both usual quests and ecoquests. If quest is not eco, it just updates ID on location.
+    But if the quest is eco, method takes env = True, and then it needs a screen_name.\n
+    :arg: quest_id(int): ID of quest.  
+    :arg: city(str): location of the quest, namely city.
+    :arg: env=False(bool): false by default. If quest is eco, this should be changed to true.
+    :arg: *name(str): if env is set to true, a name must be provided. \n
+    :return(str): either 'UPDATED' or 'NOT UPDATED'."""
+    update = "ESCORE/QUEST_NOT_UPDATED"
+    if not env:
+        sql.kursori.execute(f"update airport set event_id = {quest_id} where airport_name = '{city}';")
+        if sql.kursori.rowcount == 1:
+            return "UPDATED_NOT_ECO"
+    else:
+        sql.kursori.execute(f"""UPDATE game 
+                            SET eco_score=((SELECT eco_score FROM game where screen_name='{name}') + 1)
+                            WHERE screen_name='{name}'
+                            """)
+        
+        if sql.kursori.rowcount == 1:
+            update = "ECO_UPDATED/"
+            sql.kursori.execute(f"update airport set event_id = {quest_id} where airport_name = '{city}';")
+        
+            if sql.kursori.fetchone():
+                
+                update += "QUEST_ID_UPDATED"
+                return update
+        
+    return update
+
+
+def check_ecoscore(screen_name: str) -> bool:
+    """Checks player's ecoscore in Database. 
+    If score >= 3, it means that player has completed 3 eco quests.\n
+    Arg: player's name.\n
+    Returns: True or False."""
+    sql.kursori.execute(f"""SELECT eco_score
+                        FROM game
+                        WHERE screen_name = '{screen_name}'""")
+    eco_score = int(sql.kursori.fetchone()[0])
+    
+    if eco_score >= 3:
+        return True
+    else:
+        return False
 
 
 # Function for getting quest/event's id corresponding to the city
@@ -20,10 +60,14 @@ def get_quest_id_by_icao(icao):
         return tulos[0][0]
     return 0
 
+
 # Function for doing quests corresponding locations event_id's
-def do_quest(screen_name):
+def do_quest(screen_name: str) -> str:
+    """Sends data abt quests on current location. Returns quest data, which looks like:
+    ICAO_questtype; i.e POLN_quest == quest in Poland(static)."""
     icao = g_func.get_player_location(screen_name)
     quest_id = get_quest_id_by_icao(icao)
+    
     if quest_id == 1:
         return "MONA_quest"
         
@@ -90,18 +134,20 @@ def do_quest(screen_name):
         return "NONE_quest"
         # print("Nothing seems out of the ordinary")
 
+
 def quest_decryptor(quest_data: str, screen_name: str) -> list:
     # CHES0, BLCT5
     head = quest_data[:4]
+    
     if head == "MONA":
-        # upd_quest = update_quest(0, 'Monaco')
-        upd_quest = "YES"
+        upd_quest = update_quest(0, 'Monaco')
+        
         if quest_data[4] == "1":
             g_func.update_money("50", screen_name)
-            info_log = "They will miss you ..."
+            info_log = "Wanderer"
             
         else:
-            info_log = "There will be something to talk about ..."
+            info_log = "There will be something to talk about."
 
         return [upd_quest, info_log]
     
@@ -111,7 +157,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         if quest_data[4] == "1":
             g_func.fly_to('SA', screen_name, no_fare = True)
             g_func.update_money("1000", screen_name)
-            return [upd_quest, 'Good samaritan']
+            return [upd_quest, 'J.C would have loved this.']
         else:
             return [upd_quest, "Oh wait it's not Florida?"]
     
@@ -138,19 +184,21 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
                 # contact superiors
                 if quest_data[6] == "1" and quest_data[7] == "1":
                     g_func.update_money('-100', screen_name)
-
+                    info_log = "Justice."
                 # don't tell anyone
                     return
                 elif quest_data[6] == "1" and quest_data[7] == "0":
                     g_func.update_money("150", screen_name)
+                    info_log = "Just like in the good old USSR."
         return [upd_quest, info_log]
     
     elif head == "BLCT":
-        upd_quest = update_quest(0, g_func.get_player_location(screen_name))
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(0, loc)
         
         if quest_data[4] == "5":
             g_func.update_money("500", screen_name)
-            info_log = "Life is strange ... "
+            info_log = "Life is strange."
 
         else:
             info_log = "Damn cat."
@@ -168,11 +216,37 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         return [upd_quest, info_log]
         
     elif head == "FUND":
-        upd_quest = update_quest(0, g_func.get_player_location(screen_name))
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(0, loc, env = True, name = screen_name)
         
+        if quest_data[4] == "1":
+            g_func.update_calendar(screen_name)
+            g_func.update_money("-100", screen_name)
+            info_log = "Nothing seems out of the ordinary."
+        else:
+            info_log = "Nothing seems out of the ordinary."
+
+        if check_ecoscore(screen_name):
+            g_func.update_money("1500", screen_name)
+            info_log = f"""Your good deeds have been noticed 
+                        by a big environmental organization 
+                        and they gave you a stipend of 1500$"""
+
+
+        return [upd_quest, info_log]
 
     elif head == "CHES":
-        pass
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(0, loc)
+
+        if quest_data[4] == "1":
+            g_func.update_calendar(screen_name)
+            info_log = "Nothing."
+        else:
+            info_log = "Don't have time for this."
+        
+        return [upd_quest, info_log]
+    
     elif head == "OSLO":
         upd_quest = update_quest(0, 'Oslo')
         if quest_data[4] == "1" and quest_data[5] == "1":
@@ -186,12 +260,77 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         return [upd_quest, info_log]
 
     elif head == "WEED":
-        pass
+        loc = g_func.get_player_location(screen_name)
+        
+        if quest_data[4] == "1":
+            upd_quest = update_quest(0, loc, env = True, name = screen_name)
+            info_log = "Nothing seems to be out of the ordinary."
+        
+        else:
+            upd_quest = update_quest(0, loc)
+            info_log = "Nothing seems to be out of the ordinary."
+
+        if check_ecoscore(screen_name):
+            g_func.update_money("1500", screen_name)
+            info_log = f"""Your good deeds have been noticed 
+                        by a big environmental organization 
+                        and they gave you a stipend of 1500$"""
+
+        return [upd_quest, info_log]
+    
     elif head == "BLEN":
-        pass
+        loc = g_func.get_player_location(screen_name)
+
+        if quest_data[4] == "1":
+            upd_quest = update_quest(0, loc, env = True, name = screen_name)
+            sql.kursori.execute(f"""UPDATE game
+                                SET fuel ='ET'
+                                WHERE screen_name = '{screen_name}'
+                                """)
+            if sql.kursori.fetchone():
+                info_log = "Now you are Eco-Logical!"
+            else:
+                return [upd_quest, "ERROR CONVERTING FUEL TYPE"]
+        else:
+            upd_quest = update_quest(0, loc)
+            info_log = "Good old fossil fuels, they never disappoint."
+
+        return [upd_quest, info_log]
+
     elif head == "MADR":
-        pass
+        upd_quest = update_quest(0, 'Madrid')
+
+        if quest_data[4] == "1":
+            g_func.update_money("10", screen_name)
+            g_func.fly_to("LI", screen_name)
+            info_log = "Something tells you that it wasn't a great deal."
+        else:
+            info_log = "Nothing seems out of the ordinary."
+
+        return [upd_quest, info_log]
+    
     elif head == "BAND":
-        pass
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(0, loc)
+        g_func.update_money("-200", screen_name)
+        info_log = "You were robbed by 200$."
+
+        [update_quest, info_log]
+
     elif head == "ROMN":
-        pass
+        upd_quest = update_quest(0, 'Madrid')
+
+        # if ROMN11
+        if quest_data[3:6] == "11":
+            g_func.fly_to("IS", screen_name, True)
+            g_func.update_money("100", screen_name)
+            info_log = "Strange man just hands you 100$ and leaves."
+        else:
+            info_log = "You decline the offer."
+
+        return [upd_quest, info_log]
+    
+    else:
+        info_log = 'Nothing seems to be out of the ordinary.'
+        return ["None", info_log]
+    
