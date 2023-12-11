@@ -8,16 +8,29 @@
     <link rel="stylesheet" href="CSS/blackjack_style.css">
 </head>
 <body>
-    <img src="CSS/imags/black_background.png">
+    <header><h1>CASINO ROYALE</h1></header>
     <main>
-        <a href="gamePage.html">Go to index</a>
+        <div id="dealer">
+            <div class="cards"><img src="img/cards/diamond1.png" alt="diamond1"></div>
+            <div class="cards">
+                <ul class="horizontal">
+                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
+                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
+                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
+                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
+                </ul>
+            </div>
+            <div></div>
+        </div>
+        <div id="betNstay">
         <button id="hit">HIT</button>
         <button id="stay">STAY</button>
         <span id="bet">YOUR BET</span>
-        <span id="money">YOUR MONEY</span>
+        <span id="money">YOUR MONEY</span></div>
+        <div id="hand"></div>
     </main>
     <footer>
-        
+        <button class="buttons"><a href="gamePage.html">Game Page</a></button>
     </footer>
 </body>    
 </html>

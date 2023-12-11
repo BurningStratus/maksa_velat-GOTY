@@ -41,14 +41,14 @@ async function initMap() {
     const markersJSON = await cities.json();
     console.log(markersJSON);
     // write your code here
-   // for (let i = 0; i < await markersJSON.length; i++) {
-   //     const mark = L.marker([markersJSON[i][0],markersJSON[i][1]]).addTo(map);
-   //     mark.bindPopup(`<h1><b>${markersJSON[i][3]}, ${markersJSON[i][2]}</b>></h1>`);
-//}
+    for (let i = 0; i < await markersJSON.length; i++) {
+        const mark = L.marker([markersJSON[i][0],markersJSON[i][1]]).addTo(map);
+       mark.bindPopup(`<h1><b>${markersJSON[i][3]}, ${markersJSON[i][2]}</b>></h1>`);
+    }
     // return markersJSON;
 }
 
-const map = L.map('map').setView([51.505, -0.09], 13);
+var map = L.map('map').setView([51.505, -0.09], 13);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -156,7 +156,7 @@ async function printAirports(name) {
         });
 
         listOfDestinations.append(dest);
-      //  await initMap();
+        await initMap();
     }
 }
 async function flyto(name, airport) {
@@ -175,9 +175,6 @@ async function flyto(name, airport) {
 console.log("Username in the bottom:> " + username)
 
 printAirports(username);
-initMap();
-
-
 async function questCaller(screen_name) {
     const quest = prompt("Quest tag and data: [MONA0 or MONA1]");
     const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.${quest}`);
