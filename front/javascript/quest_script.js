@@ -94,43 +94,75 @@ async function QuestCaller(screen_name, location) {
     // logger
     const infoDex_log = document.getElementById('infoDEX_log');
 
-    butt_no.innerText = "I have no time for this.";
-    butt_yes.innerText = "Make the call";
+    switch (location) {
+        case "MONA":
+            butt_no.innerText = "I have no time for this.";
+            butt_yes.innerText = "Make the call";
 
-    text_box.innerText = `"Rich" people problems, Monaco
+text_box.innerText = `"Rich" people problems, Monaco
 Since you will be away for a while after receiving the message from the debt collectors, 
 it might be a bright idea to tell everything to your love interest.
 Would you like to make a call?`; // `` backtick is multiline string.
+        // showmodal
 
-    // showmodal
+        console.log(questbox);
+        questbox.showModal();
 
-    console.log(questbox);
-    questbox.showModal();
+        butt_no.addEventListener('click', async () => {
+            // if no was pressed.
+            const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA0`);
+            resp = await complete.json();
+            
+            info_log = resp[1]
 
-    butt_no.addEventListener('click', async () => {
-        // if no was pressed.
-        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA0`);
-        resp = await complete.json();
-        
-        info_log = resp[1]
+            await updateTerminal(screen_name);
+            infoDex_log.innerHTML += `${info_log}<br>`;
+            // TODO oncomplete: removeeventlisteners
+            questbox.close();
+        });
+        butt_yes.addEventListener('click', async () => {
+            // if YES was pressed.
+            const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA1`);
+            resp = await complete.json();
+            
+            // info_log is a row in terminal.
+            info_log = resp[1];
 
-        await updateTerminal(screen_name);
-        infoDex_log.innerHTML += `${info_log}<br>`;
-        questbox.close();
+            await updateTerminal(screen_name);
+            infoDex_log.innerHTML += `${info_log}<br>`;
+            questbox.close();
     });
-    butt_yes.addEventListener('click', async () => {
-        // if YES was pressed.
-        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA1`);
-        resp = await complete.json();
+            break;
+        case "POLN":
+            completion_string = 'WARS';
+            // 
+            butt_no.innerText = "I'll do this myself.";
+            butt_yes.innerText = "Find mechanic.";
+            
+text_box.innerText = ` quest text `; // `` backtick is multiline string.
         
-        // info_log is a row in terminal.
-        info_log = resp[1];
-
-        await updateTerminal(screen_name);
-        infoDex_log.innerHTML += `${info_log}<br>`;
-        questbox.close();
-    });
-    
+            // showmodal
+        
+            console.log(questbox);
+            questbox.showModal();
+        
+            butt_no.addEventListener('click', async () => {
+                // if no was pressed.
+                completion_string += "0"
+            });
+            butt_yes.addEventListener('click', async () => {
+                // if YES was pressed.
+                const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.WARS1`);
+                resp = await complete.json();
+                
+                // info_log is a row in terminal.
+                info_log = resp[1];
+        
+                await updateTerminal(screen_name);
+                infoDex_log.innerHTML += `${info_log}<br>`;
+                questbox.close();
+            });
+    }
     questbox.close();
 }
 
