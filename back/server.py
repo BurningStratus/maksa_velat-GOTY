@@ -80,7 +80,6 @@ def data_retriever(username):
     money = g_func.get_player_money(username)
     debt = g_func.get_player_debt(username)
     date = g_func.get_player_calendar(username)
-    
     quest = q_func.do_quest(username)
 
     response = {

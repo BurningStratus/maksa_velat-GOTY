@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+/* Fonts */
+
+
+
 
 /* definitely needs a terminal font */
 #infoDEX_log {
@@ -32,6 +36,11 @@
 }
 .buttons:hover {
     background-image: url('../img/travel_button_pressed.png');
+}
+
+.anchor_buttons a {
+    color: inherit;
+    text-decoration: none;
 }
 
 @media screen and (min-width: 720px) {
