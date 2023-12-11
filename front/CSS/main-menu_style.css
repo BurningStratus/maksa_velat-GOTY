@@ -112,4 +112,12 @@ dialog p {
     color: white;
 }
 
+#game_load_screen {
+    height: 200px;
+    overflow: auto;
+}
+
+#game_load_screen span:hover {
+    color: darkred;
+}
 
