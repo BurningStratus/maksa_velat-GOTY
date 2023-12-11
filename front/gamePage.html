@@ -14,6 +14,7 @@
     </script>
     
     <script src="javascript/scriptGame.js" defer></script>
+    <script src="javascript/quest_script.js" defer></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,9 +54,16 @@
                 <!-- all 9 destinations will be added here thru iteration -->
             </ul>
 
-            <button id="quest">QUEST</button>
-            <button id="blackjack" class="anchor_buttons"><a href="blackjack.html">BlackJack</a></button>
-            <button id="menu" class="anchor_buttons"><a href="main-menu.html">Main Menu</a></button>
+            <button value="quest_name" id="quest">QUEST</button>
+            
+            <dialog id="quest_box">
+                <span id="quest_close">X</span>
+                <img id="quest_img">
+                <p id="quest_box_text"></p>
+
+                <button value="yes" id="quest_yes"></button>
+                <button value="no" id="quest_no"></button>
+            </dialog>
         </div>
     </div>
     <footer>

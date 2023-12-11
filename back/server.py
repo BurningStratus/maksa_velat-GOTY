@@ -16,7 +16,7 @@ server.config['CORS_HEADERS'] = 'Content-Type'
 
 ########### Quick-Access Memory Box #########
 g_func.get_players_list(load_serverside=True)
-############################################
+#############################################
 
 @server.route('/')
 def main_menu():

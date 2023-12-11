@@ -153,9 +153,17 @@ def get_coordinatesSQL() -> list:
     sql.kursori.execute(sql_query)
     list_of_cities = []
     
+    # [[Decimal(), Decimal(), str, str]]
     # unpacks the tuples into lists
-    def sql_unpacker(listof_tuples: list) -> list:
-        return [*listof_tuples[0]]
+    def sql_unpacker(SQL_tuple: list) -> list:
+
+        def Decimal(decimal): return(float(decimal))
+        SQL_list = list(SQL_tuple[0])
+        
+        SQL_list[0] = Decimal(SQL_list[0])
+        SQL_list[1] = Decimal(SQL_list[1])
+        
+        return SQL_list
 
     # since we have exactly 32 cities, we can use range().
     for itr in range(31):
