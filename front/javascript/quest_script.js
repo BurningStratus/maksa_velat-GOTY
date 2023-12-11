@@ -26,22 +26,58 @@ dataHolder.addEventListener('click', () => {
 })
 
 // checks quest header and calls according quest
-async function questCaller(dataHolder) {;
+async function questCaller(dataHolder) {
 
     // MONA_quest or FUND_randm
     switch (dataHolder) {
         case 'MONA':
             console.log(dataHolder, "dataholder");
-            await MonacoCaller(username);
-        break;
-        case 'VATC':
-            await VaticanCaller(username);
+            await QuestCaller(username, "MONA");
+            break;
+        case 'VATI':
+            await QuestCaller(username, "VATI");
+            break;
+        case 'WARS':
+            await QuestCaller(username, "WARS");
+            break;
+        case 'DUBL':
+            await QuestCaller(username, "DUBL");
+            break;
+        case 'MADR':
+            await QuestCaller(username, "MADR");
+            break;
+        case 'OSLO':
+            await QuestCaller(username, "OSLO");
+            break;
+        case 'BUCH':
+            await QuestCaller(username, "BUCH");
+            break;
+        case "BLAC":
+            await QuestCaller(username, "BLAC");
+            break;
+        case 'BLOW':
+            await QuestCaller(username, "BLOW");
+            break;
+        case 'BAND':
+            await QuestCaller(username, "BAND");
+            break;
+        case 'FUND':
+            await QuestCaller(username, "FUND");
+            break;
+        case 'PLAN':
+            await QuestCaller(username, "PLAN");
+            break;
+        case 'ECOA':
+            await QuestCaller(username, "ECOA");
+            break;
+        case 'CHES':
+            await QuestCaller(username, "CHES");
             break;
     }
 }
 
 // MONACO QUEST
-async function MonacoCaller(screen_name) {
+async function QuestCaller(screen_name, location) {
 
     // elements
     const questbox = document.getElementById('quest_box');
@@ -59,9 +95,12 @@ async function MonacoCaller(screen_name) {
     const infoDex_log = document.getElementById('infoDEX_log');
 
     butt_no.innerText = "I have no time for this.";
-    butt_yes.innerText = "Make a call";
+    butt_yes.innerText = "Make the call";
 
-    text_box.innerText = `QUEST TEXT HERE`; // `` backtick is multiline string.
+    text_box.innerText = `"Rich" people problems, Monaco
+Since you will be away for a while after receiving the message from the debt collectors, 
+it might be a bright idea to tell everything to your love interest.
+Would you like to make a call?`; // `` backtick is multiline string.
 
     // showmodal
 
@@ -94,5 +133,7 @@ async function MonacoCaller(screen_name) {
     
     questbox.close();
 }
+
+
 //
 questCaller()

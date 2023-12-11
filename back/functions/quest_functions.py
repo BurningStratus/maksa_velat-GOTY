@@ -74,19 +74,19 @@ def do_quest(screen_name: str) -> str:
         # p_quests.starter_quest_caller(screen_name)  # Calls Monaco Quest
         # update_quest(0, "Monaco")  # This marks quest as done in database
     elif quest_id == 3:
-        return "POLN_quest"
+        return "WARS_quest"
         
         # p_quests.polish_incident_caller(screen_name)  # Calls Polish Quest
         # update_quest(0, "Warsaw")  # This marks quest as done in database
     elif quest_id == 4:
-        return "VATC_quest"
+        return "VATI_quest"
         
         # v_quests.vatican_escape_caller(screen_name)  # Calls Vatican Quest
         # update_quest(0, "Vatican City")  # This marks quest as done in database
     elif quest_id == 5:
         return "DUBL_quest"
        
-        # v_quests.dublin_adventure_caller(screen_name)  # Calls Lepricon Quest
+        # v_quests.dublin_adventure_caller(screen_name)  # Calls Leprechaun Quest
         # update_quest(0, "Dublin")  # This marks quest as done in database
     elif quest_id == 6:
         return "MADR_quest"
@@ -99,17 +99,17 @@ def do_quest(screen_name: str) -> str:
         # v_quests.oslo_quest(screen_name)  # Calls Oslo Quest
         # update_quest(0, "Oslo")  # This marks quest as done in database
     elif quest_id == 8:
-        return "ROMN_quest"
+        return "BUCH_quest"
         
         # p_quests.romania(screen_name)  # Calls Romania Quest
         # update_quest(0, "Bucharest")  # This marks quest as done in database
     elif quest_id == 11:
-        return "BLCT_randm"
+        return "BLAC_randm"
         
         # p_quests.black_cat_caller(screen_name)  # Calls Black Cat Random Event
         # update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
     elif quest_id == 12:
-        return "BLEN_randm"
+        return "BLOW_randm"
     
 
     elif quest_id == 13:
@@ -122,7 +122,7 @@ def do_quest(screen_name: str) -> str:
         return "FUND_randm"
     
     elif quest_id == 15:
-        return "WEED_randm"
+        return "PLAN_randm"
     
     elif quest_id == 17:
         return "CHES_randm"
@@ -144,14 +144,14 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         
         if quest_data[4] == "1":
             g_func.update_money("50", screen_name)
-            info_log = "Wanderer"
+            info_log = "Wanderer."
             
         else:
             info_log = "There will be something to talk about."
 
         return [upd_quest, info_log]
     
-    elif head == "VATC":
+    elif head == "VATI":
         upd_quest = update_quest(0, "Vatican City")
 
         if quest_data[4] == "1":
@@ -161,7 +161,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         else:
             return [upd_quest, "Oh wait it's not Florida?"]
     
-    elif head == "POLN":
+    elif head == "WARS":
         upd_quest = update_quest(0, 'Warsaw')
         g_func.update_money('-100', screen_name)
         
@@ -192,7 +192,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
                     info_log = "Just like in the good old USSR."
         return [upd_quest, info_log]
     
-    elif head == "BLCT":
+    elif head == "BLAC":
         loc = g_func.get_player_location(screen_name)
         upd_quest = update_quest(0, loc)
         
@@ -209,9 +209,9 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         upd_quest = update_quest(0, "Dublin")
         if quest_data[4] == "1":
             g_func.update_money("750", screen_name)
-            info_log = "Nothing seems to be out of the ordinary."
+            info_log = "Nothing seems out of the ordinary."
         else:
-            info_log = "Nothin seem be ut of de ardinari"
+            info_log = "Nothing seems out of de ordinary."
 
         return [upd_quest, info_log]
         
@@ -278,7 +278,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
 
         return [upd_quest, info_log]
     
-    elif head == "BLEN":
+    elif head == "BLOW":
         loc = g_func.get_player_location(screen_name)
 
         if quest_data[4] == "1":
@@ -293,7 +293,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
                 return [upd_quest, "ERROR CONVERTING FUEL TYPE"]
         else:
             upd_quest = update_quest(0, loc)
-            info_log = "Good old fossil fuels, they never disappoint."
+            info_log = "Good old fossil fuels, they never dissappoint."
 
         return [upd_quest, info_log]
 
@@ -313,18 +313,18 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         loc = g_func.get_player_location(screen_name)
         upd_quest = update_quest(0, loc)
         g_func.update_money("-200", screen_name)
-        info_log = "You were robbed by 200$."
+        info_log = "You were robbed 200$."
 
         [update_quest, info_log]
 
-    elif head == "ROMN":
-        upd_quest = update_quest(0, 'Madrid')
+    elif head == "BUCH":
+        upd_quest = update_quest(0, 'Bucharest')
 
         # if ROMN11
         if quest_data[3:6] == "11":
             g_func.fly_to("IS", screen_name, True)
             g_func.update_money("100", screen_name)
-            info_log = "Strange man just hands you 100$ and leaves."
+            info_log = "The Stranger just hands you 100$ and leaves."
         else:
             info_log = "You decline the offer."
 
