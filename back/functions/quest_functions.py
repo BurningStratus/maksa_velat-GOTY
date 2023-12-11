@@ -86,7 +86,7 @@ def do_quest(screen_name: str) -> str:
     elif quest_id == 5:
         return "DUBL_quest"
        
-        # v_quests.dublin_adventure_caller(screen_name)  # Calls Lepricon Quest
+        # v_quests.dublin_adventure_caller(screen_name)  # Calls Leprechaun Quest
         # update_quest(0, "Dublin")  # This marks quest as done in database
     elif quest_id == 6:
         return "MADR_quest"

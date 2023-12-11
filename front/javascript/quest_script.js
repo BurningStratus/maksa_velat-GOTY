@@ -33,9 +33,45 @@ async function questCaller(dataHolder) {;
         case 'MONA':
             console.log(dataHolder, "dataholder");
             await MonacoCaller(username);
-        break;
+            break;
         case 'VATC':
             await VaticanCaller(username);
+            break;
+        case 'WARS':
+            await WarsawCaller(username);
+            break;
+        case 'DUBL':
+            await DublinCaller(username);
+            break;
+        case 'MADR':
+            await MadridCaller(username);
+            break;
+        case 'OSLO':
+            await OsloCaller(username);
+            break;
+        case 'BUCH':
+            await BucharestValler(username);
+            break;
+        case "BLAC":
+            await BlackCatCaller(username);
+            break;
+        case 'BLOW':
+            await BlownEngineCaller(username);
+            break;
+        case 'BAND':
+            await BanditCaller(username);
+            break;
+        case 'FUND':
+            await FundraiserCaller(username);
+            break;
+        case 'PLAN':
+            await PlantTreesCaller(username);
+            break;
+        case 'ECOA':
+            await EcoActivistCaller(username);
+            break;
+        case 'CHES':
+            await ChessCaller(username);
             break;
     }
 }
@@ -59,9 +95,12 @@ async function MonacoCaller(screen_name) {
     const infoDex_log = document.getElementById('infoDEX_log');
 
     butt_no.innerText = "I have no time for this.";
-    butt_yes.innerText = "Make a call";
+    butt_yes.innerText = "Make the call";
 
-    text_box.innerText = `QUEST TEXT HERE`; // `` backtick is multiline string.
+    text_box.innerText = `"Rich" people problems, Monaco
+Since you will be away for a while after receiving the message from the debt collectors, 
+it might be a bright idea to tell everything to your love interest.
+Would you like to make a call?`; // `` backtick is multiline string.
 
     // showmodal
 
@@ -90,5 +129,7 @@ async function MonacoCaller(screen_name) {
     
     questbox.close();
 }
+
+
 //
 questCaller()
