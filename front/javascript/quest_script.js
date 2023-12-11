@@ -112,18 +112,22 @@ Would you like to make a call?`; // `` backtick is multiline string.
         const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA0`);
         resp = await complete.json();
         
-        await updateTerminal(screen_name);
-        infoDex_log.innerHTML += `${await info[1]}<br>`;
         info_log = resp[1]
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
         questbox.close();
     });
     butt_yes.addEventListener('click', async () => {
         // if YES was pressed.
         const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA1`);
         resp = await complete.json();
+        
+        // info_log is a row in terminal.
         info_log = resp[1];
+
         await updateTerminal(screen_name);
-        infoDex_log.innerHTML += `${await info[1]}<br>`;
+        infoDex_log.innerHTML += `${info_log}<br>`;
         questbox.close();
     });
     
