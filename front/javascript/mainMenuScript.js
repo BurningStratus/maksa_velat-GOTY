@@ -15,6 +15,7 @@ async function loadPlayer() {
     const playerList = await (await fetch('http://127.0.0.1:5000/retrieve_players')).json();
     console.log(await playerList);
     return await playerList;
+
 }
 
 loadPlayer()
@@ -30,7 +31,7 @@ async function newGame(name, debt) {
     }
     return response;
 }
-// Todo: CONNECT USERNAME AND BACKEND
+
 startButton.addEventListener('click', async (event) => {
     console.log('event started');
     const name = prompt('Name')
@@ -65,13 +66,25 @@ loadButton.addEventListener('click', async function () {
         // money
         const span_money = document.createElement('div');
         span_money.innerHTML = `$${await money}`;
-        // 
+        // debt
         const span_debt = document.createElement('div');
         span_debt.innerHTML  = `$${await debt}`;
-
+        // location
         const span_location = document.createElement('div');
         span_location.innerHTML = `${await location}`;
         
+        // creating button to use player.
+        const selectPlayerButton = document.createElement('button');
+        selectPlayerButton.innerText = 'SELECT';
+        selectPlayerButton.value = await player_name;
+        selectPlayerButton.id = 'curr_player';
+        selectPlayerButton.addEventListener('click', (object) => {
+            const name = object.target.value;
+            const debt = 
+            console.log('Selected player: ' + name);
+            newGame()
+        })
+
         article.append(span_date);
         article.append(span_date, span_name, span_money, span_debt, span_location);
         load_players.append(article);

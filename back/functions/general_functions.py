@@ -150,22 +150,19 @@ def get_coordinatesSQL() -> list:
     BTW, sql_unpacker()-method should live inside the get_coordsSQL(). """
 
     sql_query = """SELECT latitude_deg, longitude_deg, country, airport_name FROM airport;"""
-    sql.kursori.execute(sql_query)
     list_of_cities = []
-    
+
     # [[Decimal(), Decimal(), str, str]]
     # unpacks the tuples into lists
     def sql_unpacker(SQL_tuple: list) -> list:
-
         def Decimal(decimal): return(float(decimal))
         SQL_list = list(SQL_tuple[0])
-        
         SQL_list[0] = Decimal(SQL_list[0])
         SQL_list[1] = Decimal(SQL_list[1])
-        
         return SQL_list
-
     # since we have exactly 32 cities, we can use range().
+
+    sql.kursori.execute(sql_query)
     for itr in range(31):
         sql_row = sql.kursori.fetchmany()
         row = sql_unpacker(sql_row)

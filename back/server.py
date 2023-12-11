@@ -34,6 +34,8 @@ def retrieve_players():
 
 @server.route('/start/<username>/<debt>')
 def start(username, debt):
+    if username in g_func.get_players_list(serverside = True):
+        pass
     sql_game_init = load_database.load_events()
     sql_player = g_func.add_player(username, debt)
 
