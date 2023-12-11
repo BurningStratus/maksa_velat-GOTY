@@ -5,7 +5,6 @@ import json
 from functions import general_functions as g_func
 from functions import quest_functions as q_func
 from SQL_Scripts import load_database, sql_connection as sql
-
 #### TODO check SQL pass
 ####
 
@@ -16,6 +15,7 @@ server.config['CORS_HEADERS'] = 'Content-Type'
 
 ########### Quick-Access Memory Box #########
 g_func.get_players_list(load_serverside=True)
+
 #############################################
 
 @server.route('/')
@@ -34,10 +34,13 @@ def retrieve_players():
 
 @server.route('/start/<username>/<debt>')
 def start(username, debt):
+
     if username in g_func.get_players_list(serverside = True):
-        pass
-    sql_game_init = load_database.load_events()
-    sql_player = g_func.add_player(username, debt)
+        sql_game_init = 'LOADED'
+        sql_player = g_func.get_players_list(serverside = True)[-1]
+    else:
+        sql_game_init = load_database.load_events()
+        sql_player = g_func.add_player(username, debt)
 
     print('Username: ' + username)
 
@@ -52,7 +55,8 @@ def start(username, debt):
 
 @server.route('/init_cities')
 def init_cities():
-    cities = json.dumps(g_func.get_coordinatesSQL())
+    cities = g_func.get_coordinatesSQL()
+    cities = json.dumps(cities)
     return Response(response= cities, status = 200, mimetype = "application/json")
 
 
@@ -61,8 +65,6 @@ def retrieve_player():
     ### fetch current player
     
     player_name = g_func.get_players_list(True)[-1]
-
-    print(player_name)
     response = json.dumps({
         "player": player_name
     })
@@ -70,12 +72,33 @@ def retrieve_player():
 
 
 @server.route('/infoDex_navigation/<username>')
-def data_retriever(username):
+def data_retriever(username: str) -> list:
     ### fetch all data about playa'
-    print(username)
-    if username not in g_func.get_players_list(sql_names_only = True):
+    
+    undef_name = False
+    if username == "undef_name":
+        undef_name = True
+
+    
+    if username not in g_func.get_players_list(serverside = True) and not undef_name:
+        response = {
+        "date": "null",
+        "money": "0",
+        "debt": "0",
+        "location": "location",
+        "quest": "null",
+        "airports": "null"}
+
+        print("gave error, because :", undef_name, username)
+        response = json.dumps(response)
+        return Response(response=response, status=200, mimetype="application/json")
+    
+    elif username not in g_func.get_players_list(serverside = True) and undef_name:
         username = g_func.get_players_list(True)[-1]
+
         print('Had to use local names list. username:>', username)
+    else:
+        pass
 
     location = g_func.get_player_location(username)
     airports = g_func.print_9_nearest_airports(location)

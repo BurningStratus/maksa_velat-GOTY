@@ -46,7 +46,7 @@ def update_calendar(screen_name: str) -> str:
     AUG irl has 31 days, but it's not a big deal if it will have 30."""
 
     current_date = get_player_calendar(screen_name)
-    print(current_date, "inside update_calendar")
+    print(current_date, "current date inside update_calendar")
 
     if current_date[0] == "BROKEN_CALENDAR":
         return current_date
@@ -146,37 +146,37 @@ def update_money(money: str, screen_name: str) -> str:
 
 def get_coordinatesSQL() -> list:
     """Used for fetching and unpacking SQL-queries for fetching the coordinates of cities. 
-    Returns list of lists: [ [ latitude_deg, longitude_deg, country, airport_name ], ...].     
-    BTW, sql_unpacker()-method should live inside the get_coordsSQL(). """
+    Returns list of lists: [ [ latitude_deg, longitude_deg, country, airport_name ], ...]."""
 
     sql_query = """SELECT latitude_deg, longitude_deg, country, airport_name FROM airport;"""
     list_of_cities = []
 
-    # [[Decimal(), Decimal(), str, str]]
-    # unpacks the tuples into lists
-    def sql_unpacker(SQL_tuple: list) -> list:
-        def Decimal(decimal): return(float(decimal))
-        SQL_list = list(SQL_tuple[0])
-        SQL_list[0] = Decimal(SQL_list[0])
-        SQL_list[1] = Decimal(SQL_list[1])
-        return SQL_list
-    # since we have exactly 32 cities, we can use range().
-
     sql.kursori.execute(sql_query)
-    for itr in range(31):
-        sql_row = sql.kursori.fetchmany()
-        row = sql_unpacker(sql_row)
-        list_of_cities.append(row)
+    sql_data = sql.kursori.fetchall()
+
+    # [[Decimal(), Decimal(), str, str]]
+    def Decimal(decimal): return(float(decimal))
+
+    for tuple_data in sql_data:
+        tuple_data = list(tuple_data)
+        tuple_data[0] = Decimal(tuple_data[0])
+        tuple_data[1] = Decimal(tuple_data[1])
+        
+        list_of_cities.append(tuple_data)
     
+    print(list_of_cities)
     return list_of_cities
 
 
 def get_airport_name_and_country_by_icao(icao: str) -> str:
     "Returns airport's name using ICAO"
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
-    tulos = sql.kursori.fetchall()
+    tulos = list(sql.kursori.fetchone())
+
+    print(tulos, "tulos[0]")
+
     if tulos:
-        return tulos[0]
+        return tulos
     else:
         return 'NOTHING_FOUND'
 
@@ -194,6 +194,7 @@ def fly_to(icao, screen_name, no_fare:bool = False) -> list:
     """
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
     tulos = sql.kursori.fetchall()
+
     if tulos:
         city = tulos[0][0]  # tulos = ((Barcelona),(Monaco),(Madrid),)
                             # country = tulos[0][1]
@@ -233,7 +234,6 @@ def fly_to(icao, screen_name, no_fare:bool = False) -> list:
         # Player calendar change
 
         cur_date = update_calendar(screen_name)
-        print(cur_date, "inside flyto")
 
         if cur_date == 'BROKEN_CALENDAR':
             return ['null', cur_date, cost]
@@ -257,7 +257,6 @@ def get_latitude_and_longtitude_by_icao(icao):
     # Tietokannan ja pycharm valillä yhdeyksen asentaminen ja kyselyn tehtäminen ja tuloksen saaminen
     sql.kursori.execute(f"select latitude_deg, longitude_deg from airport where icao ='{icao}';")
     tulos = sql.kursori.fetchall()
-
     # Tsekataan jos tulos on tyhjä tai ei
     if tulos:
         # Jos ei tyhjä tulostetaan taulu rivi riviltä ja palautetaan tulos eli taulu
@@ -278,7 +277,7 @@ def measure_distance_between_lentokentta(icao_1, icao_2):
 
 
 def print_9_nearest_airports(icao):
-    sql.kursori.execute(f"select icao, latitude_deg, longitude_deg, airport_name, country from airport")
+    sql.kursori.execute(f"select icao, latitude_deg, longitude_deg, airport_name, country from airport;")
     tulos = sql.kursori.fetchall()
 
     nearest_9_airports = list()
@@ -350,6 +349,7 @@ def get_players_list(serverside=False, load_serverside=False, sql_names_only = F
             return players_list
         else:
             return ['NO_PLAYERS_LIST_AVAILABLE']
+    
     if sql_names_only:
         sql_query = 'SELECT screen_name FROM game WHERE score <= 0;'
         sql.kursori.execute(sql_query)
@@ -407,6 +407,7 @@ def get_player_calendar(player_name: str) -> str or tuple:
 
 
 def get_player_location(screen_name: str) -> str:
+
     sql.kursori.execute(f"select location from game where screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:

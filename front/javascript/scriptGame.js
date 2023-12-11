@@ -12,12 +12,10 @@ async function initPlayer(player) {
         case undefined:
             console.log("Pulled name: " + await responseJS.player, "Current: ", player, "Using pulled one.");
             player = await responseJS.player;
-            console.log(await player);
-            console.log('player initialised.')
+            console.log('player initialised.', await player)
             return player
         }
 }
-// username.then(response => (console.log(response)))
 const namepromise = initPlayer(username)
 namepromise.then(response => (username = response))
 
@@ -47,7 +45,7 @@ async function initMap() {
 //}
     // return markersJSON;
 }
-
+initMap();
 const map = L.map('map').setView([51.505, -0.09], 13);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -98,8 +96,15 @@ let debt = document.getElementById('debt');
 async function infoDex(name) {
     let response;
     try {
-        response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
+        if (name == undefined) {
+
+        response = await fetch(`http://127.0.0.1:5000/infoDex_navigation/undef_name`);
         response = await response.json();
+
+        } else {
+        
+        response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
+        response = await response.json();}
 
         infoDex_log.innerHTML += 'Data retrieved.<br>';
     } catch(error) {
@@ -117,7 +122,7 @@ async function updateTerminal(name) {
 
     const data = await infoDex(name);
     // debug
-    console.log("Updatetermianl info", data);
+    // console.log("Updatetermianl info", data);
 
     currLocation.innerText = data.location;
     money.innerText = `Money:  ${data.money}`;
@@ -151,17 +156,16 @@ async function printAirports(name) {
 
         await travelButton.addEventListener('click', (object) => {
             listAirports.innerHTML = '';
-            console.log(object.target.value);
             flyto(username, object.target.value);
         });
 
         listOfDestinations.append(dest);
-      //  await initMap();
+        
     }
 }
 async function flyto(name, airport) {
     const flight = await fetch(`http://127.0.0.1:5000/navigation.${airport}.${name}`);
-    console.log(await flight.json());
+    // console.log(await flight.json());
     await printAirports(username);
 }
 
@@ -171,11 +175,7 @@ async function flyto(name, airport) {
 
 /// only for development: should be removed after >> 
 
-
-console.log("Username in the bottom:> " + username)
-
 printAirports(username);
-initMap();
 
 
 async function questCaller(screen_name) {
@@ -190,7 +190,6 @@ quest.addEventListener('click', async (click) => {
     // logger
     const infoDex_log = document.getElementById('infoDEX_log');
 
-    console.log('quest started', click)
     const info = await questCaller(username);
     await updateTerminal(username);
 

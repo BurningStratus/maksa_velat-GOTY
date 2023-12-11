@@ -15,7 +15,6 @@ async function loadPlayer() {
     const playerList = await (await fetch('http://127.0.0.1:5000/retrieve_players')).json();
     console.log(await playerList);
     return await playerList;
-
 }
 
 loadPlayer()
@@ -48,12 +47,12 @@ loadButton.addEventListener('click', async function () {
     for (let i = 0; i < await players.length; i++) {
         const article = document.createElement('article');
 
-        const location = await players[i][0];
+        const player_location = await players[i][0];
         const player_name = await players[i][1];
         const money = await players[i][2];
         const debt = await players[i][3];
         const date = await players[i][4];
-        console.log(location, player_name, money, debt, date);
+        console.log(player_location, player_name, money, debt, date);
 
         // date
         const span_date = document.createElement('div');
@@ -71,22 +70,22 @@ loadButton.addEventListener('click', async function () {
         span_debt.innerHTML  = `$${await debt}`;
         // location
         const span_location = document.createElement('div');
-        span_location.innerHTML = `${await location}`;
+        span_location.innerHTML = `${await player_location}`;
         
         // creating button to use player.
         const selectPlayerButton = document.createElement('button');
         selectPlayerButton.innerText = 'SELECT';
         selectPlayerButton.value = await player_name;
         selectPlayerButton.id = 'curr_player';
-        selectPlayerButton.addEventListener('click', (object) => {
+        selectPlayerButton.addEventListener('click', async (object) => {
             const name = object.target.value;
-            const debt = 
             console.log('Selected player: ' + name);
-            newGame()
+            await newGame(name, debt);
+            location.replace('gamePage.html');
         })
 
         article.append(span_date);
-        article.append(span_date, span_name, span_money, span_debt, span_location);
+        article.append(span_date, span_name, span_money, span_debt, span_location, selectPlayerButton);
         load_players.append(article);
     }
     console.log("players loaded.")
