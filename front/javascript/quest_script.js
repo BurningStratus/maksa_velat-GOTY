@@ -34,7 +34,7 @@ async function questCaller(dataHolder) {;
             console.log(dataHolder, "dataholder");
             await MonacoCaller(username);
             break;
-        case 'VATC':
+        case 'VATI':
             await VaticanCaller(username);
             break;
         case 'WARS':
