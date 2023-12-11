@@ -43,7 +43,7 @@ async function initMap() {
     // write your code here
     for (let i = 0; i < await markersJSON.length; i++) {
         const mark = L.marker([markersJSON[i][0],markersJSON[i][1]]).addTo(map);
-       mark.bindPopup(`<h1><b>${markersJSON[i][3]}, ${markersJSON[i][2]}</b>></h1>`);
+       mark.bindPopup(`<h1><b>${markersJSON[i][3]}, ${markersJSON[i][2]}</b></h1>`);
     }
     // return markersJSON;
 }
