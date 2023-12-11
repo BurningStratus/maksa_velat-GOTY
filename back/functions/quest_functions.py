@@ -122,7 +122,7 @@ def do_quest(screen_name: str) -> str:
         return "FUND_randm"
     
     elif quest_id == 15:
-        return "WEED_randm"
+        return "PLAN_randm"
     
     elif quest_id == 17:
         return "CHES_randm"
