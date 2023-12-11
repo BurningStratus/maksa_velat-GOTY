@@ -8,7 +8,7 @@ const audioButton = document.querySelector('.audio');
 
 // load players window and (X) there.
 const load_players = document.getElementById('game_load_screen');
-const closebutton_loader = document.getElementById('X_playerloader');
+const xPlayerLoader = document.querySelector("#X_playerloader");
 
 
 async function loadPlayer() {
@@ -80,6 +80,14 @@ loadButton.addEventListener('click', async function () {
     load_players.showModal();
     
     // location.replace('gamePage.html');
+});
+
+xPlayerLoader.addEventListener('click', function () {
+    const articles = load_players.querySelectorAll('article');
+    for (let i = 0; i < articles.length; i++) {
+        load_players.removeChild(load_players.querySelector('article'));
+    }
+    load_players.close();
 });
 
 tutorialButton.addEventListener('click', async function () {

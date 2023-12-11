@@ -34,6 +34,11 @@
     background-image: url('../img/travel_button_pressed.png');
 }
 
+.anchor_buttons a {
+    color: inherit;
+    text-decoration: none;
+}
+
 @media screen and (min-width: 720px) {
             #infodex {
                 font-size: 20px; /* Adjust font size for screens wider than 600px */
