@@ -2,3 +2,11 @@
     font-family: main_headline;
     src: url('BungeeInline-Regular.ttf') format("truetype");
 }
+
+body {
+    font-family: main_headline, sans-serif;
+}
+
+.menu {
+    font-family: main_headline, sans-serif;
+}
