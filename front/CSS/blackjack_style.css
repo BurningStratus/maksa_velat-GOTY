@@ -27,13 +27,25 @@ body {
     flex-flow: row;
     width: 100px;
     justify-content: space-between;
-    overflow: scroll;
+}
+
+.pack {
+    display: flex;
+    height: 150px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    flex-flow: row;
+    width: 100px;
+    justify-content: space-between;
 }
 
 .cards img {
      width: 100%;
       height: auto; /* Maintain the aspect ratio */
-      display: block; /* Remove extra space below the image */
+      display: flex; /* Remove extra space below the image */
+    position: relative;
+    left: 2rem;
+
 }
 
 #betNstay {

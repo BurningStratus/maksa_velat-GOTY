@@ -2,35 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BlackJack</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Jack</title>
+    <link rel="stylesheet" href="CSS/blackJack.css">
     <script src="javascript/blackjack_script.js" defer></script>
-    <link rel="stylesheet" href="CSS/blackjack_style.css">
 </head>
 <body>
+
     <header><h1>CASINO ROYALE</h1></header>
-    <main>
-        <div id="dealer">
-            <div class="cards"><img src="img/cards/diamond1.png" alt="diamond1"></div>
-            <div class="cards">
-                <ul class="horizontal">
-                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
-                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
-                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
-                    <li><img src="img/cards/diamond1.png" alt="diamond1"></li>
-                </ul>
-            </div>
-            <div></div>
-        </div>
-        <div id="betNstay">
-        <button id="hit">HIT</button>
-        <button id="stay">STAY</button>
-        <span id="bet">YOUR BET</span>
-        <span id="money">YOUR MONEY</span></div>
-        <div id="hand"></div>
-    </main>
-    <footer>
-        <button class="buttons"><a href="gamePage.html">Game Page</a></button>
-    </footer>
-</body>    
+
+    <h2>Dealer: <span id="dealer-sum"></span></h2>
+    <div id="dealer-cards">
+        <img id="hidden" src="img/cards/B-B.png">
+    </div>
+
+    <h2>You: <span id="player-sum"></span></h2>
+    <div id="player-cards"></div>
+
+    <br>
+    <button id="hit">Hit</button>
+    <button id="stay">Stay</button>
+    <p id="results"></p>
+</body>
 </html>
