@@ -1,6 +1,7 @@
 from flask import Flask, Response
 from flask_cors import CORS
 import json
+import math
 
 from functions import general_functions as g_func
 from functions import quest_functions as q_func
@@ -122,6 +123,9 @@ def data_retriever(username: str) -> list:
     debt = g_func.get_player_debt(username)
     date = g_func.get_player_calendar(username)
     quest = q_func.do_quest(username)
+    blackjack = g_func.can_play_blackjack(username)
+    game_state = g_func.gameover(username)
+
 
     response = {
     "date": date,
@@ -129,6 +133,8 @@ def data_retriever(username: str) -> list:
     "debt": debt,
     "location": location,
     "quest": quest,
+    "blackjack": blackjack,
+    "game_state": game_state,
     "airports": airports}
 
     response = json.dumps(response)
@@ -145,15 +151,47 @@ def quest_completion(username: str, quest_data: str):
 def flyto(destination, username):
 
     response = g_func.fly_to(destination, username)
-    game_state = g_func.gameover(username)
+    
 
     # game 
     response = json.dumps({
     'STATS': response,
-    "gameover" : game_state
     })
     return Response(response=response, status=200, mimetype="application/json")
 
+
+@server.route('/blackjack_fetch/')
+def blackjack_fetch():
+    player_name = g_func.get_players_list(serverside=True)[-1]
+    location = g_func.get_player_location(player_name)
+    money = g_func.get_player_money(player_name)
+
+    response = {
+        "username": player_name,
+        "location": location,
+        "money": money}
+    
+    response = json.dumps(response)
+    return Response(status= 200, response= response, mimetype ="application/json")
+
+@server.route('/blackjack_update/<username>/<sum>')
+def blackjack_update(username, sum):
+    
+    if type(sum) != str:
+        try:
+            sum = str(sum)
+        except TypeError:
+            return Response(status = 300, response= json.dumps({"UPDATE":"BAD_TYPE", "REASON": sum, "TYPE": type(sum)}), mimetype= "application/json")
+    
+    updated_money = g_func.update_money(sum, username)
+    new_money = g_func.get_player_money(username)
+    response = {
+        "update": updated_money,
+        "updated_money": new_money
+    }
+    response = json.dumps(response)
+
+    return Response(status= 200, response= response, mimetype= "application/json")
 
 if __name__ == "__main__":
     server.run(use_reloader=True, debug=True)

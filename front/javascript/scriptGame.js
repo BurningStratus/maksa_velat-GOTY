@@ -115,7 +115,7 @@ async function updateTerminal(name) {
 
     const data = await infoDex(name);
     // debug
-    // console.log("Updatetermianl info", data);
+    console.log("Player info: ", data);
 
     currLocation.innerText = data.location;
     money.innerText = `Money:  ${data.money}`;

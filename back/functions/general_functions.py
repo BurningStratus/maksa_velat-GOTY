@@ -6,8 +6,6 @@ from geopy import distance
 
 from SQL_Scripts import sql_connection as sql
 
-# 
-
 local_players_list = []
 """Store players during the runtime. List exists only during the runtime. 
 The current player is always at the last index."""
@@ -108,12 +106,18 @@ $$ | \_/ $$ |$$ |  $$ |$$ | \$$\ \$$$$$$  |$$ |  $$ |         \$  /   $$$$$$$$\ 
 """, Fore.RESET)
 
 
-def gameover(screen_name: str) -> bool:
+def gameover(screen_name: str) -> bool or tuple:
+    '''Checks if the game is lost, won, or ongoing.'''
     sql.kursori.execute(f'SELECT money, debt, location FROM game WHERE screen_name="{screen_name}";')
     result = sql.kursori.fetchone()
     money = result[0]
     debt = result[1]
-    
+    location = result[2]
+    score = None
+
+    if location == "MO" and money >= debt:
+        score = get_score(screen_name)
+        return "PAID OFF", score
 
     if money >= 0:
         return False
@@ -137,7 +141,7 @@ def get_score(screen_name: str):
     sql.kursori.execute(sql_query)
     result = sql.kursori.fetchone()
 
-    return
+    return score
 
 
 def update_money(money: str, screen_name: str) -> str:
@@ -429,7 +433,7 @@ def get_player_calendar(player_name: str) -> str or tuple:
 
 
 def get_player_location(screen_name: str) -> str:
-
+    print(screen_name, "in get_players_location")
     sql.kursori.execute(f"select location from game where screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
@@ -456,7 +460,7 @@ def get_player_debt(screen_name:str) -> str:
         return "SQL_QUERY_FAIL"
 
 
-def can_play_blackjack(screen_name):
+def can_play_blackjack(screen_name: str) -> bool:
     location = get_player_location(screen_name)
     sql.kursori.execute(f"select blackjack from airport where icao='{location}';")
     tulos = sql.kursori.fetchall()
