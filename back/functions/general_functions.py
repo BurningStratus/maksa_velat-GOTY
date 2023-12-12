@@ -109,15 +109,36 @@ $$ | \_/ $$ |$$ |  $$ |$$ | \$$\ \$$$$$$  |$$ |  $$ |         \$  /   $$$$$$$$\ 
 
 
 def gameover(screen_name: str) -> bool:
-    sql.kursori.execute(f'SELECT money FROM game WHERE screen_name="{screen_name}";')
+    sql.kursori.execute(f'SELECT money, debt, location FROM game WHERE screen_name="{screen_name}";')
     result = sql.kursori.fetchone()
-    cur_money = result[0]
+    money = result[0]
+    debt = result[1]
+    
 
-    if cur_money >= 0:
+    if money >= 0:
         return False
     else:
         return True
     
+
+def get_score(screen_name: str):
+    sql_query = f"SELECT day_count, debt, money FROM game WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+    result = sql.kursori.fetchone()
+    days, debt, money  = result[0], result[1], result[2]
+    
+    if days == 0:
+        days = 1
+
+    score = round(500 / (days / (debt * 0.1)) + money ** (1.1))
+    print(screen_name + f"'s score is : {score}")
+
+    sql_query = f"UPDATE game SET score = '{score}' WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+    result = sql.kursori.fetchone()
+
+    return
+
 
 def update_money(money: str, screen_name: str) -> str:
     """
@@ -167,7 +188,7 @@ def get_coordinatesSQL() -> list:
         
         list_of_cities.append(tuple_data)
     
-    print(list_of_cities)
+    # print(list_of_cities)
     return list_of_cities
 
 
@@ -447,22 +468,3 @@ def can_play_blackjack(screen_name):
     else:
         return False
 
-
-def get_score(screen_name: str):
-    
-    sql_query = f"SELECT day_count, debt, money FROM game WHERE screen_name='{screen_name}';"
-    sql.kursori.execute(sql_query)
-    result = sql.kursori.fetchone()
-    days, debt, money  = result[0], result[1], result[2]
-    
-    if days == 0:
-        days = 1
-
-    score = round(500 / (days / (debt * 0.1)) + money ** (1.1))
-    print(screen_name + f"'s score is : {score}")
-
-    sql_query = f"UPDATE game SET score = '{score}' WHERE screen_name='{screen_name}';"
-    sql.kursori.execute(sql_query)
-    result = sql.kursori.fetchone()
-
-    return

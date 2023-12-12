@@ -35,10 +35,10 @@ def retrieve_players():
 @server.route('/start/<username>/<debt>')
 def start(username, debt):
 
-    player_index = g_func.get_players_list(serverside = True).index(username)
-    players_list = g_func.get_players_list(serverside = True)
-
     if username in g_func.get_players_list(serverside = True):
+        player_index = g_func.get_players_list(serverside = True).index(username)
+        players_list = g_func.get_players_list(serverside = True)
+        
         sql_game_init = 'LOADED'
         # moves needed username to the last index of local players list.
         
@@ -56,6 +56,7 @@ def start(username, debt):
         sql_player = players_list[-1]
     else:
         sql_game_init = load_database.load_events()
+        # print(g_func.get_players_list(serverside = True))
         sql_player = g_func.add_player(username, debt)
 
     print('Username: ' + username)

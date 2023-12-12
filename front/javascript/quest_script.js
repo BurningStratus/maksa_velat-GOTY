@@ -34,16 +34,6 @@ dataHolder.addEventListener('click', () => {
 // checks quest header and calls according quest
 async function questCaller(dataHolder) {
     // elements
-
-    const questbox = document.getElementById('quest_box');
-
-    const text_box = document.getElementById('quest_box_text');
-    const img = document.getElementById('quest_img');
-    const butt_yes = document.getElementById('quest_yes');
-    const butt_no = document.getElementById('quest_no');
-    let info_log;
-    let resp;
-    
     // MONA_quest or FUND_randm
     switch (dataHolder) {
         case 'MONA':
@@ -193,8 +183,10 @@ async function PolandCaller(screen_name) {
     const questbox = document.getElementById('quest_box');
     const text_box = document.getElementById('quest_box_text');
     const img = document.getElementById('quest_img');
-    const butt_yes = document.getElementById('quest_yes');
-    const butt_no = document.getElementById('quest_no');
+    const butt_yes = document.createElement('button')
+    butt_yes.id = 'quest_yes';
+    const butt_no = document.createElement('button');
+    butt_no.id = 'quest_no';
     let info_log;
     let resp;
     
@@ -208,7 +200,6 @@ async function PolandCaller(screen_name) {
     const buttonYes_text2 = "";
     const img_2 = "";
 
-
     // img.url = "path to pic";
     img.alt = "Warsaw quest";
     text_box.innerText = quest_text1;
@@ -216,6 +207,19 @@ async function PolandCaller(screen_name) {
     // showmodal
     console.log(questbox);
     questbox.showModal();
+
+    function polandStage1() {
+
+    }
+
+    function polandStage2{} {
+
+    }
+
+    function polandStage3 {} (
+
+    )
+
 
     butt_no.addEventListener('click', function polandStage1() {
         // if no was pressed.
@@ -226,6 +230,8 @@ async function PolandCaller(screen_name) {
         text_box.innerText = quest_text2; 
         butt_no.innerText = buttonNo_text2;
         butt_yes.innerText = buttonYes_text2;
+
+        butt_no.removeEventListener('click', )
 
         // if yes was pressed. sequence:(YES, NO)
         butt_no.addEventListener('click', async function polandStage2() {
@@ -252,11 +258,7 @@ async function PolandCaller(screen_name) {
             text_box.innerText = quest_text3; 
             butt_no.innerText = buttonNo_text3;
             butt_yes.innerText = buttonYes_text3;
-            
-            butt_no.removeEventListener('click', polandStage3())
-            butt_no.removeEventListener('click', polandStage1());
-            butt_no.removeEventListener('click', polandStage1());
-            butt_yes.removeEventListener('click', polandStage2())
+
             
             butt_no.addEventListener('click', async function polandStage4() {
                 butt_no.removeEventListener('click', polandStage4());
