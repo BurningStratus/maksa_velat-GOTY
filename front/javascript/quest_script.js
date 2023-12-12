@@ -62,7 +62,7 @@ async function questCaller(dataHolder) {
             await QuestCaller(username, "BLAC");
             break;
         case 'BLOW':
-            await QuestCaller(username, "BLOW");
+            await BlownEngineCaller(username);
             break;
         case 'BAND':
             await QuestCaller(username, "BAND");
@@ -74,7 +74,7 @@ async function questCaller(dataHolder) {
             await WeedCaller(username);
             break;
         case 'ECOA':
-            await QuestCaller(username, "ECOA");
+            await EcoActivistCaller(username);
             break;
         case 'CHES':
             await QuestCaller(username, "CHES");
@@ -311,7 +311,7 @@ Would you like to join them?`;
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "Let's go plant some trees!";
-    const img_1 = "../img/img_quests/PLAN.png";
+    const img_1 ="../img/img_quests/PLAN.jpg";
 
     // has to add pics to img box
     // logger
@@ -392,7 +392,7 @@ The bet is 100$.
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "Let's make some money for the girls!";
-    const img_1 = "../img/img_quests/FUND.png";
+    const img_1 = "../img/img_quests/FUND.jpg";
 
     // has to add pics to img box
     // logger
@@ -509,9 +509,166 @@ Will you though? Well you already got the wine so might as well find out!`;
         questbox.close();
     });
 
-    butt_yes.addEventListener('click', async function sendMonaco1() {
+    butt_yes.addEventListener('click', async function sendMadrid1() {
         // if YES was pressed.
         const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MADR1`);
+        resp = await complete.json();
+
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+
+        butt_no.remove
+        butt_yes.remove
+    });
+
+}
+
+// Blown Engine QUEST
+async function BlownEngineCaller(screen_name) {
+    // elements
+    const questbox = document.getElementById('quest_box');
+
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+
+    // stage 1
+    const quest_text1 = `Problems with the engine
+You have been having some troubles with your airplane's engine. You find a friendly mechanic. 
+Luckily they tell you the repairs will cost you only 100$. There is also a chance to convert the engine 
+so that it would run on ethanol instead of kerosene. The conversion would cost you only 50$ on top of 
+the 100$ for the needed repairs and the ethanol would cost you just a bit more kerosene(65$ per flight). 
+Are you an environmental hero or will you continue to fly with kerosene?`;
+    // yes and no
+    const buttonNo_text1 = "Only the needed repairs, thanks..";
+    const buttonYes_text1 = "Let's do it for the polar bears!";
+    const img_1 = "../img/img_quests/BLOW.jpg";
+
+    // has to add pics to img box
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+    console.log(location)
+
+    text_box.innerText = quest_text1;
+    butt_no.innerText = buttonNo_text1;
+    butt_yes.innerText = buttonYes_text1;
+
+    img.url = img_1;
+
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
+
+    // event listeners are connected to buttons.
+    // on quest_data send, event listeners should be removed to avoid problems,
+    // since there will be many functions connected to the same button.
+
+    butt_no.addEventListener('click', async function sendBlown0() {
+        // if no was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.BLOW0`);
+        resp = await complete.json();
+
+        info_log = resp[1]
+
+        // update terminal lines.
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+
+        //oncomplete: removeeventlistener
+        butt_no.remove
+        butt_yes.remove
+
+        questbox.close();
+    });
+
+    butt_yes.addEventListener('click', async function sendBlown1() {
+        // if YES was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.BLOW1`);
+        resp = await complete.json();
+
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+
+        butt_no.remove
+        butt_yes.remove
+    });
+
+}
+
+// Vatican QUEST
+async function VaticanCaller(screen_name) {
+    // elements
+    const questbox = document.getElementById('quest_box');
+
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+
+    // stage 1
+    const quest_text1 = `Pope in danger
+    You got to Vatican city, but something seems different from before.
+    The place you knew held the casino before has been raided by the police.
+    The Pope approaches you in the commotion and asks you to take him to Sarajevo to escape the raid.`
+
+    // yes and no
+    const buttonNo_text1 = "I have no time for this.";
+    const buttonYes_text1 = "Of course I'll help my old pal!";
+    const img_1 = "../img/img_quests/VATI.png";
+
+    // has to add pics to img box
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+    console.log(location)
+
+    text_box.innerText = quest_text1;
+    butt_no.innerText = buttonNo_text1;
+    butt_yes.innerText = buttonYes_text1;
+
+    img.url = img_1;
+
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
+
+    // event listeners are connected to buttons.
+    // on quest_data send, event listeners should be removed to avoid problems,
+    // since there will be many functions connected to the same button.
+
+    butt_no.addEventListener('click', async function sendVatican0() {
+        // if no was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.VATI0`);
+        resp = await complete.json();
+
+        info_log = resp[1]
+
+        // update terminal lines.
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+
+        //oncomplete: removeeventlistener
+        butt_no.remove
+        butt_yes.remove
+
+        questbox.close();
+    });
+
+    butt_yes.addEventListener('click', async function sendVatican1() {
+        // if YES was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.VATI1`);
         resp = await complete.json();
 
         // info_log is a row in terminal.

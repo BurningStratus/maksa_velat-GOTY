@@ -157,9 +157,9 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         if quest_data[4] == "1":
             g_func.fly_to('SA', screen_name, no_fare = True)
             g_func.update_money("1000", screen_name)
-            return [upd_quest, 'J.C would have loved this.']
+            return [upd_quest, 'The pope rewarded you with 1000$ as a sign of gratitude.']
         else:
-            return [upd_quest, "Oh wait it's not Florida?"]
+            return [upd_quest, "The pope got body slammed to the ground."]
     
     elif head == "WARS":
         upd_quest = update_quest(0, 'Warsaw')
