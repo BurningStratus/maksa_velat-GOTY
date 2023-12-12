@@ -70,8 +70,8 @@ async function questCaller(dataHolder) {
         case 'FUND':
             await FundraiserCaller(username);
             break;
-        case 'PLAN':
-            await PlantCaller(username);
+        case 'WEED':
+            await WeedCaller(username);
             break;
         case 'ECOA':
             await QuestCaller(username, "ECOA");
