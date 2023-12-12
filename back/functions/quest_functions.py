@@ -144,7 +144,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         
         if quest_data[4] == "1":
             g_func.update_money("50", screen_name)
-            info_log = "Wanderer."
+            info_log = "They're mad, but sent you 50$."
             
         else:
             info_log = "There will be something to talk about."
@@ -264,7 +264,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         
         if quest_data[4] == "1":
             upd_quest = update_quest(0, loc, env = True, name = screen_name)
-            info_log = "Nothing seems to be out of the ordinary."
+            info_log = "Saving the world!."
         
         else:
             upd_quest = update_quest(0, loc)
