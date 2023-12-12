@@ -6,8 +6,11 @@ from geopy import distance
 
 from SQL_Scripts import sql_connection as sql
 
-# store players only during the game.
+# 
+
 local_players_list = []
+"""Store players during the runtime. List exists only during the runtime. 
+The current player is always at the last index."""
 
 ''' courier's stash
 print(Fore.RED, 
@@ -46,7 +49,7 @@ def update_calendar(screen_name: str) -> str:
     AUG irl has 31 days, but it's not a big deal if it will have 30."""
 
     current_date = get_player_calendar(screen_name)
-    print(current_date, "current date inside update_calendar")
+    # print(current_date, "current date inside update_calendar")
 
     if current_date[0] == "BROKEN_CALENDAR":
         return current_date
@@ -76,7 +79,7 @@ def update_calendar(screen_name: str) -> str:
     
     upd_date = str(day) + "/" + str(month) + "/" + str(year)
 
-    print(upd_date, "updated date")
+    # print(upd_date, "updated date")
     ### 
     sql.kursori.execute(f'''UPDATE game 
                             SET calendar="{upd_date}",
@@ -172,8 +175,6 @@ def get_airport_name_and_country_by_icao(icao: str) -> str:
     "Returns airport's name using ICAO"
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
     tulos = list(sql.kursori.fetchone())
-
-    print(tulos, "tulos[0]")
 
     if tulos:
         return tulos

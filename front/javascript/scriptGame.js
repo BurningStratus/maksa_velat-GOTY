@@ -1,8 +1,9 @@
 'use strict';
 
+// element with id=quest will be dataHolder for the development time.
+// find by CTRL + F : quest_test
+
 let username;
-
-
 async function initPlayer(player) {
 
     const response = await fetch('http://127.0.0.1:5000/infoDex_userinit/caller/');
@@ -121,6 +122,12 @@ async function updateTerminal(name) {
     debt.innerText = `Debt:  ${data.debt}`;
     date.innerText = data.date;
 
+    // quest_test
+    const quest_name = document.getElementById('quest')
+    quest_name.innerText = await data.quest;
+    quest_name.value = await data.quest;
+    // quest_test
+
     infoDex_log.innerHTML += `Your position: ${await data.location}<br>`;
     await initMap(data.location);
     return data.airports;
@@ -139,7 +146,6 @@ async function printAirports(name) {
 
         // "PA Paris France"
         ICAOcode.innerText = airport;
-
 
         travelButton.classList.add('buttons');
         dest.append(ICAOcode, travelButton);
@@ -165,28 +171,26 @@ async function flyto(name, airport) {
 
 /////////////////////////////////////////////////////////////
 
-
+printAirports(username);
 /// only for development: should be removed after >>
 
-
-console.log("Username in the bottom:> " + username)
-
-printAirports(username);
-
+/*
 async function questCaller(screen_name) {
     const quest = prompt("Quest tag and data: [MONA0 or MONA1]");
     const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.${quest}`);
     const resp = await complete.json();
     return resp;
 }
-
 const quest = document.getElementById('quest');
+
 quest.addEventListener('click', async (click) => {
     // logger
     const infoDex_log = document.getElementById('infoDEX_log');
 
     const info = await questCaller(username);
+    console.log(info, 'Before exception')
     await updateTerminal(username);
 
     infoDex_log.innerHTML += `${await info[1]}<br>`;
 })
+*/

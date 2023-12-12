@@ -43,7 +43,7 @@ def start(username, debt):
         # moves needed username to the last index of local players list.
         
         # example: username = lob, index(lob) = 1
-        # players list : [goog, lob, gos]
+        # example players_list : [goog, lob, gos]
         buffer = None
         # 'gos'
         buffer = players_list[-1]
@@ -95,7 +95,6 @@ def data_retriever(username: str) -> list:
     if username == "undef_name":
         undef_name = True
 
-    
     if username not in g_func.get_players_list(serverside = True) and not undef_name:
         response = {
         "date": "null",

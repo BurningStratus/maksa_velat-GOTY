@@ -168,7 +168,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         # ask mechanic to change the tyre
         if quest_data[4] == "1":
             g_func.update_money('-200', screen_name)
-            return [upd_quest, "Money ain't a problem"]
+            return [upd_quest, "Money ain't a problem."]
         
         # do everything yourself
         elif quest_data[4] == "0":

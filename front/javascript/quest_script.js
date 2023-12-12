@@ -12,6 +12,12 @@
 */
 const dataHolder = document.getElementById('quest');
 
+let text_box = document.getElementById('quest_box_text');
+let img = document.getElementById('quest_img');
+let butt_yes = document.getElementById('quest_yes');
+let butt_no = document.getElementById('quest_no');
+
+
 
 // used for checking the button, where quest name comes when quest is available
 dataHolder.addEventListener('click', () => {
@@ -22,23 +28,33 @@ dataHolder.addEventListener('click', () => {
     const quest_head = holder[0] + holder[1] + holder[2] + holder[3];
     // MONA
     console.log(quest_head);
-    questCaller(quest_head)
+    questCaller(quest_head);
 })
 
 // checks quest header and calls according quest
 async function questCaller(dataHolder) {
+    // elements
 
+    const questbox = document.getElementById('quest_box');
+
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+    
     // MONA_quest or FUND_randm
     switch (dataHolder) {
         case 'MONA':
             console.log(dataHolder, "dataholder");
-            await QuestCaller(username, "MONA");
+            await MonacoCaller(username);
             break;
         case 'VATI':
-            await QuestCaller(username, "VATI");
+            await VaticanCaller(username);
             break;
         case 'WARS':
-            await QuestCaller(username, "WARS");
+            await PolandCaller(username);
             break;
         case 'DUBL':
             await QuestCaller(username, "DUBL");
@@ -76,9 +92,24 @@ async function questCaller(dataHolder) {
     }
 }
 
-// MONACO QUEST
-async function QuestCaller(screen_name, location) {
+// returns list of elements:
+// 0 == quest text, 1 == button No, 2 == button Yes, 3 == image.
+function questElements() {
+    text_box = document.getElementById('quest_box_text');
+    img = document.getElementById('quest_img');
+    butt_yes = document.getElementById('quest_yes');
+    butt_no = document.getElementById('quest_no');
 
+    text_box.innerText = '';
+    img.url = '';
+    butt_no = '';
+    butt_yes = '';
+
+    return [text_box, butt_no, butt_yes, img];
+}
+
+// MONACO QUEST
+async function MonacoCaller(screen_name) {
     // elements
     const questbox = document.getElementById('quest_box');
 
@@ -89,83 +120,173 @@ async function QuestCaller(screen_name, location) {
     let info_log;
     let resp;
 
-    // has to add pics to img box
-
-    // logger
-    const infoDex_log = document.getElementById('infoDEX_log');
-
-    switch (location) {
-        case "MONA":
-            butt_no.innerText = "I have no time for this.";
-            butt_yes.innerText = "Make the call";
-
-text_box.innerText = `"Rich" people problems, Monaco
+    // stage 1
+    const quest_text1 = `"Rich" people problems, Monaco
 Since you will be away for a while after receiving the message from the debt collectors, 
 it might be a bright idea to tell everything to your love interest.
-Would you like to make a call?`; // `` backtick is multiline string.
-        // showmodal
+Would you like to make a call?`;
+    // yes and no
+    const buttonNo_text1 = "I have no time for this.";
+    const buttonYes_text1 = "Make the call";
+    const img_1 = "../img/img_quests/MONA.png";
 
-        console.log(questbox);
-        questbox.showModal();
+    // has to add pics to img box
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+    console.log(location)
+    
+    text_box.innerText = quest_text1;
+    butt_no.innerText = buttonNo_text1;
+    butt_yes.innerText = buttonYes_text1;
 
-        butt_no.addEventListener('click', async () => {
-            // if no was pressed.
-            const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA0`);
-            resp = await complete.json();
-            
-            info_log = resp[1]
+    img.url = img_1;
 
-            await updateTerminal(screen_name);
-            infoDex_log.innerHTML += `${info_log}<br>`;
-            // TODO oncomplete: removeeventlisteners
-            questbox.close();
-        });
-        butt_yes.addEventListener('click', async () => {
-            // if YES was pressed.
-            const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA1`);
-            resp = await complete.json();
-            
-            // info_log is a row in terminal.
-            info_log = resp[1];
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
 
-            await updateTerminal(screen_name);
-            infoDex_log.innerHTML += `${info_log}<br>`;
-            questbox.close();
+    // event listeners are connected to buttons.
+    // on quest_data send, event listeners should be removed to avoid problems,
+    // since there will be many functions connected to the same button.
+
+    butt_no.addEventListener('click', async function sendMonaco0() {
+        // if no was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA0`);
+        resp = await complete.json();
+        
+        info_log = resp[1]
+        
+        // update terminal lines.
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        
+        //oncomplete: removeeventlistener
+        butt_no.remove
+        butt_yes.remove
+        
+        questbox.close();
     });
-            break;
-        case "POLN":
-            completion_string = 'WARS';
-            // 
-            butt_no.innerText = "I'll do this myself.";
-            butt_yes.innerText = "Find mechanic.";
-            
-text_box.innerText = ` quest text `; // `` backtick is multiline string.
+
+    butt_yes.addEventListener('click', async function sendMonaco1() {
+        // if YES was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MONA1`);
+        resp = await complete.json();
         
-            // showmodal
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
         
-            console.log(questbox);
-            questbox.showModal();
-        
-            butt_no.addEventListener('click', async () => {
-                // if no was pressed.
-                completion_string += "0"
-            });
-            butt_yes.addEventListener('click', async () => {
-                // if YES was pressed.
-                const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.WARS1`);
-                resp = await complete.json();
-                
-                // info_log is a row in terminal.
-                info_log = resp[1];
-        
-                await updateTerminal(screen_name);
-                infoDex_log.innerHTML += `${info_log}<br>`;
-                questbox.close();
-            });
-    }
-    questbox.close();
+        butt_no.remove
+        butt_yes.remove
+    });
+
 }
+// WARSAWA QUEST
+/*
+async function PolandCaller(screen_name) {
+    let completion_string = "";
+    let quest_stage = 0;
+
+    const questbox = document.getElementById('quest_box');
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+    
+    const quest_text1 = `Example`;
+    const buttonNo_text1 = "I'll do this myself.";
+    const buttonYes_text1 = "Find mechanic.";
+    const img_1 = "../img/img_quests/.png";
+
+    const quest_text2 = ``;
+    const buttonNo_text2 = "";
+    const buttonYes_text2 = "";
+    const img_2 = "";
 
 
-//
-questCaller()
+    // img.url = "path to pic";
+    img.alt = "Warsaw quest";
+    text_box.innerText = quest_text1;
+
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
+
+    butt_no.addEventListener('click', function polandStage1() {
+        // if no was pressed.
+        completion_string += "0";
+        questElements();
+        console.log('yes');
+
+        text_box.innerText = quest_text2; 
+        butt_no.innerText = buttonNo_text2;
+        butt_yes.innerText = buttonYes_text2;
+
+        // if yes was pressed. sequence:(YES, NO)
+        butt_no.addEventListener('click', async function polandStage2() {
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.WARS01`);
+        resp = await complete.json();
+        
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+
+        butt_no.removeEventListener('click', polandStage1());
+        butt_no.removeEventListener('click', polandStage1());
+        butt_yes.removeEventListener('click', polandStage2())
+        })
+
+        butt_yes.addEventListener('click', async function polandStage3() {
+            completion_string += "1";
+            questElements();
+            console.log('yes');
+
+            text_box.innerText = quest_text3; 
+            butt_no.innerText = buttonNo_text3;
+            butt_yes.innerText = buttonYes_text3;
+            
+            butt_no.removeEventListener('click', polandStage3())
+            butt_no.removeEventListener('click', polandStage1());
+            butt_no.removeEventListener('click', polandStage1());
+            butt_yes.removeEventListener('click', polandStage2())
+            
+            butt_no.addEventListener('click', async function polandStage4() {
+                butt_no.removeEventListener('click', polandStage4());
+
+            })
+
+        })
+
+    });
+
+
+    // if YES was pressed, quest is completed, so fetch is sent.
+    butt_yes.addEventListener('click', async function sendPoland1() {
+        
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.WARS1`);
+        resp = await complete.json();
+        
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+        butt_yes.removeEventListener('click', sendPoland1());
+        butt_no.removeEventListener('click', polandStage1());
+
+
+        });
+
+}
+*/
+
+// questCaller()
