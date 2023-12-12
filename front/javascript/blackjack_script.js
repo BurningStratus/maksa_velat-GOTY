@@ -1,6 +1,9 @@
 let dealerSum = 0;
 let playerSum = 0;
 
+let username,loca,money,betMoney;
+let startMoney;
+
 let dealerAceCount = 0;
 let playerAceCount = 0; //A, 2 + K -> 11-10 + 2 + 10 -> 13 A  -> 14 + K -> 24
 
@@ -14,6 +17,28 @@ const tutorialButton = document.querySelector('#tutorial');
 const menuButton = document.querySelector('#backToMenu');
 const closeButton = document.querySelector('#X_tutorial');
 const dialogTutorial = document.querySelector('#tutorialBox');
+
+
+data = async () => {
+    const response = await fetch('http://127.0.0.1:5000/blackjack_fetch/');
+    return response.json();
+}
+
+data()
+    .then(result => {
+        const dataa = document.querySelector('#playerInfo');
+        dataa.innerHTML = `${result.username}-${result.location}-${result.money}`;
+        const userData = dataa.innerHTML.split("-");
+        username = userData[0];
+        loca = userData[1];
+        money = parseInt(userData[2]);
+        startMoney = money;
+        document.querySelector('#playerInfo').innerHTML = "";
+        document.querySelector('#playerInfo').innerHTML = `Your money: ${money}`
+
+    })
+    .catch(error => console.error('Error:', error));
+
 
 onload = function () {
     buildDeck();
@@ -31,7 +56,7 @@ function buildDeck() {
             deck.push(types[i] + "-" + values[j]); //C-A -> C-K, D-A -> D-K
         }
     }
-    // console.log(deck);
+    // console.log(deck)
 }
 
 function shuffleDeck() {
@@ -74,6 +99,12 @@ function startGame() {
     console.log(playerSum);
     document.querySelector("#hit").addEventListener('click', hit);
     document.querySelector('#stay').addEventListener('click', stay);
+    setTimeout(bet, 1000);
+}
+
+function bet() {
+    betMoney = parseInt(prompt('How much money you betting?'));
+    document.querySelector('#playerInfo').innerHTML +=  `   Bet: ${betMoney}`;
 }
 
 function hit() {
@@ -98,16 +129,22 @@ function stay() {
     let message = "";
     if (playerSum > 21) {
         message = "You Lose!";
+        money -= betMoney;
     } else if (dealerSum > 21) {
         message = "You win!";
+        money += betMoney * 2;
     }
     //both you and the dealer <= 21
     else if (playerSum === dealerSum)
         message = "Tie!";
-    else if (playerSum > dealerSum)
+    else if (playerSum > dealerSum) {
         message = "You Win!"
-    else if (playerSum < dealerSum)
+        money += betMoney * 2
+    }
+    else if (playerSum < dealerSum) {
         message = "You Lose!";
+        money -= betMoney;
+    }
 
     document.querySelector("#dealer-sum").innerHTML = dealerSum;
     document.querySelector("#player-sum").innerHTML = playerSum;
@@ -116,8 +153,9 @@ function stay() {
         setTimeout(kickedOut, 1000);
 }
 
-function kickedOut() {
+async function kickedOut() {
     alert('You were kicked out of the casino');
+    await fetch(`http://127.0.0.1:5000//blackjack_update/${username}/${money - startMoney}`);
     location.href = "gamePage.html";
 }
 
@@ -129,6 +167,8 @@ function playAgain() {
         buildDeck();
         shuffleDeck();
         startGame();
+        document.querySelector('#playerInfo').innerHTML = "";
+        document.querySelector('#playerInfo').innerHTML = `Your money: ${money}`;
     } else {
         alert('See ya!');
         location.href = "gamePage.html";
@@ -144,7 +184,7 @@ function reduceAce(playerSum, playerAceCount) {
 }
 
 
-function clearCards(){
+function clearCards() {
     const dealer = document.querySelector('#dealer-cards');
     document.querySelector('#player-cards').innerHTML = "";
     document.querySelector("#dealer-sum").innerHTML = "";
@@ -153,6 +193,7 @@ function clearCards(){
 
     dealer.innerHTML = `<img id="hidden" src="img/cards/B-B.png">`;
 }
+
 function createCard(who, hidden = false) {
     let cardImg = document.createElement('img');
     let card = deck.pop();
@@ -216,7 +257,8 @@ closeButton.addEventListener('click', function () {
     dialogTutorial.close();
 });
 
-menuButton.addEventListener('click', function () {
+menuButton.addEventListener('click', async function () {
+    await fetch(`http://127.0.0.1:5000//blackjack_update/${username}/${money - startMoney}`);
     location.href = "gamePage.html";
 });
 
