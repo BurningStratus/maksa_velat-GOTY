@@ -32,52 +32,52 @@ async function questCaller(dataHolder) {
     switch (dataHolder) {
         case 'MONA':
             console.log(dataHolder, "dataholder");
-            await QuestCaller(username, "MONA");
+            await MonacoCaller(username);
             break;
         case 'VATI':
-            await QuestCaller(username, "VATI");
+            await VaticanCaller(username);
             break;
         case 'WARS':
-            await QuestCaller(username, "WARS");
+            await WarsawCaller(username);
             break;
         case 'DUBL':
-            await QuestCaller(username, "DUBL");
+            await DublinCaller(username);
             break;
         case 'MADR':
-            await QuestCaller(username, "MADR");
+            await MadridCaller(username);
             break;
         case 'OSLO':
-            await QuestCaller(username, "OSLO");
+            await OsloCaller(username);
             break;
         case 'BUCH':
-            await QuestCaller(username, "BUCH");
+            await BucharestValler(username);
             break;
         case "BLAC":
-            await QuestCaller(username, "BLAC");
+            await BlackCatCaller(username);
             break;
         case 'BLOW':
-            await QuestCaller(username, "BLOW");
+            await BlownEngineCaller(username);
             break;
         case 'BAND':
-            await QuestCaller(username, "BAND");
+            await BanditCaller(username);
             break;
         case 'FUND':
-            await QuestCaller(username, "FUND");
+            await FundraiserCaller(username);
             break;
         case 'PLAN':
-            await QuestCaller(username, "PLAN");
+            await PlantTreesCaller(username);
             break;
         case 'ECOA':
-            await QuestCaller(username, "ECOA");
+            await EcoActivistCaller(username);
             break;
         case 'CHES':
-            await QuestCaller(username, "CHES");
+            await ChessCaller(username);
             break;
     }
 }
 
 // MONACO QUEST
-async function QuestCaller(screen_name, location) {
+async function MonacoCaller(screen_name) {
 
     // elements
     const questbox = document.getElementById('quest_box');

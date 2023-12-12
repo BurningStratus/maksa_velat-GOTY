@@ -67,13 +67,53 @@ function startGame() {
     }
     console.log(playerSum);
     document.querySelector("#hit").addEventListener('click', hit);
+    document.querySelector('#stay').addEventListener('click', stay);
 }
 
 function hit() {
     if (!canHit) {
         return;
     }
+    createCard("player");
 
+    // if (reduceAce(playerSum, playerAceCount) > 21) { //A,J,K -> 1 + 10 + 8
+    //     canHit = false;
+    // }
+}
+
+function stay() {
+    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    playerSum = reduceAce(playerSum, playerAceCount);
+
+    canHit = false;
+    document.querySelector('#hidden').src = "./img/cards/" + hidden + ".png";
+
+    let message = "";
+    if(playerSum > 21) {
+        message = "You Lose!";
+    }
+    else if (dealerSum > 21) {
+        message = "You win!";
+    }
+    //both you and the dealer <= 21
+    else if (playerSum === dealerSum)
+        message = "Tie!";
+    else if (playerSum > dealerSum)
+        message = "You Win!"
+    else if (playerSum < dealerSum)
+        message = "You Lose!";
+
+    document.querySelector("#dealer-sum").innerHTML = dealerSum;
+    document.querySelector("#player-sum").innerHTML = playerSum;
+    document.querySelector("#results").innerHTML = message;
+}
+
+function reduceAce(playerSum, playerAceCount) {
+    while (playerSum > 21 && playerAceCount > 0) {
+        playerSum -= 10;
+        playerAceCount -= 1;
+    }
+    return playerSum;
 }
 
 function createCard(who) {
