@@ -50,7 +50,7 @@ async function questCaller(dataHolder) {
             await QuestCaller(username, "DUBL");
             break;
         case 'MADR':
-            await QuestCaller(username, "MADR");
+            await MadridCaller(username);
             break;
         case 'OSLO':
             await QuestCaller(username, "OSLO");
@@ -434,6 +434,84 @@ The bet is 100$.
     butt_yes.addEventListener('click', async function sendFundraiser1() {
         // if YES was pressed.
         const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.FUND1`);
+        resp = await complete.json();
+
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+
+        butt_no.remove
+        butt_yes.remove
+    });
+
+}
+
+// Madrid QUEST
+async function MadridCaller(screen_name) {
+    // elements
+    const questbox = document.getElementById('quest_box');
+
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+
+    // stage 1
+    const quest_text1 = `Wine delivery
+As you arrive to Madrid you're approached by a shady looking person that offers you easy money doing a delivery.
+You receive a crate full of cheap looking wine to take to Lisbon,
+Portugal and told that you'll be receiving your payment upon arrival.
+Will you though? Well you already got the wine so might as well find out!`;
+    // yes and no
+    const buttonNo_text1 = "No! I'm giving the wine back.";
+    const buttonYes_text1 = "Portugal sounds nice. Let's go!";
+    const img_1 = "../img/img_quests/MADR.png";
+
+    // has to add pics to img box
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+    console.log(location)
+
+    text_box.innerText = quest_text1;
+    butt_no.innerText = buttonNo_text1;
+    butt_yes.innerText = buttonYes_text1;
+
+    img.url = img_1;
+
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
+
+    // event listeners are connected to buttons.
+    // on quest_data send, event listeners should be removed to avoid problems,
+    // since there will be many functions connected to the same button.
+
+    butt_no.addEventListener('click', async function sendMadrid0() {
+        // if no was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MADR0`);
+        resp = await complete.json();
+
+        info_log = resp[1]
+
+        // update terminal lines.
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+
+        //oncomplete: removeeventlistener
+        butt_no.remove
+        butt_yes.remove
+
+        questbox.close();
+    });
+
+    butt_yes.addEventListener('click', async function sendMonaco1() {
+        // if YES was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.MADR1`);
         resp = await complete.json();
 
         // info_log is a row in terminal.

@@ -293,7 +293,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
                 return [upd_quest, "ERROR CONVERTING FUEL TYPE"]
         else:
             upd_quest = update_quest(0, loc)
-            info_log = "Good old fossil fuels, they never dissappoint."
+            info_log = "Good old fossil fuels, they never disappoint."
 
         return [upd_quest, info_log]
 
@@ -303,7 +303,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         if quest_data[4] == "1":
             g_func.update_money("10", screen_name)
             g_func.fly_to("LI", screen_name)
-            info_log = "Something tells you that it wasn't a great deal."
+            info_log = "You got only 10$ as payment. Seems shady."
         else:
             info_log = "Nothing seems out of the ordinary."
 
