@@ -38,7 +38,7 @@ async function initMap(location) {
     const markersJSON = await cities.json();
     console.log(markersJSON);
     const dotIcon = new L.Icon({
-        iconUrl: './img/marker.png',
+        iconUrl: './img/marker-red.png',
         iconSize: [12, 12], // Adjust the size to make it look like a dot
         iconAnchor: [6, 6], // Half of the size
         popupAnchor: [0, 0],
@@ -62,9 +62,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 const redIcon = L.icon({
-    iconUrl: 'img/map-marker.png',
-    iconSize: [32, 41],
-    iconAnchor: [12, 41],
+    iconUrl: 'img/player_marker.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
