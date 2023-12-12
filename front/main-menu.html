@@ -5,6 +5,7 @@
     <title>Maksa Velat!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main-menu_style.css">
+    <link rel="stylesheet" href="fonts/maingame_headline_font/headline_font.css">
 </head>
 <body>
 
@@ -20,10 +21,14 @@
 <!-- Content on top of the video -->
 <div id="content">
     <h1>MAKSA VELAT!</h1>
-    <p>This is an example HTML page with a video background.</p>
-    <button id="start">Start</button>
-    <button id="load_game">Load Game</button>
-    <button id="tutorial">Tutorial</button>
+    <p>It's spring 1997 in Monaco. Last winter you got into gambling and racked up some debt. Now the local debt collector
+"The Ice cream truck driver" has run out of patience and you just haven't hit it big yet. All you have is 500$ and
+that's not nearly enough to pay off your debt. You decide to take your small airplane and fly around Europe to play
+Blackjack at illegal casinos, since gambling and casinos have worked out so well for you so far. But this time you're
+confident you will win back all the money so you can return to Monaco and pay off your debts.  -This time for sure!-</p>
+    <button id="start" class="menu">Start</button>
+    <button id="load_game" class="menu">Load Game</button>
+    <button id="tutorial" class="menu">Tutorial</button>
 </div>
 <audio id="backgroundAudio">
     <source src="music/in-the-hall-of-the-mountain-king.mp3" type="audio/mp3">
@@ -34,7 +39,7 @@
 <button id="mute" class="audio"></button>
 
 <dialog id="game_load_screen">
-    <span id="X_playerloader">&#x2715;</span>
+    <span id="X_playerloader" class="exit-button">&#x2715;</span>
     
 </dialog>
 <script src="javascript/mainMenuScript.js" defer></script>

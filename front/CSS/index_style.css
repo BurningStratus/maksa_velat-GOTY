@@ -4,6 +4,10 @@
 
 /* Fonts */
 
+html {
+    width: 90%;
+    margin: auto;
+}
 
 
 
@@ -13,14 +17,17 @@
     overflow: auto;
     color: darkgreen;
     background-color: rgb(36, 34, 34);
-    font-size: 18px;
+    font-size: 14px;
+    padding-left: 0.5rem;
 }
 
 #infodex {
     color: #ddfadd;
     background-color: rgb(36, 34, 34);
-    font-size: 18px;
+    font-size: 14px;
     box-sizing: border-box;
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
 }
 
 .buttons {
@@ -45,19 +52,19 @@
 
 @media screen and (min-width: 720px) {
             #infodex {
-                font-size: 20px; /* Adjust font size for screens wider than 600px */
+                font-size: 16px; /* Adjust font size for screens wider than 600px */
             }
             #infoDEX_log {
-                font-size: 20px; /* Adjust font size for screens wider than 600px */
+                font-size: 16px; /* Adjust font size for screens wider than 600px */
             }
         }
 
         @media screen and (min-width: 1200px) {
              #infodex {
-                font-size: 24px; /* Adjust font size for screens wider than 600px */
+                font-size: 20px; /* Adjust font size for screens wider than 600px */
             }
             #infoDEX_log {
-                font-size: 24px; /* Adjust font size for screens wider than 600px */
+                font-size: 20px; /* Adjust font size for screens wider than 600px */
             }
         }
 
@@ -76,8 +83,9 @@
     box-sizing: border-box;
     object-fit: cover;
     height: 800px;
+    color: antiquewhite;
     background-color: #5e5454;
-    border: 1px solid #ccc;
+    border: 1px solid #5e0808;
     width: 39%;
 }
 
@@ -96,11 +104,13 @@ body {
     height: 2rem;
     background-color: black;
     text-align: center;
+    box-sizing: border-box;
 }
 
 #nameOfThePanel h1 {
     color: antiquewhite;
     background-image: url("../img/turquoise-2083986_640.jpg");
+    padding: 0.5rem;
 }
 
 #panel {

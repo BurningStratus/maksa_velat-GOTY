@@ -1,25 +1,18 @@
-
-
-// 1. blackjack buttons
-let hitButton = document.getElementById('hit');
-let stayButton = document.getElementById('stay');
-
-// button event handlers
-hitButton.addEventListener('click', async (event) => {
-    null
-})
-
-
 let dealerSum = 0;
 let playerSum = 0;
 
 let dealerAceCount = 0;
-let playerAceCount = 0; //A, 2 + K -> 11-10 + 2 + 10
+let playerAceCount = 0; //A, 2 + K -> 11-10 + 2 + 10 -> 13 A  -> 14 + K -> 24
 
 let hidden;
 let deck;
 
 let canHit = true; //allows player to draw while yourSum <= 21
+
+const tutorialButton = document.querySelector('#tutorial');
+const menuButton = document.querySelector('#backToMenu');
+const closeButton = document.querySelector('#X_tutorial');
+const dialogTutorial = document.querySelector('#tutorialBox');
 
 onload = function () {
     buildDeck();
@@ -56,9 +49,15 @@ function startGame() {
     dealerAceCount += checkAce(hidden);
     // console.log(hidden);
     // console.log(dealerSum);
+    let count = 1;
     while (dealerSum < 17) {
         //<img src="../img/cards/C-4.png">
-        createCard("dealer");
+        if (count !== 1)
+            createCard("dealer", true);
+        else
+            createCard("dealer")
+        count++;
+
     }
     console.log(dealerSum)
 
@@ -67,16 +66,60 @@ function startGame() {
     }
     console.log(playerSum);
     document.querySelector("#hit").addEventListener('click', hit);
+    document.querySelector('#stay').addEventListener('click', stay);
 }
 
 function hit() {
     if (!canHit) {
         return;
     }
+    createCard("player");
 
+    // if (reduceAce(playerSum, playerAceCount) > 21) { //A,J,K -> 1 + 10 + 8
+    //     canHit = false;
+    // }
 }
 
-function createCard(who) {
+function stay() {
+    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    playerSum = reduceAce(playerSum, playerAceCount);
+
+    canHit = false;
+    document.querySelector('#hidden').src = "./img/cards/" + hidden + ".png";
+    const hiddenCards = document.querySelectorAll('.hidden');
+    for (let i = 0; i < hiddenCards.length; i++) {
+        hiddenCards[i].classList.remove('hidden');
+    }
+
+    let message = "";
+    if(playerSum > 21) {
+        message = "You Lose!";
+    }
+    else if (dealerSum > 21) {
+        message = "You win!";
+    }
+    //both you and the dealer <= 21
+    else if (playerSum === dealerSum)
+        message = "Tie!";
+    else if (playerSum > dealerSum)
+        message = "You Win!"
+    else if (playerSum < dealerSum)
+        message = "You Lose!";
+
+    document.querySelector("#dealer-sum").innerHTML = dealerSum;
+    document.querySelector("#player-sum").innerHTML = playerSum;
+    document.querySelector("#results").innerHTML = message;
+}
+
+function reduceAce(playerSum, playerAceCount) {
+    while (playerSum > 21 && playerAceCount > 0) {
+        playerSum -= 10;
+        playerAceCount -= 1;
+    }
+    return playerSum;
+}
+
+function createCard(who, hidden=false) {
         let cardImg = document.createElement('img');
         let card = deck.pop();
         cardImg.src = "./img/cards/" + card + ".png";
@@ -90,7 +133,12 @@ function createCard(who) {
             case "dealer":
                 dealerSum += getValue(card);
                 dealerAceCount += checkAce(card);
-                document.querySelector('#dealer-cards').append(cardImg);
+                if (hidden) {
+                    cardImg.classList.add('hidden');
+                    document.querySelector('#dealer-cards').append(cardImg);
+                }
+                else
+                    document.querySelector('#dealer-cards').append(cardImg);
                 break;
         }
 }
@@ -113,3 +161,29 @@ function checkAce(card) {
         return 1;
     return 0;
 }
+
+
+tutorialButton.addEventListener('click', async function () {
+    try {
+        // Reads Instruction
+        const response = await fetch('../back/Blackjackinstuctions');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch data: ${response.statusText}`);
+        }
+        //Shows the instruction
+        dialogTutorial.querySelector('p').innerHTML = await response.text();
+        dialogTutorial.showModal();
+    }
+    catch (error){
+        console.log('Error: ', error);
+    }
+});
+
+closeButton.addEventListener('click', function () {
+     dialogTutorial.querySelector('p').innerHTML = "";
+     dialogTutorial.close();
+});
+
+menuButton.addEventListener('click', function () {
+    location.href = "gamePage.html";
+});

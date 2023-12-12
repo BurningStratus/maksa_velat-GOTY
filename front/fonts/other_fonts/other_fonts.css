@@ -2,4 +2,19 @@
     font-family: terminal;
     src: url('PressStart2P-Regular.ttf') format("truetype");
 }
+#infodex {
+    font-family: terminal, sans-serif;
+}
+
+#infoDEX_log {
+    font-family: terminal, sans-serif;
+}
+
+#dests {
+    font-family: Arial, Helvetica sans-serif;
+}
+
+#nameOfThePanel h1 {
+    font-family: terminal, sans-serif;
+}
 
