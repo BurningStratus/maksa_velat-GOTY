@@ -176,7 +176,7 @@ def get_coordinatesSQL() -> list:
     """Used for fetching and unpacking SQL-queries for fetching the coordinates of cities. 
     Returns list of lists: [ [ latitude_deg, longitude_deg, country, airport_name ], ...]."""
 
-    sql_query = """SELECT latitude_deg, longitude_deg, country, airport_name FROM airport;"""
+    sql_query = """SELECT latitude_deg, longitude_deg, country, airport_name, icao FROM airport;"""
     list_of_cities = []
 
     sql.kursori.execute(sql_query)

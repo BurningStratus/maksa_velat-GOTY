@@ -47,7 +47,7 @@ async function questCaller(dataHolder) {
             await PolandCaller(username);
             break;
         case 'DUBL':
-            await QuestCaller(username, "DUBL");
+            await DublinCaller(username);
             break;
         case 'MADR':
             await MadridCaller(username);
@@ -669,6 +669,86 @@ async function VaticanCaller(screen_name) {
     butt_yes.addEventListener('click', async function sendVatican1() {
         // if YES was pressed.
         const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.VATI1`);
+        resp = await complete.json();
+
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+
+        butt_no.remove
+        butt_yes.remove
+    });
+
+}
+
+// Dublin QUEST
+async function DublinCaller(screen_name) {
+    // elements
+    const questbox = document.getElementById('quest_box');
+
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+
+    // stage 1
+    const img_1 = "../img/img_quests/dublin_quest1.png";
+    img.url = img_1;
+    const quest_text1 = `Dublin, Ireland
+    You saw a rainbow and decided to head outside to see if you could find its end.
+    You stumble upon a peculiar looking bearded little man wearing green. 
+    He congratulates you for finding him and disappears before you could properly react,
+    leaving behind a small pot. Will you take a look inside the pot?`;
+    // yes and no
+    const buttonNo_text1 = "No, it's probably full of...rubbish.";
+    const buttonYes_text1 = "Let's take a look.";
+
+
+    // has to add pics to img box
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+    console.log(location)
+
+    text_box.innerText = quest_text1;
+    butt_no.innerText = buttonNo_text1;
+    butt_yes.innerText = buttonYes_text1;
+
+
+
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
+
+    // event listeners are connected to buttons.
+    // on quest_data send, event listeners should be removed to avoid problems,
+    // since there will be many functions connected to the same button.
+
+    butt_no.addEventListener('click', async function sendDublin0() {
+        // if no was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.DUBL0`);
+        resp = await complete.json();
+
+        info_log = resp[1]
+
+        // update terminal lines.
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+
+        //oncomplete: removeeventlistener
+        butt_no.remove
+        butt_yes.remove
+
+        questbox.close();
+    });
+
+    butt_yes.addEventListener('click', async function sendDublin1() {
+        // if YES was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.DUBL1`);
         resp = await complete.json();
 
         // info_log is a row in terminal.
