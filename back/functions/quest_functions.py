@@ -222,7 +222,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         if quest_data[4] == "1":
             g_func.update_calendar(screen_name)
             g_func.update_money("-100", screen_name)
-            info_log = "Nothing seems out of the ordinary."
+            info_log = "That's some good karma."
         else:
             info_log = "Nothing seems out of the ordinary."
 
