@@ -209,9 +209,9 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         upd_quest = update_quest(0, "Dublin")
         if quest_data[4] == "1":
             g_func.update_money("750", screen_name)
-            info_log = "Nothing seems out of the ordinary."
+            info_log = "The pot was full of gold! It was worth 750$."
         else:
-            info_log = "Nothing seems out of de ordinary."
+            info_log = "What a weirdo."
 
         return [upd_quest, info_log]
         
