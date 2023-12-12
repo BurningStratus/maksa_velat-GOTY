@@ -106,7 +106,7 @@ $$ | \_/ $$ |$$ |  $$ |$$ | \$$\ \$$$$$$  |$$ |  $$ |         \$  /   $$$$$$$$\ 
 """, Fore.RESET)
 
 
-def gameover(screen_name: str) -> bool or tuple:
+def gameover(screen_name: str) -> list:
     '''Checks if the game is lost, won, or ongoing.'''
     sql.kursori.execute(f'SELECT money, debt, location FROM game WHERE screen_name="{screen_name}";')
     result = sql.kursori.fetchone()
@@ -117,15 +117,18 @@ def gameover(screen_name: str) -> bool or tuple:
 
     if location == "MO" and money >= debt:
         score = get_score(screen_name)
-        return "PAID OFF", score
+        return ["WON", score]
+    elif money < 0:
+        score = get_score(screen_name, loser = True)
+        return ["BANKRUPT", score]
 
-    if money >= 0:
-        return False
-    else:
-        return True
+    return ["IN PROGRESS", 0]
     
 
-def get_score(screen_name: str):
+def get_score(screen_name: str, loser = False):
+    """Calculates and updates score of the player.
+    :arg: screen_name(str): Name of the player.
+    :arg: loser(bool): if true, the score will be set to -1."""
     sql_query = f"SELECT day_count, debt, money FROM game WHERE screen_name='{screen_name}';"
     sql.kursori.execute(sql_query)
     result = sql.kursori.fetchone()
@@ -134,12 +137,17 @@ def get_score(screen_name: str):
     if days == 0:
         days = 1
 
+    if loser:
+        sql_query = f"UPDATE game SET score = -1 WHERE screen_name='{screen_name}';"
+        sql.kursori.execute(sql_query)
+
+        return -1
+
     score = round(500 / (days / (debt * 0.1)) + money ** (1.1))
     print(screen_name + f"'s score is : {score}")
 
-    sql_query = f"UPDATE game SET score = '{score}' WHERE screen_name='{screen_name}';"
+    sql_query = f"UPDATE game SET score = {score} WHERE screen_name='{screen_name}';"
     sql.kursori.execute(sql_query)
-    result = sql.kursori.fetchone()
 
     return score
 
@@ -157,14 +165,14 @@ def update_money(money: str, screen_name: str) -> str:
         money = int(money[1:])
         sql.kursori.execute(f"""UPDATE game 
                             SET money=((SELECT money FROM game WHERE screen_name='{screen_name}') - {money})
-                            WHERE screen_name='{screen_name}' """)
+                            WHERE screen_name='{screen_name}';""")
         return "UPDATED_MONEY_ADD"
     
     else:  # if not money will be added
         money = int(money)
         sql.kursori.execute(f"""UPDATE game 
                             SET money=((SELECT money FROM game WHERE screen_name='{screen_name}') + {money})
-                            WHERE screen_name='{screen_name}' """)
+                            WHERE screen_name='{screen_name}';""")
         
     if sql.kursori.rowcount == 1:
         return "UPDATED_MONEY_REMOVED"

@@ -4,6 +4,9 @@
 // find by CTRL + F : quest_test
 
 let username;
+let gameState = ['IN PROGRESS', 0];
+
+
 async function initPlayer(player) {
 
     const response = await fetch('http://127.0.0.1:5000/infoDex_userinit/caller/');
@@ -86,6 +89,55 @@ let currLocation = document.getElementById('location');
 let money = document.getElementById('money');
 let debt = document.getElementById('debt');
 
+
+// checks if the game is won, lost or ongoing.
+function checkGameState(state) {
+    const state_game = state[0];
+    const score = state[1];
+    
+    const loser_screen = document.getElementById('loser_screen');
+    const loser_text = document.getElementById('loser_box_text');
+    const loser_yes = document.getElementById('loser_yes');
+    const loser_score = document.getElementById('loser_score');
+
+    loser_yes.addEventListener('click', () => {
+        location.replace('main-menu.html');
+        loser_text = '';
+    })
+
+    console.log('function casted. game state', state);
+
+    switch (state_game) {
+        case "IN PROGRESS":
+            console.log(state_game);
+            break;
+
+        case "BANKRUPT":
+            loser_text.innerText = 
+            `You have gambled your life away, but you realised it when it was too late. 
+            Lady luck wasn't on your side, if it ever was.
+            
+            You had to sell everything you had to get back to Monaco, but this time
+            you weren't given any chance for payoff. From now on, you will have to 
+            work for local kingpin until you pay off the debt.
+            `
+            loser_screen.showModal();
+            break;
+        
+        case "WON":
+            loser_text.innerText = 
+            `You managed to pay off your debt. 
+            As a result, you've earned a good reputation with the casino, and you took out greater loans.
+            
+            But are you really winning if you stay in a sinful infinite loop?`
+
+            loser_score.innerText = `Your score: ${score}`
+            loser_screen.showModal();
+            break;
+    }
+}
+
+
 async function infoDex(name) {
     let response;
     try {
@@ -113,8 +165,10 @@ async function updateTerminal(name) {
     let currLocation = document.getElementById('location');
     let money = document.getElementById('money');
     let debt = document.getElementById('debt');
-
+    
     const data = await infoDex(name);
+    gameState = await data.game_state;
+    checkGameState(gameState);
     // debug
     console.log("Player info: ", data);
 
@@ -122,6 +176,8 @@ async function updateTerminal(name) {
     money.innerText = `Money:  ${data.money}`;
     debt.innerText = `Debt:  ${data.debt}`;
     date.innerText = data.date;
+
+    // gamestate will monitor the game progress.
 
     // quest_test
     const quest_name = document.getElementById('quest')
@@ -135,9 +191,9 @@ async function updateTerminal(name) {
 }
 
 async function printAirports(name) {
-    const airports = await updateTerminal(name);
+    
     const listOfDestinations = document.getElementById('dests');
-
+    const airports = await updateTerminal(name);
     // creating articles with text, button and event listener.
     for (let i = 0; i < 9; i++) {
         const airport = await airports[i];
@@ -170,28 +226,13 @@ async function flyto(name, airport) {
     await printAirports(username);
 }
 
+//<span id="loser_close">X</span>
+// <img id="loser_img">
+// <p id="loser_box_text"></p>
+// <button id="loser_yes">Main menu</button>
 /////////////////////////////////////////////////////////////
 
+
+console.log(gameState);
 printAirports(username);
-/// only for development: should be removed after >>
 
-/*
-async function questCaller(screen_name) {
-    const quest = prompt("Quest tag and data: [MONA0 or MONA1]");
-    const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.${quest}`);
-    const resp = await complete.json();
-    return resp;
-}
-const quest = document.getElementById('quest');
-
-quest.addEventListener('click', async (click) => {
-    // logger
-    const infoDex_log = document.getElementById('infoDEX_log');
-
-    const info = await questCaller(username);
-    console.log(info, 'Before exception')
-    await updateTerminal(username);
-
-    infoDex_log.innerHTML += `${await info[1]}<br>`;
-})
-*/

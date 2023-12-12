@@ -12,9 +12,13 @@ const xPlayerLoader = document.querySelector("#X_playerloader");
 
 
 async function loadPlayer() {
+    try {
     const playerList = await (await fetch('http://127.0.0.1:5000/retrieve_players')).json();
     console.log(await playerList);
     return await playerList;
+    } catch (error) {
+        alert("ERR: Couldn't retrieve the players list. Check connection to your server/database.", error)
+    }
 }
 
 loadPlayer()
@@ -53,39 +57,43 @@ loadButton.addEventListener('click', async function () {
         const debt = await players[i][3];
         const date = await players[i][4];
         console.log(player_location, player_name, money, debt, date);
-
-        // date
-        const span_date = document.createElement('div');
-        span_date.innerHTML  = `${await date}`;
-        
-        // in row: `${await date} ${await player_name} $${await money} $${await debt} ${await location}`;
-        // name
-        const span_name = document.createElement('div');
-        span_name.innerHTML  = `${await player_name}`;
-        // money
-        const span_money = document.createElement('div');
-        span_money.innerHTML = `$${await money}`;
-        // debt
-        const span_debt = document.createElement('div');
-        span_debt.innerHTML  = `$${await debt}`;
-        // location
-        const span_location = document.createElement('div');
-        span_location.innerHTML = `${await player_location}`;
         
         // creating button to use player.
         const selectPlayerButton = document.createElement('button');
-        selectPlayerButton.innerText = 'SELECT';
+        // const selectPlayerButton = document.createElement('button');
+        // selectPlayerButton.innerText = 'PLAY';
         selectPlayerButton.value = await player_name;
-        selectPlayerButton.id = 'curr_player';
+        selectPlayerButton.classList.add('buttons');
         selectPlayerButton.addEventListener('click', async (object) => {
             const name = object.target.value;
             console.log('Selected player: ' + name);
             await newGame(name, debt);
             location.replace('gamePage.html');
         })
+        // date
+        // CHANGES >>>>>
+        const span_date = document.createElement('div');
+        span_date.innerHTML = 
+        `${await player_name}   MONEY ${await money}$     DEBT:${await debt}$     ${await date}   ${await player_location}`;
+        // span_date.innerHTML = `${await date}`;
 
-        article.append(span_date);
-        article.append(span_date, span_name, span_money, span_debt, span_location, selectPlayerButton);
+        /*
+        // in row: `${await date} ${await player_name} $${await money} $${await debt} ${await location}`;
+        // name
+        const span_name = document.createElement('span');
+        span_name.innerHTML  = `${await player_name}`;
+        // money
+        const span_money = document.createElement('span');
+        span_money.innerHTML = `$${await money}`;
+        // debt
+        const span_debt = document.createElement('span');
+        span_debt.innerHTML  = `$${await debt}`;
+        // location
+        const span_location = document.createElement('span');
+        span_location.innerHTML = `${await player_location}`;
+        */
+        article.append(selectPlayerButton, span_date);
+        // article.append(span_name, span_money, span_debt, span_date, span_location, );
         load_players.append(article);
     }
     console.log("players loaded.")

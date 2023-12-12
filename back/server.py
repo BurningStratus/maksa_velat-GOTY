@@ -15,8 +15,8 @@ server.config['CORS_HEADERS'] = 'Content-Type'
 
 
 ########### Quick-Access Memory Box #########
-g_func.get_players_list(load_serverside=True)
-
+check_players = g_func.get_players_list(load_serverside=True)
+print(check_players)
 #############################################
 
 @server.route('/')
@@ -126,7 +126,6 @@ def data_retriever(username: str) -> list:
     blackjack = g_func.can_play_blackjack(username)
     game_state = g_func.gameover(username)
 
-
     response = {
     "date": date,
     "money": money,
@@ -151,7 +150,6 @@ def quest_completion(username: str, quest_data: str):
 def flyto(destination, username):
 
     response = g_func.fly_to(destination, username)
-    
 
     # game 
     response = json.dumps({

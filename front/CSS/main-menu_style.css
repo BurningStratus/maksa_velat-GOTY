@@ -139,3 +139,25 @@ dialog p {
     background-color: #b7b4b4;
 }
 
+
+
+/* CHANGES >>>*/
+.buttons {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    border: none;
+    border-radius: 3rem;
+    cursor: pointer;
+    background-image: url('../img/travel_button_unpressed.png');
+    background-size: cover;
+}
+.buttons:hover {
+    background-image: url('../img/travel_button_pressed.png');
+}
+
+.anchor_buttons a {
+    color: inherit;
+    text-decoration: none;
+}
