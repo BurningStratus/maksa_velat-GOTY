@@ -11,14 +11,16 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: -1;
-    radial-gradient(transparent 50%, black);
+    color: radial-gradient(transparent 50%, black);
 }
 
 /* Optional: Add additional styles for content on top of the video */
 #content {
+    height: 10%;
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 50%;
+    bottom: auto;
     transform: translate(-50%, -50%);
     z-index: 1;
     padding: 20px;
@@ -37,6 +39,9 @@ h1 {
     background-color: rgba(250, 235, 215, 0.5);
     border-radius: 10px;
     font-size: 20px;
+
+    overflow: auto;
+    height: 400%;
 }
 
 /* Existing styles for the background image */
@@ -120,7 +125,7 @@ dialog p {
 }
 
 #game_load_screen {
-    height: 200px;
+    height: 40%;
     overflow: auto;
 }
 
@@ -139,6 +144,30 @@ dialog p {
     background-color: #b7b4b4;
 }
 
+.play_buttons {
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-evenly;
+}
+
+.play_buttons button {
+    align-items: end;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+
+    color: white;
+    border: none;
+    border-radius: 3rem;
+    cursor: pointer;
+    background-image: url('../img/travel_button_unpressed.png');
+    background-size: cover;
+}
+
+.play_buttons button:click {
+    background-image: url('../img/travel_button_pressed.png');
+}
 
 
 /* CHANGES >>>*/
@@ -153,7 +182,7 @@ dialog p {
     background-image: url('../img/travel_button_unpressed.png');
     background-size: cover;
 }
-.buttons:hover {
+.buttons:click {
     background-image: url('../img/travel_button_pressed.png');
 }
 

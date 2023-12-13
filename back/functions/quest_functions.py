@@ -1,4 +1,5 @@
-import quests.list_of_quests as p_quests
+# import list_of_quests as p_quests
+
 from SQL_Scripts import sql_connection as sql
 from functions import general_functions as g_func
 from quests import maksa_velat_projektia as v_quests
@@ -313,7 +314,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         loc = g_func.get_player_location(screen_name)
         upd_quest = update_quest(0, loc)
         g_func.update_money("-200", screen_name)
-        info_log = "You were robbed 200$."
+        info_log = "You were robbed of 200$."
 
         [update_quest, info_log]
 

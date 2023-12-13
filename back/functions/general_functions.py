@@ -4,7 +4,7 @@ import time
 from colorama import Fore
 from geopy import distance
 
-from back.SQL_Scripts import sql_connection as sql
+from SQL_Scripts import sql_connection as sql
 
 local_players_list = []
 """Store players during the runtime. List exists only during the runtime. 
