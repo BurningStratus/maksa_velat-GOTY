@@ -1,8 +1,9 @@
-Maksa Velat! GOTY-Edition. \n\n
+Maksa Velat! GOTY-Edition.
 
-Projektin tekijät ja GitHub-nimet: \n
-\n
-Jafar Jafarov:  Jafestro \n
-Katariina Pelto-Timperi : katarilp \n
+
+Projektin tekijät ja GitHub-nimet:
+
+Jafar Jafarov:  Jafestro 
+Katariina Pelto-Timperi : katarilp
 Ville Simola : Villesim
-Pavel Shishkin : BurningStratus(User1337).
+Pavel Shishkin : BurningStratus(User1337)
