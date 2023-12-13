@@ -611,7 +611,7 @@ async function VaticanCaller(screen_name) {
     let info_log;
     let resp;
     // stage 1
-    img.src = "./img/img_quests/VATI.jpg";
+    img.src = "./img/img_quests/VATI.png";
     const quest_text1 = `Pope in danger
     You got to Vatican city, but something seems different from before.
     The place you knew held the casino before has been raided by the police.
