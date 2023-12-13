@@ -65,7 +65,7 @@ async function questCaller(dataHolder) {
             await BlownEngineCaller(username);
             break;
         case 'BAND':
-            await QuestCaller(username, "BAND");
+            await BanditCaller(username);
             break;
         case 'FUND':
             await FundraiserCaller(username);
@@ -617,8 +617,9 @@ async function VaticanCaller(screen_name) {
     const butt_no = document.getElementById('quest_no');
     let info_log;
     let resp;
-
     // stage 1
+    const img_1 = "../img/img_quests/VATI.jpg";
+    img.url = img_1;
     const quest_text1 = `Pope in danger
     You got to Vatican city, but something seems different from before.
     The place you knew held the casino before has been raided by the police.
@@ -627,9 +628,7 @@ async function VaticanCaller(screen_name) {
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "Of course I'll help my old pal!";
-    const img_1 = "../img/img_quests/VATI.png";
 
-    // has to add pics to img box
     // logger
     const infoDex_log = document.getElementById('infoDEX_log');
     console.log(location)
@@ -638,7 +637,7 @@ async function VaticanCaller(screen_name) {
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
 
-    img.url = img_1;
+
 
     // showmodal
     console.log(questbox);
@@ -763,4 +762,80 @@ async function DublinCaller(screen_name) {
     });
 
 }
+// Bandit QUEST
+async function BanditCaller(screen_name) {
+    // elements
+    const questbox = document.getElementById('quest_box');
+
+    const text_box = document.getElementById('quest_box_text');
+    const img = document.getElementById('quest_img');
+    const butt_yes = document.getElementById('quest_yes');
+    const butt_no = document.getElementById('quest_no');
+    let info_log;
+    let resp;
+
+    // stage 1
+    const img_1 = "../img/img_quests/BAND.png";
+    img.url = img_1;
+    const quest_text1 = `Bandit
+    Oh no! You got robbed. Luckily you only had 200$ in your pockets.`;
+    // yes and no
+    const buttonYes_text1 = "Wrong place...";
+    const buttonNo_text1 = "...at the wrong time.";
+
+    // has to add pics to img box
+    // logger
+    const infoDex_log = document.getElementById('infoDEX_log');
+    console.log(location)
+
+    text_box.innerText = quest_text1;
+    butt_no.innerText = buttonNo_text1;
+    butt_yes.innerText = buttonYes_text1;
+
+
+
+    // showmodal
+    console.log(questbox);
+    questbox.showModal();
+
+    // event listeners are connected to buttons.
+    // on quest_data send, event listeners should be removed to avoid problems,
+    // since there will be many functions connected to the same button.
+
+    butt_no.addEventListener('click', async function sendBandit0() {
+        // if no was pressed.
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.BAND0`);
+        resp = await complete.json();
+
+        info_log = resp[1]
+
+        // update terminal lines.
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+
+        //oncomplete: removeeventlistener
+        butt_no.remove
+        butt_yes.remove
+
+        questbox.close();
+    });
+
+    butt_yes.addEventListener('click', async function sendBandit1() {
+        // if YES was pressed.
+
+        const complete = await fetch(`http://127.0.0.1:5000/quest/${screen_name}.BAND1`);
+        resp = await complete.json();
+
+        // info_log is a row in terminal.
+        info_log = resp[1];
+
+        await updateTerminal(screen_name);
+        infoDex_log.innerHTML += `${info_log}<br>`;
+        questbox.close();
+    butt_yes.remove;
+
+    });
+
+}
+
 // questCaller()

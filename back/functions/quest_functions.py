@@ -315,7 +315,7 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
         g_func.update_money("-200", screen_name)
         info_log = "You were robbed 200$."
 
-        [update_quest, info_log]
+        return [upd_quest, info_log]
 
     elif head == "BUCH":
         upd_quest = update_quest(0, 'Bucharest')
