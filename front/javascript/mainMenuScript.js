@@ -5,6 +5,8 @@ const tutorialButton = document.querySelector('#tutorial');
 const dialogExitButton = document.querySelector('.exit-button');
 const dialogWindow = document.querySelector('dialog');
 const audioButton = document.querySelector('.audio');
+const clickSound = document.querySelector('#clickSound');
+const pickSound = document.querySelector('#pickSound');
 
 // load players window and (X) there.
 const load_players = document.getElementById('game_load_screen');
@@ -111,7 +113,6 @@ xPlayerLoader.addEventListener('click', function () {
 });
 
 tutorialButton.addEventListener('click', async function () {
-
     try {
         // Reads Instruction
         const response = await fetch('../back/Game_instructions_README');
@@ -135,11 +136,41 @@ dialogExitButton.addEventListener('click', function(){
 // Audio button clicked changes it from muted to unmuted and otherway
 audioButton.addEventListener('click', function (){
     const audio = document.querySelector('audio');
-    if (audioButton.id === 'mute'){
-        audio.muted = true;
-        audioButton.id = 'unmute';
-    } else {
-       audio.muted = false;
-       audioButton.id = 'mute';
-    }
+    if (audio.paused) {
+      audio.play();
+      audioButton.id = 'mute';
+   } else {
+      audio.pause();
+      audioButton.id = 'unmute';
+   }
+    // if (audioButton.id === 'mute'){
+    //     audio.muted = true;
+    //     audioButton.id = 'unmute';
+    // } else {
+    //    audio.muted = false;
+    //    audioButton.id = 'mute';
+    // }
+});
+
+
+///click sounds
+tutorialButton.addEventListener('mouseover', () => {
+    // Play the click sound when hovering over the button
+    clickSound.currentTime = 0; // Reset the audio to the beginning
+    clickSound.play();
+});
+loadButton.addEventListener('mouseover', () => {
+    // Play the click sound when hovering over the button
+    clickSound.currentTime = 0; // Reset the audio to the beginning
+    clickSound.play();
+});
+startButton.addEventListener('mouseover', () => {
+    // Play the click sound when hovering over the button
+    clickSound.currentTime = 0; // Reset the audio to the beginning
+    clickSound.play();
+});
+audioButton.addEventListener('mouseover', () => {
+    // Play the click sound when hovering over the button
+    clickSound.currentTime = 0; // Reset the audio to the beginning
+    clickSound.play();
 });

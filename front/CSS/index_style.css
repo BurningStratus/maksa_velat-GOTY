@@ -9,7 +9,9 @@ html {
     margin: auto;
 }
 
-
+#quest_box {
+    text-align: center;
+}
 
 /* definitely needs a terminal font */
 #infoDEX_log {
