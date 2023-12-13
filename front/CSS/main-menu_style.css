@@ -149,6 +149,8 @@ dialog p {
     display: flex;
     box-sizing: border-box;
     justify-content: space-evenly;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .play_buttons button {

@@ -17,16 +17,17 @@ html {
 #infoDEX_log {
     height: 200px;
     overflow: auto;
-    color: darkgreen;
+    color: #1bf41b;
     background-color: rgb(36, 34, 34);
-    font-size: 14px;
+    font-size: 11px;
     padding-left: 0.5rem;
+    padding-top: 10px
 }
 
 #infodex {
     color: #ddfadd;
     background-color: rgb(36, 34, 34);
-    font-size: 14px;
+    font-size: 10px;
     box-sizing: border-box;
     padding-top: 0.5rem;
     padding-left: 0.5rem;
@@ -54,19 +55,19 @@ html {
 
 @media screen and (min-width: 720px) {
             #infodex {
-                font-size: 16px; /* Adjust font size for screens wider than 600px */
+                font-size: 11px; /* Adjust font size for screens wider than 600px */
             }
             #infoDEX_log {
-                font-size: 16px; /* Adjust font size for screens wider than 600px */
+                font-size: 13px; /* Adjust font size for screens wider than 600px */
             }
         }
 
         @media screen and (min-width: 1200px) {
              #infodex {
-                font-size: 20px; /* Adjust font size for screens wider than 600px */
+                font-size: 13px; /* Adjust font size for screens wider than 600px */
             }
             #infoDEX_log {
-                font-size: 20px; /* Adjust font size for screens wider than 600px */
+                font-size: 13px; /* Adjust font size for screens wider than 600px */
             }
         }
 
