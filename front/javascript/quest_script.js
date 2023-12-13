@@ -118,7 +118,7 @@ Would you like to make a call?`;
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "Make the call";
-    const img_1 = "../img/img_quests/MONA.png";
+    img.src = "./img/img_quests/MONA.png";
 
     // has to add pics to img box
     // logger
@@ -129,7 +129,6 @@ Would you like to make a call?`;
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
 
-    img.url = img_1;
 
     // showmodal
     console.log(questbox);
@@ -311,7 +310,7 @@ Would you like to join them?`;
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "Let's go plant some trees!";
-    const img_1 ="../img/img_quests/PLAN.jpg";
+    img.src ="./img/img_quests/PLAN.jpg";
 
     // has to add pics to img box
     // logger
@@ -322,7 +321,6 @@ Would you like to join them?`;
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
 
-    img.url = img_1;
 
     // showmodal
     console.log(questbox);
@@ -392,7 +390,7 @@ The bet is 100$.
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "Let's make some money for the girls!";
-    const img_1 = "../img/img_quests/FUND.jpg";
+    img.src = "./img/img_quests/FUND.jpg";
 
     // has to add pics to img box
     // logger
@@ -402,8 +400,6 @@ The bet is 100$.
     text_box.innerText = quest_text1;
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
-
-    img.url = img_1;
 
     // showmodal
     console.log(questbox);
@@ -470,7 +466,7 @@ Will you though? Well you already got the wine so might as well find out!`;
     // yes and no
     const buttonNo_text1 = "No! I'm giving the wine back.";
     const buttonYes_text1 = "Portugal sounds nice. Let's go!";
-    const img_1 = "../img/img_quests/MADR.png";
+    img.src = "./img/img_quests/MADR.png";
 
     // has to add pics to img box
     // logger
@@ -480,8 +476,6 @@ Will you though? Well you already got the wine so might as well find out!`;
     text_box.innerText = quest_text1;
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
-
-    img.url = img_1;
 
     // showmodal
     console.log(questbox);
@@ -549,7 +543,7 @@ Are you an environmental hero or will you continue to fly with kerosene?`;
     // yes and no
     const buttonNo_text1 = "Only the needed repairs, thanks..";
     const buttonYes_text1 = "Let's do it for the polar bears!";
-    const img_1 = "../img/img_quests/BLOW.jpg";
+    img.src = "./img/img_quests/BLOW.jpg";
 
     // has to add pics to img box
     // logger
@@ -560,7 +554,6 @@ Are you an environmental hero or will you continue to fly with kerosene?`;
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
 
-    img.url = img_1;
 
     // showmodal
     console.log(questbox);
@@ -618,8 +611,7 @@ async function VaticanCaller(screen_name) {
     let info_log;
     let resp;
     // stage 1
-    const img_1 = "../img/img_quests/VATI.jpg";
-    img.url = img_1;
+    img.src = "./img/img_quests/VATI.jpg";
     const quest_text1 = `Pope in danger
     You got to Vatican city, but something seems different from before.
     The place you knew held the casino before has been raided by the police.
@@ -696,8 +688,7 @@ async function DublinCaller(screen_name) {
     let resp;
 
     // stage 1
-    const img_1 = "../img/img_quests/dublin_quest1.png";
-    img.url = img_1;
+    img.src = "./img/img_quests/dublin_quest1.png";
     const quest_text1 = `Dublin, Ireland
     You saw a rainbow and decided to head outside to see if you could find its end.
     You stumble upon a peculiar looking bearded little man wearing green. 
@@ -775,8 +766,8 @@ async function BanditCaller(screen_name) {
     let resp;
 
     // stage 1
-    const img_1 = "../img/img_quests/BAND.png";
-    img.url = img_1;
+    img.src = "./img/img_quests/BAND.png";
+
     const quest_text1 = `Bandit
     Oh no! You got robbed. Luckily you only had 200$ in your pockets.`;
     // yes and no
@@ -838,7 +829,7 @@ async function BanditCaller(screen_name) {
 
 }
 // MONACO QUEST
-async function MonacoCaller(screen_name) {
+async function ChessCaller(screen_name) {
     // elements
     const questbox = document.getElementById('quest_box');
 
@@ -859,7 +850,7 @@ Once he notices you, the old man asks you to play a single game with him.`;
     // yes and no
     const buttonNo_text1 = "I have no time for this.";
     const buttonYes_text1 = "I love chess. Let's play!";
-    const img_1 = "../img/img_quests/CHES.png";
+    img.src = "./img/img_quests/CHES.png";
 
     // has to add pics to img box
     // logger
@@ -870,7 +861,6 @@ Once he notices you, the old man asks you to play a single game with him.`;
     butt_no.innerText = buttonNo_text1;
     butt_yes.innerText = buttonYes_text1;
 
-    img.url = img_1;
 
     // showmodal
     console.log(questbox);
