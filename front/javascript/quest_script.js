@@ -44,7 +44,8 @@ async function questCaller(dataHolder) {
             await VaticanCaller(username);
             break;
         case 'WARS':
-            await PolandCaller(username);
+            alert('you met a strange mechanic in warsawa airport.')
+            // await PolandCaller(username);
             break;
         case 'DUBL':
             await DublinCaller(username);
@@ -53,13 +54,16 @@ async function questCaller(dataHolder) {
             await MadridCaller(username);
             break;
         case 'OSLO':
-            await QuestCaller(username, "OSLO");
+            alert('here will be oslo quest')
+            // await QuestCaller(username, "OSLO");
             break;
         case 'BUCH':
-            await QuestCaller(username, "BUCH");
+            alert('here will be bucharest quest')
+            // await QuestCaller(username, "BUCH");
             break;
         case "BLAC":
-            await QuestCaller(username, "BLAC");
+            alert('You found the black cat. It just sits on the sidewalk.')
+            // await QuestCaller(username, "BLAC");
             break;
         case 'BLOW':
             await BlownEngineCaller(username);
