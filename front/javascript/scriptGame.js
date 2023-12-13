@@ -121,6 +121,8 @@ function checkGameState(state) {
             you weren't given any chance for payoff. From now on, you will have to 
             work for local kingpin until you pay off the debt.
             `
+
+            loser_screen.querySelector('img').src = "./img/loser.png"
             loser_screen.showModal();
             break;
         
@@ -132,6 +134,7 @@ function checkGameState(state) {
             But are you really winning if you stay in a sinful infinite loop?`
 
             loser_score.innerText = `Your score: ${score}`
+            loser_screen.querySelector('img').src = "./img/winner-image.png"
             loser_screen.showModal();
             break;
     }

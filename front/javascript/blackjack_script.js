@@ -17,6 +17,8 @@ const tutorialButton = document.querySelector('#tutorial');
 const menuButton = document.querySelector('#backToMenu');
 const closeButton = document.querySelector('#X_tutorial');
 const dialogTutorial = document.querySelector('#tutorialBox');
+const header = document.querySelector('header');
+const img = header.querySelector('img');
 
 
 data = async () => {
@@ -33,6 +35,7 @@ data()
         loca = userData[1];
         money = parseInt(userData[2]);
         startMoney = money;
+        img.src = `./img/casino_names/${loca}_casino.png`
         document.querySelector('#playerInfo').innerHTML = "";
         document.querySelector('#playerInfo').innerHTML = `Your money: ${money}`
 
