@@ -241,9 +241,9 @@ def quest_decryptor(quest_data: str, screen_name: str) -> list:
 
         if quest_data[4] == "1":
             g_func.update_calendar(screen_name)
-            info_log = "Nothing."
+            info_log = "You won the match!"
         else:
-            info_log = "Don't have time for this."
+            info_log = "He would have probably cheated."
         
         return [upd_quest, info_log]
     
