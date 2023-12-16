@@ -16,7 +16,7 @@ let text_box = document.getElementById('quest_box_text');
 let img = document.getElementById('quest_img');
 let butt_yes = document.getElementById('quest_yes');
 let butt_no = document.getElementById('quest_no');
-
+img.style.width = "80%";
 
 
 // used for checking the button, where quest name comes when quest is available
@@ -106,11 +106,6 @@ function questElements() {
 async function MonacoCaller(screen_name) {
     // elements
     const questbox = document.getElementById('quest_box');
-
-    const text_box = document.getElementById('quest_box_text');
-    const img = document.getElementById('quest_img');
-    const butt_yes = document.getElementById('quest_yes');
-    const butt_no = document.getElementById('quest_no');
     let info_log;
     let resp;
 
@@ -298,11 +293,6 @@ async function PolandCaller(screen_name) {
 async function WeedCaller(screen_name) {
     // elements
     const questbox = document.getElementById('quest_box');
-
-    const text_box = document.getElementById('quest_box_text');
-    const img = document.getElementById('quest_img');
-    const butt_yes = document.getElementById('quest_yes');
-    const butt_no = document.getElementById('quest_no');
     let info_log;
     let resp;
 
@@ -837,10 +827,6 @@ async function ChessCaller(screen_name) {
     // elements
     const questbox = document.getElementById('quest_box');
 
-    const text_box = document.getElementById('quest_box_text');
-    const img = document.getElementById('quest_img');
-    const butt_yes = document.getElementById('quest_yes');
-    const butt_no = document.getElementById('quest_no');
     let info_log;
     let resp;
 

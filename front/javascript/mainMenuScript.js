@@ -1,4 +1,6 @@
 'use strict';
+
+// DOM elements
 const startButton = document.getElementById('start');
 const loadButton = document.querySelector('#load_game');
 const tutorialButton = document.querySelector('#tutorial');
@@ -12,20 +14,20 @@ const pickSound = document.querySelector('#pickSound');
 const load_players = document.getElementById('game_load_screen');
 const xPlayerLoader = document.querySelector("#X_playerloader");
 
-
+// Function to fetch player data from the server
 async function loadPlayer() {
     try {
     const playerList = await (await fetch('http://127.0.0.1:5000/retrieve_players')).json();
     console.log(await playerList);
     return await playerList;
     } catch (error) {
-        alert("ERR: Couldn't retrieve the players list. Check connection to your server/database.", error)
+        alert("ERR: Couldn't retrieve the players list. Check connection to your server/database. " + error)
     }
 }
-
+// Initial loading of players
 loadPlayer()
 
-
+// Function to start a new game
 async function newGame(name, debt) {
     let response;
     try {
@@ -36,7 +38,7 @@ async function newGame(name, debt) {
     }
     return response;
 }
-
+// Event listener for starting a new game
 startButton.addEventListener('click', async (event) => {
     console.log('event started');
     const name = prompt('Name')
@@ -46,6 +48,7 @@ startButton.addEventListener('click', async (event) => {
 })
 
 
+// Event listener for loading players
 loadButton.addEventListener('click', async function () {
     const players = await loadPlayer();
     console.log('Loading players ... ');

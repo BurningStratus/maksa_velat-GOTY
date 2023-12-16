@@ -6,12 +6,13 @@
 let username;
 let gameState = ['IN PROGRESS', 0];
 
-
+// Asynchronous function to initialize the player
 async function initPlayer(player) {
-
+ // Fetch player information from the server
     const response = await fetch('http://127.0.0.1:5000/infoDex_userinit/caller/');
     const responseJS = await response.json();
 
+    // Switch statement to handle the player parameter
     switch (player) {
         case undefined:
             console.log("Pulled name: " + await responseJS.player, "Current: ", player, "Using pulled one.");
@@ -20,6 +21,7 @@ async function initPlayer(player) {
             return player
     }
 }
+// Initialize the player and update the 'username' variable
 const namepromise = initPlayer(username)
 namepromise.then(response => (username = response))
 
@@ -32,40 +34,43 @@ Example response:
 [[Decimal('52.367600'), Decimal('4.904100'), 'Holland', 'Amsterdam'], ...]
 */
 
-
+// Function to convert a float to a decimal
 function Decimal(float) {
     return parseFloat(float);
 }
-
+// Function to convert a float to a decimal
 async function initMap(location) {
+     // Fetch cities' information from the server
     const cities = await fetch('http://127.0.0.1:5000/init_cities');
     const markersJSON = await cities.json();
     console.log(markersJSON);
+     // Create a dot icon for markers
     const dotIcon = new L.Icon({
         iconUrl: './img/marker-red.png',
         iconSize: [12, 12], // Adjust the size to make it look like a dot
         iconAnchor: [6, 6], // Half of the size
         popupAnchor: [0, 0],
     });
-    // write your code here
+        // Iterate through the markers and add them to the map
     for (let i = 0; i < await markersJSON.length; i++) {
         const mark = L.marker([markersJSON[i][0], markersJSON[i][1]], {icon: dotIcon}).addTo(map);
         mark.bindPopup(`<h1><b>${markersJSON[i][3]}, ${markersJSON[i][2]}</b></h1>`);
+         // Set the end marker if the location matches
         if (location === markersJSON[i][4]) {
             loppuMarker.setLatLng([markersJSON[i][0], markersJSON[i][1]]);
             loppuMarker.bindPopup(`<h1><b>${markersJSON[i][2]}, ${markersJSON[i][3]}<b></h1>`)
         }
     }
-    // return markersJSON;
 }
-
+// Leaflet map initialization
 var map = L.map('map').setView([51.505, -0.09], 5);
 map.setMinZoom(5)
-
+// Add OpenStreetMap tile layer to the map
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+// Create a red icon for the player marker
 const redIcon = L.icon({
     iconUrl: 'img/player_marker.png',
     iconSize: [40, 40],
@@ -73,9 +78,10 @@ const redIcon = L.icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
-
+// Initialize a marker for the end location and add it to the map
 var loppuMarker = L.marker([48.8566, 2.3522], {icon: redIcon}).addTo(map);
 
+// Bind a popup to the end marker
 loppuMarker.bindPopup("<h1><b>Paris, France<b></h1>");
 
 
@@ -94,16 +100,14 @@ let debt = document.getElementById('debt');
 function checkGameState(state) {
     const state_game = state[0];
     const score = state[1];
-    
+
     const loser_screen = document.getElementById('loser_screen');
     const loser_text = document.getElementById('loser_box_text');
     const loser_yes = document.getElementById('loser_yes');
     const loser_score = document.getElementById('loser_score');
+    loser_screen.querySelector('img').style.width = "80%";
 
-    loser_yes.addEventListener('click', () => {
-        location.replace('main-menu.html');
-        loser_text = '';
-    })
+
 
     console.log('function casted. game state', state);
 
@@ -113,7 +117,11 @@ function checkGameState(state) {
             break;
 
         case "BANKRUPT":
-            loser_text.innerText = 
+             loser_yes.addEventListener('click', () => {
+                location.replace('main-menu.html'); ``
+                loser_text = '';
+             })
+            loser_text.innerText =
             `You have gambled your life away, but you realised it when it was too late. 
             Lady luck wasn't on your side, if it ever was.
             
@@ -122,12 +130,32 @@ function checkGameState(state) {
             work for local kingpin until you pay off the debt.
             `
 
-            loser_screen.querySelector('img').src = "./img/loser.png"
+            loser_screen.querySelector('img').src = "./img/loser.png";
             loser_screen.showModal();
             break;
-        
+
         case "WON":
-            loser_text.innerText = 
+            loser_yes.innerText = "Continue";
+            loser_yes.addEventListener('click', async () => {
+                loser_yes.innerText = "Main Menu";
+                loser_screen.querySelector('img').src = "./img/WaitAminute.gif";
+                 try {
+                    // Fetch and display game instructions
+                    const response = await fetch('../back/Epilogue');
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch data: ${response.statusText}`);
+                    }
+                    loser_text.innerHTML = `<h1>EPILOGUE</h1><br>`
+                    loser_text.innerText += await response.text();
+                } catch (error) {
+                    console.log('Error: ', error);
+                }
+                loser_yes.addEventListener('click', () => {
+                    location.replace('main-menu.html');
+                    loser_text = '';
+                });
+             })
+            loser_text.innerText =
             `You managed to pay off your debt. 
             As a result, you've earned a good reputation with the casino, and you took out greater loans.
             
@@ -150,7 +178,7 @@ async function infoDex(name) {
         response = await response.json();
 
         } else {
-        
+
         response = await fetch('http://127.0.0.1:5000/infoDex_navigation/'+ name);
         response = await response.json();}
 
@@ -168,7 +196,7 @@ async function updateTerminal(name) {
     let currLocation = document.getElementById('location');
     let money = document.getElementById('money');
     let debt = document.getElementById('debt');
-    
+
     const data = await infoDex(name);
     gameState = await data.game_state;
     checkGameState(gameState);
@@ -194,7 +222,7 @@ async function updateTerminal(name) {
 }
 
 async function printAirports(name) {
-    
+
     const listOfDestinations = document.getElementById('dests');
     const airports = await updateTerminal(name);
     // creating articles with text, button and event listener.
