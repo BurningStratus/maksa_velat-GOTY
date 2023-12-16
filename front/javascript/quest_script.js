@@ -26,6 +26,9 @@ dataHolder.addEventListener('click', () => {
     const holder = dataHolder.value;
     console.log(holder);
     const quest_head = holder[0] + holder[1] + holder[2] + holder[3];
+    const randomNumber = Math.floor(Math.random() * 2) + 1
+    document.querySelector('#voice').src = `./music/p-${randomNumber}.mp3`;
+    document.querySelector('#voice').play();
     // MONA
     console.log(quest_head);
     questCaller(quest_head);

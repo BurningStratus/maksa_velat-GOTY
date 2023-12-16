@@ -105,8 +105,16 @@ function startGame() {
 
 // Function to prompt the player for a bet
 function bet() {
+    let yes = true;
     betMoney = parseInt(prompt('How much money are you betting?'));
-    document.querySelector('#playerInfo').innerHTML += `   Bet: ${betMoney}`;
+    if (betMoney > money) {
+        alert("You don't have that much money");
+        yes = false;
+        bet();
+    }
+    //ensures that bet Money: 234234 was printed on the screen only once
+    if (yes)
+        document.querySelector('#playerInfo').innerHTML += `   Bet: ${betMoney}`;
 }
 
 // Function to handle the player hitting (drawing a card)

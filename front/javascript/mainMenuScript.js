@@ -38,11 +38,21 @@ async function newGame(name, debt) {
     }
     return response;
 }
+
+function checkDebt(){
+    let debt = parseInt(prompt('Debt'));
+    if (debt > 501)
+        return debt;
+    else
+        alert('Debt cannot be lower than 501 dollars. Write something higher.')
+        return checkDebt();
+}
+
 // Event listener for starting a new game
 startButton.addEventListener('click', async (event) => {
     console.log('event started');
-    const name = prompt('Name')
-    const debt = parseInt(prompt('Debt'));
+    const name = prompt('Name');
+    const debt = checkDebt();
     console.log(await newGame(name, debt));
     location.replace('gamePage.html');
 })

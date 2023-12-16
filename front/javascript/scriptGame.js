@@ -136,6 +136,8 @@ function checkGameState(state) {
 
         case "WON":
             loser_yes.innerText = "Continue";
+            document.querySelector('#win').src = "./music/winningSound.mp3"
+            document.querySelector('#win').play();
             loser_yes.addEventListener('click', async () => {
                 loser_yes.innerText = "Main Menu";
                 loser_screen.querySelector('img').src = "./img/WaitAminute.gif";
@@ -212,7 +214,11 @@ async function updateTerminal(name) {
 
     // quest_test
     const quest_name = document.getElementById('quest')
-    quest_name.innerText = await data.quest;
+    const qname = await data.quest;
+    if (qname !== "NONE_quest")
+        quest_name.innerText = "Quest";
+    else
+        quest_name.innerText = await data.quest;
     quest_name.value = await data.quest;
     // quest_test
 
@@ -242,7 +248,13 @@ async function printAirports(name) {
         const ICAO = await airport.split(' ')[0];
         travelButton.value = ICAO;
 
+        travelButton.addEventListener('mouseover', () => {
+           document.querySelector('#click').src = "./music/click1.mp3";
+           document.querySelector('#click').play();
+        });
         await travelButton.addEventListener('click', (object) => {
+            document.querySelector('#fly').src = "./music/fly.mp3";
+            document.querySelector('#fly').play();
             listAirports.innerHTML = '';
             flyto(username, object.target.value);
         });
