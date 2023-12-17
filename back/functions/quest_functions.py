@@ -5,16 +5,57 @@ from quests import maksa_velat_projektia as v_quests
 
 
 # Function updates quest/event_id in asked city
-def update_quest(quest_id, city):
-    sql.kursori.execute(f"update airport set event_id = {quest_id} where airport_name = '{city}';")
-    if sql.kursori.rowcount == 1:
-        return "UPDATED"
-    return "NOTHING_UPDATED"
+def update_quest(city: str, env=False, name=None) -> str:
+    """Updates both usual quests/random encounters and ecoquests. If quest is not eco, it just updates status(to 1 if done) on location.
+    But if the quest is eco, method takes env = True, and then it needs a screen_name.\n  
+    :arg: city(str): location of the quest, namely city.
+    :arg: env=False(bool): false by default. If quest is eco, this should be changed to true.
+    :arg: *name(str): if env is set to true, a name must be provided. \n
+    :return(str): either 'UPDATED' or 'NOT UPDATED'."""
+    update = "ESCORE/QUEST_NOT_UPDATED"
+    if not env:
+        sql.kursori.execute(f"update airport set event_stat = 1 where airport_name = '{city}'; ")
+        if sql.kursori.rowcount == 1:
+            return "UPDATED_NOT_ECO"
+    
+    else:
+        sql.kursori.execute(f"""UPDATE game 
+                            SET eco_score=((SELECT eco_score FROM game where screen_name='{name}') + 1)
+                            WHERE screen_name='{name}'
+                            """)
+        
+        if sql.kursori.rowcount == 1:
+            update = "ECO_UPDATED/"
+            sql.kursori.execute(f"update airport set event_stat = 1 where airport_name = '{city}';")
+        
+            if sql.kursori.fetchone():
+                
+                update += "QUEST_ID_UPDATED"
+                return update
+        
+    return update
+
+
+
+def check_ecoscore(screen_name: str) -> bool:
+    """Checks player's ecoscore in Database. 
+    If score >= 3, it means that player has completed 3 eco quests.\n
+    Arg: player's name.\n
+    Returns: True or False."""
+    sql.kursori.execute(f"""SELECT eco_score
+                        FROM game
+                        WHERE screen_name = '{screen_name}'""")
+    eco_score = int(sql.kursori.fetchone()[0])
+    
+    if eco_score >= 3:
+        return True
+    else:
+        return False
 
 
 # Function for getting quest/event's id corresponding to the city
 def get_quest_id_by_icao(icao):
-    sql.kursori.execute(f"select event_id from airport where icao='{icao}'")
+    sql.kursori.execute(f"select event_id from airport where icao='{icao}' and event_stat < 1;")
     tulos = sql.kursori.fetchall()
     if tulos:
         return tulos[0][0]
@@ -25,6 +66,26 @@ def get_quest_id_by_icao(icao):
 def do_quest(screen_name):
     icao = g_func.get_player_location(screen_name)
     quest_id = get_quest_id_by_icao(icao)
+    
+    quest_dict = {
+        0: 'NONE_quest',
+        1: 'MONA_quest',
+        3: 'WARS_quest',
+        4: 'VATI_quest',
+        5: 'DUBL_quest',
+        6: 'MADR_quest',
+        7: 'OSLO_quest',
+        8: 'BUCH_quest',
+        11: 'BLAC_randm',
+        12: 'BLOW_randm',
+        13: 'BAND_randm',
+        14: 'FUND_randm',
+        15: 'PLAN_randm',
+        17: 'CHES_randm'
+    }
+
+    return quest_dict[quest_id]
+    '''
     if quest_id == 1:
         p_quests.starter_quest_caller(screen_name)  # Calls Monaco Quest
         update_quest(0, "Monaco")  # This marks quest as done in database
@@ -53,7 +114,225 @@ def do_quest(screen_name):
         p_quests.black_cat_caller(screen_name)  # Calls Black Cat Random Event
         update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
     elif quest_id == 13:
-        p_quests.bandits(screen_name)  # Calls Bandit event Random Event
-        update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
+        return "BAND_randm"
+       
+        # p_quests.bandits(screen_name)  # Calls Bandit event Random Event
+        # update_quest(0, g_func.get_player_location(screen_name))  # This marks quest as done in database
+    
+    elif quest_id == 14:
+        return "FUND_randm"
+    
+    elif quest_id == 15:
+        return "PLAN_randm"
+    
+    elif quest_id == 17:
+        return "CHES_randm"
+        
+        # p_quests.chess_in_germany_caller()  # Calls German Quest
+        # update_quest(0, "Berlin")  # This marks quest as done in databas
     else:
-        print("Nothing seems out of the ordinary")
+        return "NONE_quest"
+        # print("Nothing seems out of the ordinary")
+'''
+
+
+def quest_decryptor(quest_data: str, screen_name: str) -> list:
+    # CHES0, BLCT5
+    head = quest_data[:4]
+    
+    if head == "MONA":
+        upd_quest = update_quest('Monaco')
+        
+        if quest_data[4] == "1":
+            g_func.update_money("50", screen_name)
+            info_log = "They're mad, but sent you 50$."
+            
+        else:
+            info_log = "There will be something to talk about."
+
+        return [upd_quest, info_log]
+    
+    elif head == "VATI":
+        upd_quest = update_quest("Vatican City")
+
+        if quest_data[4] == "1":
+            g_func.fly_to('SA', screen_name, no_fare = True)
+            g_func.update_money("1000", screen_name)
+            return [upd_quest, 'The pope rewarded you with 1000$ as a sign of gratitude.']
+        else:
+            return [upd_quest, "The pope got body slammed to the ground."]
+    
+    elif head == "WARS":
+        upd_quest = update_quest('Warsaw')
+        g_func.update_money('-100', screen_name)
+        
+        # ask mechanic to change the tyre
+        if quest_data[4] == "1":
+            g_func.update_money('-200', screen_name)
+            return [upd_quest, "Money ain't a problem."]
+        
+        # do everything yourself
+        elif quest_data[4] == "0":
+            g_func.update_money('-50', screen_name)
+            g_func.update_calendar(screen_name)
+
+            # leave mechanic alone
+            if quest_data[5] == "0":
+                return [upd_quest, "Don't interrupt the course of the universe, and it won't interrupt you."]
+            
+            # confront mechanic
+            else:
+                # contact superiors
+                if quest_data[6] == "1" and quest_data[7] == "1":
+                    g_func.update_money('-100', screen_name)
+                    info_log = "Justice."
+                # don't tell anyone
+                    return
+                elif quest_data[6] == "1" and quest_data[7] == "0":
+                    g_func.update_money("150", screen_name)
+                    info_log = "Just like in the good old USSR."
+        return [upd_quest, info_log]
+    
+    elif head == "BLAC":
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(loc)
+        
+        if quest_data[4] == "5":
+            g_func.update_money("500", screen_name)
+            info_log = "Life is strange."
+
+        else:
+            info_log = "Damn cat."
+        
+        return [quest_data, info_log]
+    
+    elif head == "DUBL":
+        upd_quest = update_quest("Dublin")
+        if quest_data[4] == "1":
+            g_func.update_money("750", screen_name)
+            info_log = "The pot was full of gold! It was worth 750$."
+        else:
+            info_log = "What a weirdo."
+
+        return [upd_quest, info_log]
+        
+    elif head == "FUND":
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(loc, env = True, name = screen_name)
+        
+        if quest_data[4] == "1":
+            g_func.update_calendar(screen_name)
+            g_func.update_money("-100", screen_name)
+            info_log = "That's some good karma."
+        else:
+            info_log = "Nothing seems out of the ordinary."
+
+        if check_ecoscore(screen_name):
+            g_func.update_money("1500", screen_name)
+            info_log = f"""Your good deeds have been noticed 
+                        by a big environmental organization 
+                        and they gave you a stipend of 1500$"""
+
+
+        return [upd_quest, info_log]
+
+    elif head == "CHES":
+        loc = g_func.get_player_location(screen_name)
+        upd_quest = update_quest(loc)
+        
+        if quest_data[4] == "1":
+            g_func.update_calendar(screen_name)
+            info_log = "You won the match!"
+        else:
+            info_log = "He would have probably cheated."
+        
+        return [upd_quest, info_log]
+    
+    elif head == "OSLO":
+        upd_quest = update_quest('Oslo')
+        if quest_data[4] == "1" and quest_data[5] == "1":
+            g_func.update_money("-200", screen_name)
+            info_log = "Maybe that was fishy after all."
+        
+        elif quest_data[4] == "1" and quest_data[5] == "0":
+            g_func.update_money("200", screen_name)
+            info_log = "Made a buck after all."
+        
+        return [upd_quest, info_log]
+
+    elif head == "WEED":
+        loc = g_func.get_player_location(screen_name)
+        
+        if quest_data[4] == "1":
+            upd_quest = update_quest(loc, env = True, name = screen_name)
+            info_log = "Saving the world!."
+        
+        else:
+            upd_quest = update_quest(loc)
+            info_log = "Nothing seems to be out of the ordinary."
+
+        if check_ecoscore(screen_name):
+            g_func.update_money("1500", screen_name)
+            info_log = f"""Your good deeds have been noticed 
+                        by a big environmental organization 
+                        and they gave you a stipend of 1500$"""
+
+        return [upd_quest, info_log]
+    
+    elif head == "BLOW":
+        loc = g_func.get_player_location(screen_name)
+
+        if quest_data[4] == "1":
+            upd_quest = update_quest(loc, env = True, name = screen_name)
+            sql.kursori.execute(f"""UPDATE game
+                                SET fuel ='ET'
+                                WHERE screen_name = '{screen_name}'
+                                """)
+            if sql.kursori.fetchone():
+                info_log = "Now you are Eco-Logical!"
+            else:
+                return [upd_quest, "ERROR CONVERTING FUEL TYPE"]
+        else:
+            upd_quest = update_quest(loc)
+            info_log = "Good old fossil fuels, they never disappoint."
+
+        return [upd_quest, info_log]
+
+    elif head == "MADR":
+        upd_quest = update_quest('Madrid')
+
+        if quest_data[4] == "1":
+            g_func.update_money("10", screen_name)
+            g_func.fly_to("LI", screen_name)
+            info_log = "You got only 10$ as payment. Seems shady."
+        else:
+            info_log = "Nothing seems out of the ordinary."
+
+        return [upd_quest, info_log]
+    
+    elif head == "BAND":
+        loc = g_func.get_player_location(screen_name)
+       
+        upd_quest = update_quest(loc)
+        g_func.update_money("-200", screen_name)
+        info_log = "You were robbed of 200$."
+
+        return [upd_quest, info_log]
+
+    elif head == "BUCH":
+        upd_quest = update_quest('Bucharest')
+
+        # if ROMN11
+        if quest_data[3:6] == "11":
+            g_func.fly_to("IS", screen_name, True)
+            g_func.update_money("100", screen_name)
+            info_log = "The Stranger just hands you 100$ and leaves."
+        else:
+            info_log = "You decline the offer."
+
+        return [upd_quest, info_log]
+    
+    else:
+        info_log = 'Nothing seems to be out of the ordinary.'
+        return ["None", info_log]
+    

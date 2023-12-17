@@ -1,59 +1,120 @@
-import sys
-import time
-
-from colorama import Fore
 from geopy import distance
-
 from SQL_Scripts import sql_connection as sql
 
+class Query:
+    def __init__(self, qry):
+        self.query = qry
+        
+    def executeSQL(self):
+        sql.kursori.execute(self.query)
 
-def print_game_name():
-    print(Fore.RED + """
-$$\      $$\  $$$$$$\  $$\   $$\  $$$$$$\   $$$$$$\        $$\    $$\ $$$$$$$$\ $$\        $$$$$$\  $$$$$$$$\ 
-$$$\    $$$ |$$  __$$\ $$ | $$  |$$  __$$\ $$  __$$\       $$ |   $$ |$$  _____|$$ |      $$  __$$\ \__$$  __|
-$$$$\  $$$$ |$$ /  $$ |$$ |$$  / $$ /  \__|$$ /  $$ |      $$ |   $$ |$$ |      $$ |      $$ /  $$ |   $$ |   
-$$\$$\$$ $$ |$$$$$$$$ |$$$$$  /  \$$$$$$\  $$$$$$$$ |      \$$\  $$  |$$$$$\    $$ |      $$$$$$$$ |   $$ |   
-$$ \$$$  $$ |$$  __$$ |$$  $$<    \____$$\ $$  __$$ |       \$$\$$  / $$  __|   $$ |      $$  __$$ |   $$ |   
-$$ |\$  /$$ |$$ |  $$ |$$ |\$$\  $$\   $$ |$$ |  $$ |        \$$$  /  $$ |      $$ |      $$ |  $$ |   $$ |   
-$$ | \_/ $$ |$$ |  $$ |$$ | \$$\ \$$$$$$  |$$ |  $$ |         \$  /   $$$$$$$$\ $$$$$$$$\ $$ |  $$ |   $$ |   
-\__|     \__|\__|  \__|\__|  \__| \______/ \__|  \__|          \_/    \________|\________|\__|  \__|   \__|   
-                                                                                                              
-                                                                                                              
-                                                                                                              
-""", Fore.RESET)
+        if sql.kursori.rowcount == 1:
+            print("SQL query successful.")
+            return sql.kursori.fetchall()
+        else:
+            print("0-rowcount from SQL query.")
 
-
-def gameover():
-    print(Fore.RED, """
-              ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  
-             ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
-            ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
-            ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄  
-            ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒
-             ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░
-              ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░
-            ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░ 
-                  ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░     
-                                                                 ░                   
-            """, Fore.RESET)
+####
 
 
-# This function updates money in game database, which means it adds or takes money from database
-# If in argument in money variable will be given "-200" it will minus that amount of money from database
-# and update it, or if in money variable will be given "200" then it will add that amount of money to
-# the money in database
-def update_money(money, screen_name):
+
+local_players_list = []
+"""Store players during the runtime. List exists only during the runtime. 
+The current player is always at the last index."""
+
+# METHODS
+def update_calendar(screen_name: str) -> str:
+    """Takes care of calendar. Has 2 returns, one for successful update and for the failed one. 
+    Takes name as argument.
+    Retrieves the current date from DB and progresses the calendar and day counter by one day.
+    Example of input and output: 
+    ["30/07/1997"] >> 01/08/1997.   Each month has 30 days. 
+    AUG irl has 31 days, but it's not a big deal if it will have 30."""
+
+    current_date = get_player_calendar(screen_name)
+    # print(current_date, "current date inside update_calendar")
+
+    if current_date[0] == "BROKEN_CALENDAR":
+        return current_date
+
+    date = current_date.split("/")
+    day = int(date[0])
+    month = int(date[1])
+    year = int(date[2])
+
+    if day < 30 and month < 12:
+        # any month except DEC. Day will swap to +1( 1 4 1997 >> 2 4 1997 )
+        day += 1
+    elif day == 30 and month < 12:
+        # month changes. Any, except DEC. ( 30 4 1997 >> 1 5 1997 )
+        month += 1
+        day = 1
+    elif day == 30 and month == 12:
+        # year swap. If 30 DEC, year + 1 ( 30 12 1997 >> 1 1 1998 ) 
+        day = 1
+        month = 1
+        year += 1
+    
+    if len(str(day)) < 2:
+        day = "0" + str(day)
+    if len(str(month)) < 2:
+        month = "0" + str(month)
+    
+    upd_date = str(day) + "/" + str(month) + "/" + str(year)
+
+    # print(upd_date, "updated date")
+    ### 
+    sql.kursori.execute(f'''UPDATE game 
+                            SET calendar="{upd_date}",
+                            day_count=((SELECT day_count FROM game WHERE screen_name='{screen_name}') + 1)
+                            WHERE screen_name="{screen_name}";''')
+    
+    if sql.kursori.rowcount == 1:
+        return "CALENDAR/DAYCOUNT UPDATED"
+    else:
+        return "ERROR DAYCOUNT"
+        
+
+def gameover(screen_name: str) -> list:
+    '''Checks if the game is lost, won, or ongoing.'''
+    sql.kursori.execute(f'SELECT money, debt, location FROM game WHERE screen_name="{screen_name}";')
+    result = sql.kursori.fetchone()
+    money = result[0]
+    debt = result[1]
+    location = result[2]
+    score = None
+
+    if location == "MO" and money >= debt:
+        score = get_score(screen_name)
+        return ["WON", score]
+    elif money < 0:
+        score = get_score(screen_name, loser = True)
+        return ["BANKRUPT", score]
+
+    return ["IN PROGRESS", 0]
+    
+
+def update_money(money: str, screen_name: str) -> str:
+    """
+    This function updates money in game database, which means it adds or takes money from database
+    If in argument in money variable will be given "-200" it will minus that amount of money from database
+    and update it, or if in money variable will be given "200" then it will add that amount of money to
+    the money in database.
+    """
     symbol = money[0]  # checks if string have minus sign at the beginning or not
     if symbol == "-":  # if yes then money will be minused
         money = int(money[1:])
-        sql.kursori.execute(f"update game "
-                            f"set money=((select money from game where screen_name='{screen_name}') - {money})"
-                            f"where screen_name='{screen_name}';")
+        sql.kursori.execute(f"""UPDATE game 
+                            SET money=((SELECT money FROM game WHERE screen_name='{screen_name}') - {money})
+                            WHERE screen_name='{screen_name}' """)
+        return "UPDATED_MONEY_ADD"
+    
     else:  # if not money will be added
         money = int(money)
-        sql.kursori.execute(f"update game "
-                            f"set money=((select money from game where screen_name='{screen_name}') + {money})"
-                            f"where screen_name='{screen_name}';")
+        sql.kursori.execute(f"""UPDATE game 
+                            SET money=((SELECT money FROM game WHERE screen_name='{screen_name}') + {money})
+                            WHERE screen_name='{screen_name}' """)
+        
     if sql.kursori.rowcount == 1:
         return "UPDATED"
     return "NOTHING_UPDATED"
@@ -61,7 +122,7 @@ def update_money(money, screen_name):
 
 def get_airport_name_and_country_by_icao(icao):
     sql.kursori.execute(f"select airport_name, country from airport where icao='{icao}';")
-    tulos = sql.kursori.fetchall()
+    tulos = list(sql.kursori.fetchone())
     if tulos:
         return tulos[0]
     else:
@@ -89,7 +150,15 @@ def fly_to(icao, screen_name, no_fare=False):
             if sql.kursori.rowcount == 1:
                 print(f"Flight to {city} cost you 50$")
             else:
-                print("SCREEN_NAME_DOES_NOT_EXIST")
+                return ["SCREEN_NAME_DOES_NOT_EXIST", "null", "null"]
+        
+        # Player calendar change
+        cur_date = update_calendar(screen_name)
+
+        if cur_date == 'BROKEN_CALENDAR':
+            return ['null', cur_date, cost]
+        
+
         # Player location change
         sql.kursori.execute(f"update game "
                             f"set location=(select icao from airport where airport_name='{city}')"
@@ -118,7 +187,6 @@ def get_latitude_and_longtitude_by_icao(icao):
     return list()
 
 
-# Funktio
 def measure_distance_between_lentokentta(icao_1, icao_2):
     sijanti_1 = get_latitude_and_longtitude_by_icao(icao_1)
     sijanti_2 = get_latitude_and_longtitude_by_icao(icao_2)
@@ -154,50 +222,172 @@ def print_9_nearest_airports(icao):
         return 'NONE'
 
 
-def get_epilogue():
-    print('''
-The first thing you do after arriving back in Monaco is finding the "ice cream truck driver" you owed the money to and 
-hand over the money. They give off a devious smirk and let you pick an ice cream from the truck as a sign of good will.
-Or so you thought.
-You get home and notice that no one is home and there is a letter for you on the table. The letter reads:
+def get_players_list(serverside = False, load_serverside = False, sql_names_only = False) -> list:
+    """Used for retrieving the list of players.
+    :arg: serverside: False by default. Used for returning a list of players. If false, the list will be pulled from the Database. If set to True, will return the local list.
+    :arg: load_serverside: Defaults to false. If set to true, will fill up the local list of players by calling the database.
+    :arg: sql_names_only. Used for retrieving only names from DB.
+    :return: list of players. Only exception is when DB is empty, but there is an attempt to fill the local list."""
+    
+    if load_serverside:
+        sql_query = 'SELECT screen_name FROM game WHERE score <= 0;'
+        sql.kursori.execute(sql_query)
+        players_list_tuple = sql.kursori.fetchall()
+        players_list = []
 
-- We've waited for your debt for long enough. By the time you read this it's likely that you've paid it off,
-but that just doesn't cut it anymore. 
-We've taken your love interest. They were very willing to follow once they learned about your debt.
-Call it a late fee if you will. They'll prove their usefulness in time.
-Wish to save them? Fork over the late fees. Good luck!
+        for player in players_list_tuple:
+            players_list.append(player[0])
+        
+        if players_list:
+            local_players_list.extend(players_list)
 
-You rush back to the ice cream truck driver's house and peer through the windows.
-You see your significant other making ice cream inside.
-Just as you do, the truck driver notices you and tells you to get off his property unless you're about to pay them.
-They let out a roaring laugh at your defeated look as you leave, determined to right this wrong.
+            return players_list
+        else:
+            return ['NO_PLAYERS_LIST_AVAILABLE']
+    
+    if sql_names_only:
+        sql_query = 'SELECT screen_name FROM game WHERE score <= 0;'
+        sql.kursori.execute(sql_query)
+        players_list_tuple = sql.kursori.fetchall()
+        players_list = []
 
-Your troubles with money aren't quite over it seems.
-To be continued?
-''')
+        for player in players_list_tuple:
+            players_list.append(player[0])
 
+        return players_list
+        
+    if not serverside:
+        sql_query = 'SELECT location, screen_name, money, debt, calendar FROM game WHERE score <= 0;'
+        sql.kursori.execute(sql_query)
+        
+        players_list = sql.kursori.fetchall()
+        if players_list:
+            return players_list
+        else:
+            return ['Empty player list.']
+    else:
+        return local_players_list
+    
 
 def add_player(screen_name, debt):
-    sql.kursori.execute(f"insert into game(screen_name,location,money,debt) "
-                        f"values('{screen_name}','MO',500,{debt});")
+    """Adds player to the database and to the local list."""
+    sql.kursori.execute(f"select screen_name from game where screen_name ='{screen_name}';")
+    result = sql.kursori.fetchone()
+    if result:
+        return 'PLAYER EXISTS'
+    print(screen_name)
+    sql.kursori.execute(f"""INSERT INTO 
+                        game(screen_name, location, money, debt, calendar, day_count, score, fuel, eco_score)
+                        VALUES ('{screen_name}','MO',500,{debt},'10/04/1997',0,0,'KE',0);""")
     if sql.kursori.rowcount == 1:
+        local_players_list.append(screen_name)
         
-        return 'name/debt updated'
+        sql.kursori.execute(f"""INSERT INTO 
+                        quest_data(screen_name)
+                        VALUES ('{screen_name}');""")
+        
+        if len(local_players_list) >= 10:
+            del local_players_list[0]
+
+        return 'NAME/DEBT/CALENDAR/FUEL/SCORE UPDATED'
     else:
-        return 'error updating name/debt'
+        return 'ERROR ADDING NAME/DEBT/FUEL/CALENDAR/SCORE'
 
 
-def get_player_location(screen_name):
+def add_quests_toDB(screen_name) -> str:
+    '''Creates a quest list and moves it to the quest_data table in DB.'''
+    sql.kursori.execute('SELECT event_id, event_stat, icao FROM airport;')
+    event_list = sql.kursori.fetchall()
+
+    data = ""
+
+    for event in event_list:
+        
+        event_id = event[0] 
+        status = event[1] 
+        icao = event[2]
+        # to sort out the empty airports
+        if str(event_id) == "0":
+            continue
+
+        # on all static quests, id is single-digit.
+        # so another zero is added to use same functions for the data hadling.
+        if len(str(event_id)) < 2:
+            event_id = "0" + str(event_id)
+
+        data += str(event_id) + str(status) + icao
+
+    sql.kursori.execute(f'''UPDATE quest_data
+                            SET quest_data = '{data}'
+                            WHERE screen_name = '{screen_name}'; ''')
+    
+    if sql.kursori.fetchone():
+        return 'quest storage successful.'
+    return 'no response from quest storage.'
+
+
+def add_quests_to_map(screen_name):
+    '''Used for loading the game. Pulls the quest list from the DB and adds them to the map.'''
+    prepared_list = get_quests_list(screen_name)
+    static_quests = prepared_list[0][0]
+
+    sql.kursori.execute('UPDATE airport SET event_id = 0;')
+
+    for i in range(0, len(static_quests), 5):
+        print("event_stat:", static_quests[ i + 2 ])                # 0 or 1
+        print("event_id", int(static_quests[ i : ( i + 2 ) ]))  # 08, 13, 17 ... 
+        print("icao", static_quests[ ( i + 3 ) : ( i + 5 )])             # WA, MO, OS ...
+        
+        sql.kursori.execute(f'''UPDATE airport
+                        SET event_stat = { static_quests[ i + 2 ] },
+                        event_id = { static_quests[ i : ( i + 2 )] }
+                        WHERE icao = '{ static_quests[( i + 3 ) : ( i + 5 )] }'; ''')
+
+    return 'events loaded.'
+
+
+# PLAYER INFO BLOCK >>
+def get_quests_list(screen_name) -> list:
+    sql.kursori.execute(f'''SELECT quest_data
+                        FROM quest_data WHERE screen_name = "{screen_name}"; ''')
+    raw_list = sql.kursori.fetchall()
+    cooked_list = []
+
+    statics = raw_list[0]
+
+    # 'decrypting' quests
+    # list looks like 010MO020WA030VA, so every three chars describe a quest:
+    # 10 will always be Monaco quest; 11MO will mean Monaco is completed, and 10 - not yet.
+    for i in range(0, len(statics), 5): 
+        quest = statics[i : (i + 5)]
+        cooked_list.append(quest)
+
+    print("prepped list: ", cooked_list)
+    return cooked_list
+
+
+def get_player_calendar(player_name: str) -> str or tuple:
+    '''Returns string dd/mm/yyyy.'''
+    sql_query = f'SELECT calendar FROM game WHERE screen_name="{player_name}";'
+    sql.kursori.execute(sql_query)
+    tulos = sql.kursori.fetchone()
+    if tulos:
+        return tulos[0]
+    else:
+        return "BROKEN_CALENDAR"
+
+
+def get_player_location(screen_name: str) -> str:
+
     sql.kursori.execute(f"select location from game where screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
         return tulos[0][0]
     else:
-        print("UNKNOWN_ERROR")
-        return None
+        return "ERROR_FETCHING_PL_LOCATION"
 
 
-def get_player_money(screen_name):
+def get_player_money(screen_name: str) -> str:
     sql.kursori.execute(f"select money from game where screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
@@ -206,13 +396,67 @@ def get_player_money(screen_name):
         return "PLAYER_NOT_FOUND_EXCEPTION"
         
 
-def get_player_debt(screen_name):
+def get_player_debt(screen_name: str) -> str:
     sql.kursori.execute(f"SELECT debt FROM game WHERE screen_name='{screen_name}';")
     tulos = sql.kursori.fetchall()
     if tulos:
         return tulos[0][0]
     else:
         return "SQL_QUERY_FAIL"
+
+
+def get_score(screen_name: str, loser = False):
+    """Calculates and updates score of the player.
+    :arg: screen_name(str): Name of the player.
+    :arg: loser(bool): if true, the score will be set to -1."""
+    sql_query = f"SELECT day_count, debt, money FROM game WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+    result = sql.kursori.fetchone()
+    days, debt, money  = result[0], result[1], result[2]
+    
+    if days == 0:
+        days = 1
+
+    if loser:
+        sql_query = f"UPDATE game SET score = -1 WHERE screen_name='{screen_name}';"
+        sql.kursori.execute(sql_query)
+
+        return -1
+
+    score = round(500 / (days / (debt * 0.1)) + money ** (1.1))
+    print(screen_name + f"'s score is : {score}")
+
+    sql_query = f"UPDATE game SET score = {score} WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+
+    return score
+
+
+def get_score(screen_name: str, loser = False):
+    """Calculates and updates score of the player.
+    :arg: screen_name(str): Name of the player.
+    :arg: loser(bool): if true, the score will be set to -1."""
+    sql_query = f"SELECT day_count, debt, money FROM game WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+    result = sql.kursori.fetchone()
+    days, debt, money  = result[0], result[1], result[2]
+    
+    if days == 0:
+        days = 1
+
+    if loser:
+        sql_query = f"UPDATE game SET score = -1 WHERE screen_name='{screen_name}';"
+        sql.kursori.execute(sql_query)
+
+        return -1
+
+    score = round(500 / (days / (debt * 0.1)) + money ** (1.1))
+    print(screen_name + f"'s score is : {score}")
+
+    sql_query = f"UPDATE game SET score = {score} WHERE screen_name='{screen_name}';"
+    sql.kursori.execute(sql_query)
+
+    return score
 
 
 def can_play_blackjack(screen_name):
